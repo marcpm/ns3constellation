@@ -3,6 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks,linux
 
 starlink-ns3-tests/*
+orbital-tests/spacetrack/stconfig.py
 
 ### JupyterNotebooks ###
 # gitignore template for Jupyter Notebooks

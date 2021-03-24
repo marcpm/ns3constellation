@@ -1,3 +1,0 @@
-auth = {USR =  ""
-PASS = ""
-}
