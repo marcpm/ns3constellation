@@ -1,0 +1,3 @@
+auth = {USR =  ""
+PASS = ""
+}
