@@ -2,7 +2,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,jupyternotebooks,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jupyternotebooks,linux
 
-starlink-ns3-tests/*
+# starlink-ns3-tests/*
 orbital-tests/spacetrack/stconfig.py
 
 ### JupyterNotebooks ###

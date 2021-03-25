@@ -1,0 +1,10 @@
+# Literal filenames #
+#####################
+*/__pycache__/
+
+# Files created during building #
+#################################
+.lock-waf_linux_build
+.waf3-2.0.18-ff4ae9f5cc05353d3dc3aeff8854ae69/
+/build/
+ns-allinone-3.30.1/pybindgen-0.20.0/pybindgen/__pycache__/__init__.cpython-39.pyc
