@@ -94,11 +94,14 @@ class Topos
 
 
 
+double gstime (double jdut1);
+void polarm(double jdut1, double pm[3][3]);
+
+PVCoords teme2ecef(const double rteme[3], const double vteme[3], double jdut1);
 
 
-
-std::list < Vector > ECEFtoTEME (const Vector p_ecef, Vector v_ecef);
-std::list < Vector > TEMEtoECEF (const Vector p_teme, Vector v_teme);
+// std::list < Vector > ECEFtoTEME (const Vector p_ecef, Vector v_ecef);
+// std::list < Vector > TEMEtoECEF (const Vector p_teme, Vector v_teme);
 
 
 

@@ -174,14 +174,6 @@ double  gstime
      return temp;
    }  // end gstime
 
-/*
-
-***************************************************
-***************************************************
-***************************************************
-***************************************************
-
-*/
 
 
 
@@ -198,14 +190,16 @@ OUTPUTS         DESCRIPTION
 pm              Transformation matrix for ECEF - PEF
 */
 
-std::vector < std::vector <float> >
-polarm(double jdut1)
+void 
+polarm(double jdut1, double pm[3][3])
 {
     double MJD; //Julian Date - 2,400,000.5 days
     double A;
     double C;
     double xp; //Polar motion coefficient in radians
     double yp; //Polar motion coefficient in radians
+
+    double pm[3][3];
 
     
     //Predict polar motion coefficients using IERS Bulletin - A (Vol. XXVIII No. 030)
@@ -240,13 +234,6 @@ polarm(double jdut1)
     pm[2][1] = -sin(yp);
     pm[2][2] = cos(xp) * cos(yp);
 }
-
-
-
-
-
-
-
 
 
 
@@ -295,7 +282,7 @@ teme2ecef(const double rteme[3], const double vteme[3], double jdut1)
     rpef[2] = st[0][2] * rteme[0] + st[1][2] * rteme[1] + st[2][2] * rteme[2];
     
     //Get polar motion vector
-    pm = polarm(jdut1);
+    polarm(jdut1, pm);
     
     //ECEF postion vector is the inverse of the polar motion vector multiplied by rpef
     recef[0] = pm[0][0] * rpef[0] + pm[1][0] * rpef[1] + pm[2][0] * rpef[2];
