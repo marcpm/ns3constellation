@@ -100,6 +100,12 @@ void polarm(double jdut1, double pm[3][3]);
 PVCoords teme2ecef(const double rteme[3], const double vteme[3], double jdut1);
 
 
+
+
+void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
+
+
+
 // std::list < Vector > ECEFtoTEME (const Vector p_ecef, Vector v_ecef);
 // std::list < Vector > TEMEtoECEF (const Vector p_teme, Vector v_teme);
 
