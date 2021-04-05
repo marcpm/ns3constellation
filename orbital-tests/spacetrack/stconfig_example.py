@@ -1,3 +1,4 @@
-auth = {USR =  "test"
+auth = {
+USR =  "test",
 PASS = "test"
 }
