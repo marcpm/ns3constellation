@@ -24,6 +24,7 @@
 #include "ns3/internet-module.h"
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/applications-module.h"
+#include <sstream>
 
 namespace ns3 {
 

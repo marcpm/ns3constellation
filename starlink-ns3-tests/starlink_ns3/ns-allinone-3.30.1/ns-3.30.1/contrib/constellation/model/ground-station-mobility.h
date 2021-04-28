@@ -9,6 +9,9 @@
 
 namespace ns3 {
 
+
+
+
 /**
  * \ingroup leo-satellite
  * \brief ground station mobility model.
@@ -27,14 +30,18 @@ public:
   static TypeId GetTypeId (void);
   GroundStationMobilityModel();
 
-private:
-  virtual Vector DoGetPosition (void) const;
-  virtual void DoSetPosition (const Vector &position);
-  virtual Vector DoGetVelocity (void) const;
-  friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite
-  friend double GetVisibilityGroundToSat (const &position);
+  Vector GetLatLonAlt (void);
+  Vector GetPosEcef (void);
+  std::string ToString();
 
-  virtual Vector GetGeodeticPosition (void) const;
+private:
+  virtual void DoSetPosition (void);
+  virtual Vector DoGetPosition (void) const;
+  virtual Vector DoGetVelocity (void) const;
+  friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite (deprecated)
+  friend Vector GetVisibilityGroundToSat (const &position);
+
+  // virtual Vector GetLatLonAlt (void) const;
   virtual Vector GetZenithDirection(void) const
   
   double m_latitude; // latitude of ground station
@@ -42,6 +49,10 @@ private:
   double m_longitude; // longitude of ground station
                       // negative value indicates western longitude, positive value indicates eastern longitude
   double m_altitude; // Ground station altitude wrt to sea level
+
+  // double m_antennaSpecs;  Data rate, incidence angle, etc.
+
+  std::string m_name;
 
   Vector m_ecefPosition;
   Vector m_ecefVelocity;

@@ -22,7 +22,7 @@ NS_LOG_COMPONENT_DEFINE("LeoSatelliteExample");
 int 
 main (int argc, char *argv[])
 {
-  uint32_t n_planes = 3;
+  uint32_t n_planes = 5;
   uint32_t n_sats_per_plane = 4;
   double altitude = 2000;
 
@@ -32,9 +32,9 @@ main (int argc, char *argv[])
   cmd.AddValue ("altitude", "Altitude of satellites in constellation in kilometers ... must be between 500 and 2000", altitude);
 
   cmd.Parse (argc,argv);
-
-  LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
-  LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
+  
+  LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_ERROR);
+  LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_ERROR);
 
   LeoSatelliteConfig sat_network(n_planes, n_sats_per_plane, altitude);
   
@@ -73,6 +73,10 @@ main (int argc, char *argv[])
   ss >> file_title;
 
   flowmonHelper.SerializeToXmlFile (file_title, false, false);
+
+  
+  NS_LOG_INFO("Testing Logging. Simulation Donee. testing numbers:");
+  
   return 0; 
 }
 

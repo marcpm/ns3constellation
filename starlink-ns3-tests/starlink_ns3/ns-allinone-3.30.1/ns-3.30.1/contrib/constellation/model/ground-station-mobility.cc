@@ -2,13 +2,15 @@
 
 
 #include "ground-station-mobility.h"
+#include "orbital-coords.h"
+
 #include "ns3/vector.h"
 #include "ns3/double.h"
 #include "ns3/log.h"
 #include "ns3/integer.h"
 
 #include "ns3/geographic-positions.h" // geo converter
-#include "orbital-utils.h"
+#include "orbital-coords.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -47,22 +49,70 @@ GroundStationMobilityModel::GetTypeId (void)
   return tid;
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(float latitude, float longitude, float altitude)
+GroundStationMobilityModel::GroundStationMobilityModel(double latitude, double longitude, double altitude)
 {
-  m_latitude = latitude;
-  m_longitude = longitude;
-  m_altitude = altitude;
+    m_latitude = latitude;
+    m_longitude = longitude;
+    m_altitude = altitude;
+    m_name = "";
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(Vector r_ecef)
+GroundStationMobilityModel::GroundStationMobilityModel(Vector latLonAlt)
 {
-  m_ecefPosition = r_ecef;
+    m_latitude = latitude;
+    m_longitude = longitude;
+    m_altitude = altitude;
+    m_name = "";
 }
+
+GroundStationMobilityModel::GroundStationMobilityModel(Vector latLonAlt, std::string name)
+{
+    m_latitude = latitude;
+    m_longitude = longitude;
+    m_altitude = altitude;
+    m_name = name;
+    // m_id
+}
+
 
 
 GroundStationMobilityModel::GroundStationMobilityModel()
 {
 }
+
+
+
+
+
+Vector 
+GroundStationMobilityModel::GetLatLonAlt (void) const
+{
+  return Vector(m_latitude, m_longitude, m_altitude);
+}
+
+  Vector GetPosEcef (void)
+  {
+    return m_ecefPosition;
+  };
+  
+  std::string ToString()
+  {
+    std::stringstream info;
+    info << "Ground station[";
+    info << "name=" << m_name << ", ";
+    info << "latitude=" << m_latitude << ", ";
+    info << "longitude=" << m_longitude << ", ";
+    info << "elevation=" << m_elevation << ", ";
+    info << "ecef_position=" << m_ecefPosition;
+    info << "]";
+    return info.str();
+  };
+
+
+
+
+
+
 
 /* To be called after MobilityModel object is created to set position.
    Input should be a NULL vector as position is determined by number of orbital planes and number of satellites per   
@@ -71,9 +121,10 @@ GroundStationMobilityModel::GroundStationMobilityModel()
    latitudes   
  */
 void 
-GroundStationMobilityModel::DoSetPosition (const Vector &position)
+GroundStationMobilityModel::DoSetPosition ()
 {
   m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude);
+  m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 Vector
@@ -83,28 +134,35 @@ GroundStationMobilityModel::DoGetPosition (void) const
   return m_ecefPosition;
 }
 
-Vector 
-GroundStationMobilityModel::GetGeodeticPosition (void) const
-{
-  return Vector(m_latitude, m_longitude, m_altitude);
-}
 
 
-/* Vector a is the position of the ground station
-   Vector b is the position of the  satellite */
+
 double 
-CalculateDistanceGroundToSat (const Vector &a, const Vector &b)
+CalculateDistanceGroundToSat (const Vector &ecefSat) // (const Vector &a, const Vector &b)
 {
 
-  distance = sqrt( pow( b.x - a.x, 2) +  pow( b.y - a.y, 2)  + pow( b.z - a.z, 2)  )
+  distance = (m_ecefPosition - ecefSat).GetLength()
+  // distance = sqrt( pow( b.x - a.x, 2) +  pow( b.y - a.y, 2)  + pow( b.z - a.z, 2)  )
 
   return distance;
 }
 
-bool 
-GetVisibilityGroundToSat (const &position)
+Vector 
+GetVisibilityGroundToSat (const &satPVCoords)
 {
   
+  
+  ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
+
+  
+
+
+
+    return Topos(az,
+            el,
+            rangew,
+            rate);
+
   return false 
 }
 
@@ -114,10 +172,16 @@ Vector
 GroundStationMobilityModel::DoGetVelocity (void) const
 {
   
-  
-  m_ecefVelocity = Vector(0.0, 0.0, 0.0); // ecef velocity = 0; fixed (to earths spinning axis) ref frame
+ // ecef velocity = 0; fixed (to earths rotating axis) ref frame
   return m_ecefVelocity;
 }
+
+
+
+
+
+
+
 
 Vector 
 GroundStationMobility::GetZenithDirection(void) const

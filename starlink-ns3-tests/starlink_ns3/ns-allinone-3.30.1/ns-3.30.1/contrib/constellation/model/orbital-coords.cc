@@ -10,9 +10,300 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+#include "sgp4math.h"
+
 namespace ns3 {
 
 
+        PVCoords::PVCoords();
+
+        // Constructor for pos-vel unpackedvectors
+        PVCoords::PVCoords(double px, double py, double pz, double vx, double vy, double vz, FrameType frame): 
+                m_pos(px, py, pz), m_vel(vx, vy, vz), m_frame(frame)
+                {
+                    NS_LOG_FUNCTION (this);
+
+                };
+
+        // constructor for pos-vel vectors
+        PVCoords::PVCoords(Vector pos, Vector vel, FrameType frame): 
+                m_pos(pos), m_vel(vel), m_frame(frame)
+                {
+                    NS_LOG_FUNCTION (this);
+                };
+
+
+        std::string PVCoords::PrintFrameType()
+        {
+            switch(m_frame)
+            {
+                case FrameType::ECI:
+                    std::cout << "ECI" << std::endl;    
+                    break;
+                case FrameType::ECEF:
+                    std::cout << "ECEF" << std::endl;
+                    break;
+                case FrameType::TEME:
+                    std::cout << "TEME" << std::endl;
+                    break;
+                case FrameType::GEO:
+                    std::cout << "GEO" << std::endl;
+                    break;
+            }
+        };
+
+        Vector PVCoords::GetPos()
+        {
+            return m_pos;
+        };
+        
+        Vector PVCoords::GetVel()
+        {
+            return m_vel;
+        };
+
+        Vector GetLatLonAlt()
+        {
+            if (m_frame == FrameType::GEO)
+            {
+                return m_pos; // x,y,z == lat,lon,alt
+            }
+            else
+            {   // create new geodetic frame for instant conversion to lat lon alt.
+                PVCoords geotemp = this->TransformTo(FrameType::GEO);
+                return geotemp.GetPos();
+            }
+        }
+
+        Vector GetLat()
+        {
+            return GetLatLonAlt().x
+        };
+        Vector GetLon()
+        {
+            return GetLatLonAlt().y
+        };
+        Vector GetAlt()
+        {
+            return GetLatLonAlt().z
+        };
+
+
+        PVCoords PVCoords::TransformTo(FrameType newFrame)
+        {
+            switch (m_frame)
+            {   
+                
+                case FrameType::ECI:
+                    switch (newFrame)
+                    {   
+                        case FrameType::ECI:
+                            PVCoords newFrameFrame =  PVCoords(m_pos, m_vel, m_frame) //copy ECI 2 ECI
+                            break;
+                        case FrameType::ECEF:
+                            // ECI2ECEF 
+                            break;
+                        case FrameType::TEME:
+                            // ECI2TEME
+                            break;
+                        case FrameType::GEO:
+                            // ECI2GEO
+                            break;
+                    }  
+                    
+                    break;
+
+                case FrameType::ECEF:
+                    switch (newFrame)
+                    {   
+                        case FrameType::ECI:
+                            // ECEF2ECI  
+                            break;
+                        case FrameType::ECEF:
+                            PVCoords newCoords =  PVCoords(m_pos, m_vel, m_frame) //copy ECEF 2 ECEF
+                            break;
+                        case FrameType::TEME:
+                            // ECEF2TEME
+                            break;
+                        case FrameType::GEO:
+                            // ECEF2GEO
+                            break;
+                    }  
+
+                    break;
+
+                case FrameType::TEME:
+                    switch (newFrame)
+                    {   
+                        case FrameType::ECI:
+                            // TEME2ECI  
+                            break;
+                        case FrameType::ECEF:
+                            // TEME2ECEF 
+                            break;
+                        case FrameType::TEME:
+                            PVCoords newCoords =  PVCoords(m_pos, m_vel, m_frame) //copy TEME 2 TEME
+                            break;
+                        case FrameType::GEO:
+                            // TEME2GEO
+                            break;
+                    }  
+
+                    break;
+                case FrameType::GEO:
+                    switch (newFrame)
+                    {   
+                        case FrameType::ECI:
+                            // GEO2ECI  
+                            break;
+                        case FrameType::ECEF:
+                            PVCoords newCoords = PVCoords::Geodetic2ECEF (, double longitude, double altitude);
+                            break;
+                        case FrameType::TEME:
+                            // GEO2TEME
+                            break;
+                        case FrameType::GEO:
+                            PVCoords newCoords =  PVCoords(m_pos, m_vel, m_frame) //copy GEO 2 GEO
+                            break;
+                    }  
+
+                    break;
+                
+            };
+            return newCoords;
+
+        };
+
+
+        
+virtual PVCoords PVCoords::Geodetic2ECEF (double latitude, double longitude, double altitude)
+{
+
+    // * "Department of Defense World Geodetic System 1984." National Imagery and 
+    //  * Mapping Agency, 1 Jan. 2000. 
+    //  * <http://earth-info.nga.mil/GandG/publications/tr8350.2/wgs84fin.pdf>.
+    //  */
+
+    NS_LOG_FUNCTION_NOARGS ();
+    /// Conversion factor: degrees to radians
+    static constexpr double DEG2RAD = M_PI / 180.0;
+
+    /// Conversion factor: radians to degrees
+    static constexpr double RAD2DEG = 180.0 * M_1_PI;
+
+
+    
+    double latitudeRadians = DEG2RAD * latitude;
+    double longitudeRadians = DEG2RAD * longitude;
+    double  a = 6378137; // earths semi major axis
+    double  e = 0.0818191908426215; // WGS84 eccentricity
+
+    
+    double Rn = a / (sqrt (1 - pow (e, 2) * pow (sin (latitudeRadians), 2))); // radius of
+                                                                            // curvature
+    double x = (Rn + altitude) * cos (latitudeRadians) * cos (longitudeRadians);
+    double y = (Rn + altitude) * cos (latitudeRadians) * sin (longitudeRadians);
+    double z = ((1 - pow (e, 2)) * Rn + altitude) * sin (latitudeRadians);
+    
+    Vector ecefPos = Vector (x, y, z);
+    Vector ecefVel = Vector(0.0, 0.0, 0.0);
+
+    PVCoords ecefCoords(ecefPos, ecefVel, FrameType::ECEF);
+    
+    return ecefCoords;
+}
+
+
+
+
+/*
+ECEF2GEO
+This function calulates the latitude, longitude and altitude
+given the ECEF position matrix.
+Based on David Vallado, 2007, +  Grady Hillhouse.
+INPUTS          DESCRIPTION                     RANGE/UNITS
+r               Position matrix (ECEF)          m
+OUTPUTS         DESCRIPTION
+latlongh        Latitude, longitude, and altitude (deg, deg, and m)
+*/
+PVCoords PVCoords::ECEF2GEO (PVCoords ecefCoords)
+{
+    double twopi = 2.0*M_PI;
+    double small = 0.00000001;          //small value for tolerances
+    double re = 6378137;               //radius of earth in m
+    double eesqrd = 0.006694385000;     //eccentricity of earth sqrd
+    double magr, temp, rtasc;
+    
+    Vector ecefPos = ecefCoords.getPos()
+    double r[3] = {ecefPos.x, ecefPos.y, ecefPos.z};
+
+
+    magr = mag(r);
+    temp = sqrt(r[0]*r[0] + r[1]*r[1]);
+ 
+    if(abs(temp) < small)
+    {
+        rtasc = sgn(r[2]) * pi * 0.5;
+    }
+    else
+    {
+        rtasc = atan2(r[1], r[0]);
+    }
+    
+    latlongh[1] = rtasc;
+    
+    if (abs(latlongh[1]) >= pi)
+    {
+        if (latlongh[1] < 0.0)
+        {
+            latlongh[1] += twopi;
+        }
+        else
+        {
+            latlongh[1] -= twopi;
+        }
+    }
+    
+    latlongh[0] = asin(r[2] / magr);
+    
+    //Iterate to find geodetic latitude
+    int i = 1;
+    double olddelta = latlongh[0] + 10.0;
+    double sintemp, c = 0;
+    
+    while ( (abs(olddelta - latlongh[0]) >= small) && (i < 10) )
+    {
+        olddelta = latlongh[0];
+        sintemp = sin(latlongh[0]);
+        c = re / sqrt(1.0 - eesqrd*sintemp*sintemp);
+        latlongh[0] = atan( (r[2] + c*eesqrd*sintemp) / temp );
+        i++;
+    }
+    
+    if (0.5*pi - abs(latlongh[0]) > pi/180.0)
+    {
+        latlongh[2] = (temp/cos(latlongh[0])) - c;
+    }
+    else
+    {
+        latlongh[2] = r[2]/sin(latlongh[0]) - c*(1.0 - eesqrd);
+    }
+
+
+    PVCoords newGeoCoords(latlongh[0]*RAD2DEG, latlongh[1]*RAD2DEG , latlongh[2]*RAD2DEG, 
+                        FrameType::GEO);
+
+    return newGeoCoords;
+};
+
+
+
+
+
+
+
+// //////////////////// //////////////////// //////////////////// //////////////////// //////////////////
+// //////////////////// //////////////////// //////////////////// //////////////////
 
 /**
     * Default constructor
@@ -113,6 +404,46 @@ Topos::ToString() const
     ss << ", Rng Rt: " << std::setw(7) << range_rate;
     return ss.str();
 }
+
+
+
+// ******************************************************
+// ******************************************************
+// SGPEXT + C based funcs . Not clean
+
+
+double  sgn
+        (
+          double x
+        )
+   {
+     if (x < 0.0)
+       {
+          return -1.0;
+       }
+       else
+       {
+          return 1.0;
+       }
+
+   }  // end sgn
+
+double  mag
+        (
+          const double x[3]
+        )
+   {
+     return sqrt(x[0]*x[0] + x[1]*x[1] + x[2]*x[2]);
+   }
+
+double  dot
+        (
+          double x[3], double y[3]
+        )
+   {
+     return (x[0]*y[0] + x[1]*y[1] + x[2]*y[2]);
+   } 
+
 
 
 /* -----------------------------------------------------------------------------
@@ -294,9 +625,8 @@ teme2ecef(const double rteme[3], const double vteme[3], double jdut1)
     vecef[1] = pm[0][1] * vpef[0] + pm[1][1] * vpef[1] + pm[2][1] * vpef[2];
     vecef[2] = pm[0][2] * vpef[0] + pm[1][2] * vpef[1] + pm[2][2] * vpef[2];
 
-    PVCoords pv_ecef;
-    pv_ecef.position = Vector(recef[0], recef[1], recef[2])
-    pv_ecef.velocity = Vector(vecef[0], vecef[1], vecef[2])
+    PVCoords pv_ecef (Vector(recef[0], recef[1], recef[2]),   Vector(vecef[0], vecef[1], vecef[2]), FrameType::ECEF);
+    
     
     return pv_ecef;
 }
@@ -307,6 +637,47 @@ teme2ecef(const double rteme[3], const double vteme[3], double jdut1)
 
 *****************************************************************************
 */
+
+
+
+/*
+site
+This function finds the position and velocity vectors for a site. The
+outputs are in the ECEF coordinate system. Note that the velocity vector
+is zero because the coordinate system rotates with the earth.
+Author: David Vallado, 2007
+Ported to C++ by Grady Hillhouse with some modifications, July 2015.
+INPUTS          DESCRIPTION                     RANGE/UNITS
+latgd           Site geodetic latitude          -PI/2 to PI/2 in radians
+lon             Longitude                       -2PI to 2PI in radians
+alt             Site altitude                   m
+OUTPUTS         DESCRIPTION
+rs              Site position vector            m
+vs              Site velocity vector            m/s
+*/
+
+void site(double latgd, double lon, double alt, double rs[3], double vs[3])
+{
+    double sinlat, re, eesqrd, cearth, rdel, rk;
+    re = 6378137;              //radius of earth in m
+    eesqrd = 0.006694385000;    //eccentricity of earth sqrd wgs84
+    
+    //Find rdel and rk components of site vector
+    sinlat = sin(latgd);
+    cearth = re / sqrt( 1.0 - (eesqrd*sinlat*sinlat) );
+    rdel = (cearth + alt) * cos(latgd);
+    rk = ((1.0 - eesqrd) * cearth + alt ) * sinlat;
+    
+    //Find site position vector (ECEF)
+    rs[0] = rdel * cos( lon );
+    rs[1] = rdel * sin( lon );
+    rs[2] = rk;
+    
+    //Velocity of site is zero because the coordinate system is rotating with the earth
+    vs[0] = 0.0;
+    vs[1] = 0.0;
+    vs[2] = 0.0;
+}
 
 
 
@@ -414,6 +785,100 @@ void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lo
     razelrates[1] = daz;        //Azimuth rate (rad/s)
     razelrates[2] = del;        //Elevation rate (rad/s)
 }
+
+
+
+void ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
+{
+    //Locals
+    double halfPI = PI * 0.5;
+    double small  = 0.00000001;
+    double temp;
+    double rs[3];
+    double vs[3];
+    double rhoecef[3];
+    double drhoecef[3];
+    double tempvec[3];
+    double rhosez[3];
+    double drhosez[3];
+    double magrhosez;
+    double rho, az, el;
+    double drho, daz, del;
+    
+    double recef[3] = {satEcefCoords.getPos().x, satEcefCoords.getPos().y, satEcefCoords.getPos().z};
+    double vecef[3] = {satEcefCoords.getVel().x, satEcefCoords.getVel().y, satEcefCoords.getVel().z};
+
+    
+    //Get site vector in ECEF coordinate system
+    site(latgd, lon, alt, rs, vs);
+    
+    
+
+     
+    //Find ECEF range vectors
+    for (int i = 0; i < 3; i++)
+    {
+        rhoecef[i] = recef[i] - rs[i];
+        drhoecef[i] = vecef[i];
+    }
+    rho = mag(rhoecef); //Range in km
+    
+    //Convert to SEZ (topocentric horizon coordinate system)
+    rot3(rhoecef, lon, tempvec);
+    rot2(tempvec, (halfPI-latgd), rhosez);
+    
+    rot3(drhoecef, lon, tempvec);
+    rot2(tempvec, (halfPI-latgd), drhosez);
+    
+    //Calculate azimuth, and elevation
+    temp = sqrt(rhosez[0]*rhosez[0] + rhosez[1]*rhosez[1]);
+    if (temp < small)
+    {
+        el = sgn(rhosez[2]) * halfPI;
+        az = atan2(drhosez[1], -drhosez[0]);
+    }
+    else
+    {
+        magrhosez = mag(rhosez);
+        el = asin(rhosez[2]/magrhosez);
+        az = atan2(rhosez[1]/temp, -rhosez[0]/temp);
+    }
+    
+    //Calculate rates for range, azimuth, and elevation
+    drho = dot(rhosez,drhosez) / rho;
+    
+    if(abs(temp*temp) > small)
+    {
+        daz = (drhosez[0]*rhosez[1] - drhosez[1]*rhosez[0]) / (temp * temp);
+    }
+    else
+    {
+        daz = 0.0;
+    }
+    
+    if(abs(temp) > small)
+    {
+        del = (drhosez[2] - drho*sin(el)) / temp;
+    }
+    else
+    {
+        del = 0.0;
+    }
+    
+    //Move values to output vectors
+    razel[0] = rho;             //Range (km)
+    razel[1] = az;              //Azimuth (radians)
+    razel[2] = el;              //Elevation (radians)
+    
+    razelrates[0] = drho;       //Range rate (km/s)
+    razelrates[1] = daz;        //Azimuth rate (rad/s)
+    razelrates[2] = del;        //Elevation rate (rad/s)
+}
+
+
+
+
+
 
 void rot3(double invec[3], double xval, double outvec[3])
 {

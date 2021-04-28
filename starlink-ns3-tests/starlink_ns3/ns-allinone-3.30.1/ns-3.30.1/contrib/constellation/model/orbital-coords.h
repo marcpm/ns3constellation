@@ -9,13 +9,7 @@ namespace ns3 {
 
 
 
-struct PassDetails
-{
-    DateTime aos;
-    DateTime los;
-    double range;
-    double max_elevation;
-};
+
 
 // struct CoordTopoCentric
 // {
@@ -32,11 +26,58 @@ struct CoordGeodetic
     float altitude;
 };
 
-struct PVCoords
+// where ECI= J2000, TEME=(sgp4 vallado defined), ECEF="ITRF", GEO="WGS84/WGS72"
+enum class FrameType {ECI="ECI", TEME="TEME", ECEF="ECEF", GEO="GEO"};
+
+class PVCoords
 {
-    Vector position;
-    Vector velocity;
+    public:
+        PVCoords();
+        PVCoords(double px, double py, double pz, double vx, double vy, double vz, FrameType frame); //: m_pos(px, py, pz), m_vel(vx, vy, vz), m_frame(frame);
+        PVCoords(Vector pos, Vector vel, FrameType frame); //: m_pos(pos), m_vel(vel), m_frame(frame);
+
+        
+        // For Debugging Purposes
+        std::string PrintFrameType();
+        
+        Vector GetPos();
+        Vector GetVel();
+        
+        Vector GetLatLonAlt();
+        Vector GetLat();
+        Vector GetLon();
+        Vector GetAlt();
+
+        PVCoords TransformTo(FrameType newFrame);
+        
+
+
+        virtual Vector PVCoords::Geodetic2ECEF (double latitude, double longitude, double altitude)
+        
+        // PVCoords ToTEME();
+        // PVCoords ToECI();
+        // PVCoords ToECEF();
+        // PVCoords ToGEO();
+        
+    private: 
+        FrameType m_frame;
+        Vector m_pos; // x,y,z in nonGeo frames, lat,lon,alt in Geodetic frame
+        Vector m_vel;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Topos point in a TopoCentric Coordinate frame. (on earth's surface)
@@ -45,9 +86,9 @@ class Topos
  public:
 
     /** azimuth in degrees */
-    double azimuth;
+    double az;
     /** elevations in degrees */
-    double elevation;
+    double el;
     /** range in meters */
     double range;
     /** range rate in meters per second */
@@ -56,7 +97,7 @@ class Topos
     /**
      * Default constructor
      */
-    Topos();
+    Topos(): az(0.0), el(0.0), range(0.0), range_rate(0.0);
     /**
      * Constructor
      * @param[in] az azimuth in radians
@@ -64,10 +105,12 @@ class Topos
      * @param[in] rnge range in kilometers
      * @param[in] rnge_rate range rate in kilometers per second
      */
-    Topos( double az, double el, double rnge, double rnge_rate);
+    Topos( double azi, double ele, double rnge, double rnge_rate): 
+            az(azi), el(ele), range(rnge), range_rate(0.0);
 
 
-    Topos( double az, double el, double rnge);
+    Topos( double az, double el, double rnge)
+        az(azi), el(ele), range(rnge), range_rate(0.0);
 
 
     /**
@@ -94,6 +137,35 @@ class Topos
 
 
 
+
+
+
+
+
+
+struct PassDetails
+{
+    DateTime aos;
+    DateTime los;
+    double range;
+    double max_elevation;
+};
+
+double  sgn
+        (
+          double x
+        );
+
+double  mag
+        (
+          const double x[3]
+        );
+
+double  dot
+        (
+          double x[3], double y[3]
+        );
+
 double gstime (double jdut1);
 void polarm(double jdut1, double pm[3][3]);
 
@@ -102,9 +174,14 @@ PVCoords teme2ecef(const double rteme[3], const double vteme[3], double jdut1);
 
 
 
+void site(double latgd, double lon, double alt, double rs[3], double vs[3]);
+
 void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
 
+void ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
 
+void rot3(double invec[3], double xval, double outvec[3]);
+void rot2(double invec[3], double xval, double outvec[3]);
 
 // std::list < Vector > ECEFtoTEME (const Vector p_ecef, Vector v_ecef);
 // std::list < Vector > TEMEtoECEF (const Vector p_teme, Vector v_teme);
