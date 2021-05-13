@@ -2,15 +2,6 @@
 
 
 #include "ground-station-mobility.h"
-#include "orbital-coords.h"
-
-#include "ns3/vector.h"
-#include "ns3/double.h"
-#include "ns3/log.h"
-#include "ns3/integer.h"
-
-#include "ns3/geographic-positions.h" // geo converter
-#include "orbital-coords.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>

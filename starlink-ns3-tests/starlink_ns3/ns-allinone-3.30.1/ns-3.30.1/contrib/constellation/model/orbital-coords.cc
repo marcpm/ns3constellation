@@ -62,7 +62,7 @@ namespace ns3 {
             return m_vel;
         };
 
-        Vector GetLatLonAlt()
+        Vector PVCoords::GetLatLonAlt()
         {
             if (m_frame == FrameType::GEO)
             {
@@ -75,15 +75,15 @@ namespace ns3 {
             }
         }
 
-        Vector GetLat()
+        Vector PVCoords::GetLat()
         {
             return GetLatLonAlt().x
         };
-        Vector GetLon()
+        Vector PVCoords::GetLon()
         {
             return GetLatLonAlt().y
         };
-        Vector GetAlt()
+        Vector PVCoords::GetAlt()
         {
             return GetLatLonAlt().z
         };

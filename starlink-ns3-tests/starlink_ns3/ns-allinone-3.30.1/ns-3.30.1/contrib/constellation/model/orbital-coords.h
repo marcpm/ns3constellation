@@ -11,19 +11,19 @@ namespace ns3 {
 
 
 
-// struct CoordTopoCentric
-// {
-//     float azimuth;
-//     float elevation;
-//     float range;
-//     float range_rate;
-// }
+struct CoordTopoCentric
+{
+    double azimuth;
+    double elevation;
+    double range;
+    double range_rate;
+};
 
 struct CoordGeodetic
 {
-    float latitude;
-    float longitude;
-    float altitude;
+    double latitude;
+    double longitude;
+    double altitude;
 };
 
 // where ECI= J2000, TEME=(sgp4 vallado defined), ECEF="ITRF", GEO="WGS84/WGS72"
@@ -80,7 +80,7 @@ class PVCoords
 
 
 
-// Topos point in a TopoCentric Coordinate frame. (on earth's surface)
+//  TopoCentric Coordinate frame. (on earth's surface)
 class Topos
 {
  public:
@@ -109,11 +109,11 @@ class Topos
             az(azi), el(ele), range(rnge), range_rate(0.0);
 
 
-    Topos( double az, double el, double rnge)
+    Topos( double az, double el, double rnge):
         az(azi), el(ele), range(rnge), range_rate(0.0);
 
 
-    /**
+    /*
      * Copy constructor
      * @param[in] topo object to copy from
      */
@@ -137,19 +137,6 @@ class Topos
 
 
 
-
-
-
-
-
-
-struct PassDetails
-{
-    DateTime aos;
-    DateTime los;
-    double range;
-    double max_elevation;
-};
 
 double  sgn
         (

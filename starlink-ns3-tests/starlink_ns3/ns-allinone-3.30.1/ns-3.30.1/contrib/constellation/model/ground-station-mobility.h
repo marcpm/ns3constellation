@@ -4,8 +4,17 @@
 #define GROUND_STATION_MOBILITY_H
 
 #include "ns3/object.h"
+#include "ns3/geographic-positions.h" // geo converter
 #include "ns3/mobility-model.h"
+
 #include "ns3/vector.h"
+#include "ns3/double.h"
+#include "ns3/log.h"
+#include "ns3/integer.h"
+
+#include "ns3/orbital-coords.h"
+
+
 
 namespace ns3 {
 
@@ -39,7 +48,7 @@ private:
   virtual Vector DoGetPosition (void) const;
   virtual Vector DoGetVelocity (void) const;
   friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite (deprecated)
-  friend Vector GetVisibilityGroundToSat (const &position);
+  friend std::tuple<bool, double> GetVisibilityGroundToSat (const &position);
 
   // virtual Vector GetLatLonAlt (void) const;
   virtual Vector GetZenithDirection(void) const

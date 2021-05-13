@@ -127,9 +127,9 @@ LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSf
 {
   ReadSatConfigFile();
 
-  int total_num_satellites = m_constellationSats.size();
+  int totalNumSatellites = m_constellationSats.size();
   // NodeContainer temp;
-  m_satellitesNodes.Create(total_num_satellites);
+  m_satellitesNodes.Create(totalNumSatellites);
 
   //assign mobility model to all satellites
   MobilityHelper mobility;
@@ -264,7 +264,7 @@ LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSf
   // }
 
 
-  for (int j = 0; j<totalNumGrounstations; j++)
+  for (int j = 0; j<totalNumGroundstations; j++)
   {
     Vector temp = ground_stations.Get(j)->GetObject<MobilityModel> ()->GetPosition();
     // Vector LatLonAlt = ground)stations.Get(j)
@@ -274,21 +274,20 @@ LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSf
 
   //setting up links between ground stations and their closest satellites
   NS_LOG_INFO("Setting links between ground stations and satellites"<<std::endl);
-  for (uint32_t i=0; i<2; i++)
+  for (uint32_t i=0; i<totalNumGroundstations; i++)
   {
-    Vector gndPos = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetPosition();
-    uint32_t closestAdjSat = 0;
-    uint32_t closestAdjSatDist = 0;
-    uint32_t planeIndex;
-    if (i == 0)
-      planeIndex = 0;
-    else
-      planeIndex = floor(3*num_planes/7);
+    Vector gsPos = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetPosition();
+    uint32_t closestSat = 0;
+    uint32_t closestSatDist = 0;
+
     //find closest adjacent satellite for ground station
-    for (uint32_t j=0; j<this->num_satellites_per_plane; j++)
+    for (uint32_t j=0; j<totalNumSatellites; j++)
     {
-      Vector pos = this->plane[planeIndex].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      double temp_dist = CalculateDistanceGroundToSat(gndPos,pos);
+      Vector satPos = m_constellationSatsNodes.Get(j)->GetObject<MobilityModel>()->GetPosition();
+      std::tuple <bool, double > gsSatVisibility = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetVisibilityGroundToSat(satPos);
+      
+      
+      double temp_dist = CalculateDistanceGroundToSat(gsPos,pos);
       if((temp_dist < closestAdjSatDist) || (j==0))
       {
         closestAdjSatDist = temp_dist;
