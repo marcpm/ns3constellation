@@ -39,16 +39,97 @@ TypeId LeoSatelliteConfig::GetInstanceTypeId (void) const
   return tid;
 }
 
-//constructor
-LeoSatelliteConfig::LeoSatelliteConfig (uint32_t num_planes, uint32_t num_satellites_per_plane, double altitude)
+void LeoSatelliteConfig::ReadSatConfigFile (std::string satConfigFilepath)
 {
-  this->num_planes = num_planes;
-  this->num_satellites_per_plane = num_satellites_per_plane;
-  this->m_altitude = altitude;
+   fstream newfile;
+   newfile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
+   if (newfile.is_open()){   //checking whether the file is open
+      string satname;
+      string line1;
+      string line2;
+      string tmp;
+      
+      int i = 0;
+      while(getline(newfile, tmp))
+      { //read data from file object and put it into string.
+        if (i % 3 == 0)
+        {
+          if (i > 0) // construct + append satellite object every 3 lines read.
+          {
+            Satellite satellite;
+            satellite.SetName(satname);
+            satellite.SetTleInfo(line1, line2);
+            m_constellationSats.push_back(satellite); // add satellites to member variable: vector of satellites
+          }
 
-  uint32_t total_num_satellites = num_planes*num_satellites_per_plane;
-  NodeContainer temp;
-  temp.Create(total_num_satellites);
+          satname = tmp; // read satellite name line
+          
+        }else if ( (i-1) % 3 == 0)
+        {
+          line1 = tmp;  // read TLE - line 1
+        }else if ( (i-2) % 3 == 0)
+        {
+          line2 = tmp;   // read TLE - line 2
+        }
+
+        i++;
+      }
+      newfile.close(); //close the file object.
+
+   
+}
+
+// extra util split string with chosen delimiter
+std::vector<std::string> split_string (std::string s, std::string delimiter) {
+    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
+    std::string token;
+    std::vector<std::string> res;
+
+    while ((pos_end = s.find (delimiter, pos_start)) != std::string::npos) {
+        token = s.substr (pos_start, pos_end - pos_start);
+        pos_start = pos_end + delim_len;
+        res.push_back (token);
+    }
+
+    res.push_back (s.substr (pos_start));
+    return res;
+}
+
+
+
+void LeoSatelliteConfig::ReadGSConfigFile (std::string GSfilepath)
+{/////// editttt
+   fstream newfile;
+   newfile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
+   if (newfile.is_open()){   //checking whether the file is open
+      string GSname;
+      string tmp;
+      
+      while(getline(newfile, tmp))
+      { //read data from file object and put it into string.
+
+        std::vector <string> gsStrLine = split_string(tmp, ",");
+        string gsName = gsStrLine[0];
+        float gsLat = std::stof(gsStrLine[1]);
+        float gsLon = std::stof(gsStrLine[2]);
+        float gsAlt = std::stof(gsStrLine[3]);
+
+        GroundStation groundStation(gsLat, gsLon, gsAlt, gsName);
+        m_groundStations.push_back(groundStation);
+      }
+      newfile.close(); //close the file object.
+
+}
+
+//constructor
+LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSfilepath)
+
+{
+  ReadSatConfigFile();
+
+  int total_num_satellites = m_constellationSats.size();
+  // NodeContainer temp;
+  m_satellitesNodes.Create(total_num_satellites);
 
   //assign mobility model to all satellites
   MobilityHelper mobility;
@@ -57,7 +138,7 @@ LeoSatelliteConfig::LeoSatelliteConfig (uint32_t num_planes, uint32_t num_satell
                              "NumberofPlanes", IntegerValue (num_planes),
                              "Altitude", DoubleValue(altitude),
                              "Time", DoubleValue(Simulator::Now().GetSeconds()));
-  mobility.Install(temp);
+  mobility.Install(m_satellitesNodes);
   
   for (NodeContainer::Iterator j = temp.Begin ();
        j != temp.End (); ++j)
@@ -69,106 +150,128 @@ LeoSatelliteConfig::LeoSatelliteConfig (uint32_t num_planes, uint32_t num_satell
       NS_ASSERT (position != 0);
     }
 
-  //assigning nodes to e/ plane's node container as necessary
-  for (uint32_t i=0; i<num_planes; i++)
-  {
-     NodeContainer temp_plane;
-     for(uint32_t j=0; j<num_satellites_per_plane/2; j++)
-     {
-       Vector pos = temp.Get(i*num_satellites_per_plane/2 + j)->GetObject<MobilityModel> ()->GetPosition();
-       NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": plane # "<< i << " node # " <<j<< ": x = " << pos.x << ", y = " << pos.y << ", z = " << pos.z << std::endl);
-       temp_plane.Add(temp.Get(i*num_satellites_per_plane/2 + j));
-     }
-     for(uint32_t j=num_satellites_per_plane/2; j> 0; j--)
-     {
-       Vector pos = temp.Get(total_num_satellites/2 + i*num_satellites_per_plane/2 + j - 1)->GetObject<MobilityModel> ()->GetPosition();
-       NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": plane # "<< i << " node # " <<num_satellites_per_plane - j<< ": x = " << pos.x << ", y = " << pos.y << ", z = " << pos.z << std::endl);
-       temp_plane.Add(temp.Get(total_num_satellites/2 + i*num_satellites_per_plane/2 + j - 1));
-     }
-     InternetStackHelper stack;
-     stack.Install(temp_plane);
-     this->plane.push_back(temp_plane);
-  }
+  // //assigning nodes to e/ plane's node container as necessary
+  // for (uint32_t i=0; i<num_planes; i++)
+  // {
+  //    NodeContainer temp_plane;
+  //    for(uint32_t j=0; j<num_satellites_per_plane/2; j++)
+  //    {
+  //      Vector pos = temp.Get(i*num_satellites_per_plane/2 + j)->GetObject<MobilityModel> ()->GetPosition();
+  //      NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": plane # "<< i << " node # " <<j<< ": x = " << pos.x << ", y = " << pos.y << ", z = " << pos.z << std::endl);
+  //      temp_plane.Add(temp.Get(i*num_satellites_per_plane/2 + j));
+  //    }
+  //    for(uint32_t j=num_satellites_per_plane/2; j> 0; j--)
+  //    {
+  //      Vector pos = temp.Get(total_num_satellites/2 + i*num_satellites_per_plane/2 + j - 1)->GetObject<MobilityModel> ()->GetPosition();
+  //      NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": plane # "<< i << " node # " <<num_satellites_per_plane - j<< ": x = " << pos.x << ", y = " << pos.y << ", z = " << pos.z << std::endl);
+  //      temp_plane.Add(temp.Get(total_num_satellites/2 + i*num_satellites_per_plane/2 + j - 1));
+  //    }
+  //    InternetStackHelper stack;
+  //    stack.Install(temp_plane);
+  //    this->plane.push_back(temp_plane);
+  // }
 
-  //setting up all intraplane links
-  Vector nodeAPosition = this->plane[0].Get(0)->GetObject<MobilityModel>()->GetPosition();
-  Vector nodeBPosition = this->plane[0].Get(1)->GetObject<MobilityModel>()->GetPosition();
-  double distance = CalculateDistance(nodeAPosition, nodeBPosition);
-  double delay = (distance * 1000)/speed_of_light; //should get delay in seconds
-  PointToPointHelper intraplane_link_helper;
-  intraplane_link_helper.SetDeviceAttribute ("DataRate", StringValue ("5.36Gbps"));
-  intraplane_link_helper.SetChannelAttribute ("Delay", TimeValue(Seconds (delay)));
+  // //setting up all intraplane links
+  // Vector nodeAPosition = this->plane[0].Get(0)->GetObject<MobilityModel>()->GetPosition();
+  // Vector nodeBPosition = this->plane[0].Get(1)->GetObject<MobilityModel>()->GetPosition();
+  // double distance = CalculateDistance(nodeAPosition, nodeBPosition);
+  // double delay = (distance * 1000)/speed_of_light; //should get delay in seconds
+  // PointToPointHelper intraplane_link_helper;
+  // intraplane_link_helper.SetDeviceAttribute ("DataRate", StringValue ("5.36Gbps"));
+  // intraplane_link_helper.SetChannelAttribute ("Delay", TimeValue(Seconds (delay)));
 
-  NS_LOG_INFO("Setting up intra-plane links with distance of "<<distance<<" km and delay of "<<delay<<" seconds."<<std::endl);
+  // NS_LOG_INFO("Setting up intra-plane links with distance of "<<distance<<" km and delay of "<<delay<<" seconds."<<std::endl);
 
-  for (uint32_t i=0; i<num_planes; i++)
-  {
-    for (uint32_t j=0; j<num_satellites_per_plane; j++)
-    {
-      this->intra_plane_devices.push_back(intraplane_link_helper.Install(plane[i].Get(j), plane[i].Get((j+1)%num_satellites_per_plane)));
-      NS_LOG_INFO("Plane "<<i<<": channel between node "<<j<<" and node "<<(j+1)%num_satellites_per_plane<<std::endl);
-    }
-  }
+  // for (uint32_t i=0; i<num_planes; i++)
+  // {
+  //   for (uint32_t j=0; j<num_satellites_per_plane; j++)
+  //   {
+  //     this->intra_plane_devices.push_back(intraplane_link_helper.Install(plane[i].Get(j), plane[i].Get((j+1)%num_satellites_per_plane)));
+  //     NS_LOG_INFO("Plane "<<i<<": channel between node "<<j<<" and node "<<(j+1)%num_satellites_per_plane<<std::endl);
+  //   }
+  // }
 
-  //setting up interplane links
-  NS_LOG_INFO("Setting up inter-plane links"<<std::endl);
-  for (uint32_t i=0; i<num_planes; i++)
-  {
-    for (uint32_t j=0; j<num_satellites_per_plane; j++)
-    {
-      uint32_t nodeBIndex;
-      (i == num_planes - 1) ? nodeBIndex = num_satellites_per_plane - j - 1: nodeBIndex = j;
-      Vector nodeAPos = this->plane[i].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      Vector nodeBPos = this->plane[(i+1)%num_planes].Get(nodeBIndex)->GetObject<MobilityModel>()->GetPosition();
-      double distance = CalculateDistance(nodeAPos, nodeBPos);
-      double delay = (distance*1000)/speed_of_light;
-      CsmaHelper interplane_link_helper;
-      interplane_link_helper.SetChannelAttribute("DataRate", StringValue ("5.36Gbps"));
-      interplane_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
+  // //setting up interplane links
+  // NS_LOG_INFO("Setting up inter-plane links"<<std::endl);
+  // for (uint32_t i=0; i<num_planes; i++)
+  // {
+  //   for (uint32_t j=0; j<num_satellites_per_plane; j++)
+  //   {
+  //     uint32_t nodeBIndex;
+  //     (i == num_planes - 1) ? nodeBIndex = num_satellites_per_plane - j - 1: nodeBIndex = j;
+  //     Vector nodeAPos = this->plane[i].Get(j)->GetObject<MobilityModel>()->GetPosition();
+  //     Vector nodeBPos = this->plane[(i+1)%num_planes].Get(nodeBIndex)->GetObject<MobilityModel>()->GetPosition();
+  //     double distance = CalculateDistance(nodeAPos, nodeBPos);
+  //     double delay = (distance*1000)/speed_of_light;
+  //     CsmaHelper interplane_link_helper;
+  //     interplane_link_helper.SetChannelAttribute("DataRate", StringValue ("5.36Gbps"));
+  //     interplane_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
 
-      NS_LOG_INFO("Channel open between plane "<<i<<" satellite "<<j<<" and plane "<<(i+1)%num_planes<<" satellite "<<nodeBIndex<< " with distance "<<distance<< "km and delay of "<<delay<<" seconds"<<std::endl);
+  //     NS_LOG_INFO("Channel open between plane "<<i<<" satellite "<<j<<" and plane "<<(i+1)%num_planes<<" satellite "<<nodeBIndex<< " with distance "<<distance<< "km and delay of "<<delay<<" seconds"<<std::endl);
 
-      NodeContainer temp_node_container;
-      temp_node_container.Add(this->plane[i].Get(j));
-      temp_node_container.Add(this->plane[(i+1)%num_planes]);
-      NetDeviceContainer temp_netdevice_container;
-      temp_netdevice_container = interplane_link_helper.Install(temp_node_container);
-      Ptr<CsmaChannel> csma_channel;
-      Ptr<Channel> channel;
-      channel = temp_netdevice_container.Get(0)->GetChannel();
-      csma_channel = channel->GetObject<CsmaChannel> ();
+  //     NodeContainer temp_node_container;
+  //     temp_node_container.Add(this->plane[i].Get(j));
+  //     temp_node_container.Add(this->plane[(i+1)%num_planes]);
+  //     NetDeviceContainer temp_netdevice_container;
+  //     temp_netdevice_container = interplane_link_helper.Install(temp_node_container);
+  //     Ptr<CsmaChannel> csma_channel;
+  //     Ptr<Channel> channel;
+  //     channel = temp_netdevice_container.Get(0)->GetChannel();
+  //     csma_channel = channel->GetObject<CsmaChannel> ();
       
-      for (uint32_t k=0; k<num_satellites_per_plane; k++)
-      {
-        if (j != k)
-        {
-          csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
-        }
-      }
+  //     for (uint32_t k=0; k<num_satellites_per_plane; k++)
+  //     {
+  //       if (j != k)
+  //       {
+  //         csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
+  //       }
+  //     }
         
-      this->inter_plane_devices.push_back(temp_netdevice_container);
-      this->inter_plane_channels.push_back(csma_channel);
-      this->inter_plane_channel_tracker.push_back(nodeBIndex);
-    }
-  }
+  //     this->inter_plane_devices.push_back(temp_netdevice_container);
+  //     this->inter_plane_channels.push_back(csma_channel);
+  //     this->inter_plane_channel_tracker.push_back(nodeBIndex);
+  //   }
+  // }
 
-  //setting up two ground stations for now
-  NS_LOG_INFO("" << "Setting up two ground stations" << std::endl);
-  ground_stations.Create(2);
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+
+  int totalNumGroundstations = m_groundStations.size();
+  m_groundStationsNodes.Create(totalNumGroundstations);
   //assign mobility model to ground stations
   MobilityHelper groundMobility;
-  groundMobility.SetMobilityModel ("ns3::GroundStationMobilityModel",
-                             "NPerPlane", IntegerValue (num_satellites_per_plane),
-                             "NumberofPlanes", IntegerValue (num_planes));
-  groundMobility.Install(ground_stations);
+  groundMobility.SetMobilityModel ("ns3::GroundStationMobilityModel");
+  // ground
+  groundMobility.Install(m_groundStationsNodes);
   //Install IP stack
   InternetStackHelper stack;
-  stack.Install(ground_stations);
-  for (int j = 0; j<2; j++)
+  stack.Install(m_groundStationsNodes);
+  
+
+  // for (std::vector<GroundStation>::iterator gs = m_groundStations.begin(); gs != m_groundStations.end(); )
+  // for (GroundStation& const gs: m_groundStations)
+  // for (Node& gsNode: m_groundStationsNodes)
+  // {
+  //   Vector gsPos = gsNode->GetObject<MobilityModel> () ->GetPosition();
+  //   // Vector gsPos = gsNode->GetObject<GroundStation> () ->GetLatLonAlt();
+
+  //   // NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": ground station # " << gs.GetId() << ": lat = " << gs.GetLat() 
+  //   //           << ", lon = " << gs.GetLon() << 
+  //   //           "alt = "<< gs.GetAlt()<< std::endl);
+
+  //   NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": ground station # " << j << ": x = " << temp.x << ", y = " << temp.y << std::endl);
+  // }
+
+
+  for (int j = 0; j<totalNumGrounstations; j++)
   {
     Vector temp = ground_stations.Get(j)->GetObject<MobilityModel> ()->GetPosition();
+    // Vector LatLonAlt = ground)stations.Get(j)
     NS_LOG_INFO("" << Simulator::Now().GetSeconds() << ": ground station # " << j << ": x = " << temp.x << ", y = " << temp.y << std::endl);
   }
+
+
   //setting up links between ground stations and their closest satellites
   NS_LOG_INFO("Setting links between ground stations and satellites"<<std::endl);
   for (uint32_t i=0; i<2; i++)
@@ -284,6 +387,16 @@ LeoSatelliteConfig::LeoSatelliteConfig (uint32_t num_planes, uint32_t num_satell
     p2p.EnablePcap("ground-sniff", this->ground_station_devices[i].Get(1), true);
   }*/
 }
+
+/*
+******************************************************
+******************************************************
+******************************************************
+******************************************************
+******************************************************
+******************************************************
+*/
+
 
 void LeoSatelliteConfig::UpdateLinks()
 {

@@ -25,6 +25,9 @@
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/applications-module.h"
 #include <sstream>
+#include <vector>
+#include <fstream>
+#include <string>
 
 namespace ns3 {
 
@@ -37,31 +40,38 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  LeoSatelliteConfig (uint32_t num_planes, uint32_t num_satellites_per_plane, double altitude);
+  LeoSatelliteConfig (std::string TLEfilepath, std::string GSfilepath);
 
   virtual ~LeoSatelliteConfig ();
   virtual TypeId GetInstanceTypeId (void) const;
   
+  void ReadSatConfigFile (std::string TLEfilepath); // reads and parses file containing 3 line TLEs.
+  void ReadGSConfigFile (std::string GSfilepath);
+  
   void UpdateLinks (); //update the intersatellite links
 
-  NodeContainer ground_stations; //node container to hold ground stations
-  std::vector<Ipv4InterfaceContainer> ground_station_interfaces;
+  
+  NodeContainer m_satellitesNodes;
+  NodeContainer m_groundStationsNodes; //node container to hold ground stations
 
 private:
-  uint32_t num_planes;
-  uint32_t num_satellites_per_plane;
-  double m_altitude;
+  std::vector<Satellite> m_constellationSats;
+  std::vector<GroundStation> m_groundStations;
+  
+  NodeContainer m_groundStationsNodes;
+  std::vector<NetDeviceContainer> m_groundStationsdevices; 
+  std::vector<Ptr<CsmaChannel>> m_groundStationschannels;
+  std::vector<Ipv4InterfaceContainer> m_groundStationsinterfaces;
+  std::vector<uint32_t> m_groundStationschannel_tracker;
 
-  std::vector<NodeContainer> plane; //node container for each plane
-  std::vector<NetDeviceContainer> intra_plane_devices; //contains net devices for all P2P links for all planes
-  std::vector<NetDeviceContainer> inter_plane_devices;
-  std::vector<Ptr<CsmaChannel>> inter_plane_channels;
-  std::vector<uint32_t> inter_plane_channel_tracker; //this will have the node from the adjacent plane that is currently connected
-  std::vector<NetDeviceContainer> ground_station_devices; 
-  std::vector<Ptr<CsmaChannel>> ground_station_channels;
-  std::vector<uint32_t> ground_station_channel_tracker;
-  std::vector<Ipv4InterfaceContainer> intra_plane_interfaces;
-  std::vector<Ipv4InterfaceContainer> inter_plane_interfaces;
+
+  NodeContainer m_constellationSatsNodes;
+  NetDeviceContainer m_islDevices;
+  std::vector<Ptr<CsmaChannel>> m_oislChannels;
+  std::vector<Ptr<CsmaChannel>> m_islChannels;
+  std::vector<Ipv4InterfaceContainer> m_islInterfaces;
+  std::vector<uint32_t> m_islTracker; //this will have the node from the adjacent plane that is currently connected
+
   
 };
   

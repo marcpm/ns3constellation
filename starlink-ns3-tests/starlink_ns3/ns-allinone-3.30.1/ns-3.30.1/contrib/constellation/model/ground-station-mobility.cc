@@ -49,6 +49,14 @@ GroundStationMobilityModel::GetTypeId (void)
   return tid;
 }
 
+GroundStationMobilityModel::GroundStationMobilityModel(double latitude, double longitude, double altitude, std::string name)
+{
+    m_latitude = latitude;
+    m_longitude = longitude;
+    m_altitude = altitude;
+    m_name = name;
+}
+
 GroundStationMobilityModel::GroundStationMobilityModel(double latitude, double longitude, double altitude)
 {
     m_latitude = latitude;
@@ -151,8 +159,10 @@ Vector
 GetVisibilityGroundToSat (const &satPVCoords)
 {
   
-  
-  ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
+  PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
+  double razel[3];
+  double razelrates[3];
+  ECEF2azel(ecefSat, m_latitude, m_longitude, m_altitude, jdut1, razel[3], razelrates[3]);
 
   
 
