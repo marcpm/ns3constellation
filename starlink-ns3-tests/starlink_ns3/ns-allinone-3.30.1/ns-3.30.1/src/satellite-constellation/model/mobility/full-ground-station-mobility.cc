@@ -35,6 +35,19 @@ FullGroundStationMobilityModel::GetTypeId (void)
                    DoubleValue (0.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_altitude),
                    MakeDoubleChecker<double> ())
+    .AddAttribute ("Name", "The ground station Name.",
+                   StringValue (""),
+                   MakeStringAccessor (&FullGroundStationMobilityModel::m_name),
+                   MakeStringChecker<string> ())
+    .AddAttribute ("DataRate", "The ground station Data Rate.",
+                   StringValue ("5.36Gbps"),
+                   MakeStringAccessor (&FullGroundStationMobilityModel::m_dataRate),
+                   MakeStringChecker<string> ())
+    .AddAttribute ("AngleIncidence", "The minimum Angle of incidence of ground station.",
+                   DoubleValue (25.0),
+                   MakeDoubleAccessor (&FullGroundStationMobilityModel::m_angleIncidence),
+                   MakeDoubleChecker<double> ())
+                   
   ;
 
   return tid;
@@ -110,8 +123,8 @@ FullGroundStationMobilityModel::GetLatLonAlt (void) const
     info << "name=" << m_name << ", ";
     info << "latitude=" << m_latitude << ", ";
     info << "longitude=" << m_longitude << ", ";
-    info << "elevation=" << m_elevation << ", ";
-    info << "ecef_position=" << m_ecefPosition;
+    info << "elevation=" << m_altitude << ", ";
+    // info << "ecef_position=" << m_ecefPosition;
     info << "]";
     return info.str();
   };
@@ -207,6 +220,15 @@ FullGroundStationMobility::GetZenithDirection(void) const
   zenith = Vector(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) )
   return zenith;
 }
+
+
+
+String 
+FullGroundStationMobility::GetName(void) const
+{
+  return m_name;
+}
+
 
 
 } // namespace ns3

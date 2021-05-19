@@ -39,8 +39,10 @@ public:
   virtual TypeId GetInstanceTypeId (void) const;
   
   void ReadSatConfigFile (std::string TLEfilepath); // reads and parses file containing 3 line TLEs.
+  std::vector<std::string> SatelliteNetworkConfig::splitString (std::string s, std::string delimiter);
   void ReadGSConfigFile (std::string GSfilepath);
   
+
   void UpdateLinks (); //update the intersatellite links
 
   
@@ -58,7 +60,7 @@ private:
   std::vector<uint32_t> m_groundStationschannel_tracker;
 
 
-  NodeContainer m_constellationSatsNodes;
+  // NodeContainer m_constellationSatsNodes;
   NetDeviceContainer m_islDevices;
   std::vector<Ptr<CsmaChannel>> m_oislChannels;
   std::vector<Ptr<CsmaChannel>> m_islChannels;

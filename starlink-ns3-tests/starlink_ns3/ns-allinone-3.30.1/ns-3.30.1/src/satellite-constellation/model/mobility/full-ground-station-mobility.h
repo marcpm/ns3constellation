@@ -58,8 +58,8 @@ private:
   friend double GetAngleofIncidence(void) const;
   friend double GetDataRate(void) const;
   // virtual Vector GetLatLonAlt (void) const;
-  virtual Vector GetZenithDirection(void) const
-  
+  virtual Vector GetZenithDirection(void) const;
+  virtual String GetName(void) const;
   double m_latitude; // latitude of ground station
                      // negative value indicates southern latitude, positive value indicates northern latitude
   double m_longitude; // longitude of ground station
