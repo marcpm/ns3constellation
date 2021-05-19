@@ -32,6 +32,12 @@ namespace ns3 {
                     NS_LOG_FUNCTION (this);
                 };
 
+        PVCoords::PVCoords(Vector3D pos, Vector3D vel, FrameType frame): 
+                m_pos(pos), m_vel(vel), m_frame(frame)
+                {
+                    NS_LOG_FUNCTION (this);
+                };
+
 
         std::string PVCoords::PrintFrameType()
         {
@@ -308,13 +314,26 @@ PVCoords PVCoords::ECEF2GEO (PVCoords ecefCoords)
 /**
     * Default constructor
     */
-Topos::Topos()
-    : azimuth(0.0)
-    , elevation(0.0)
-    , range(0.0)
-    , range_rate(0.0)
-{
-}
+
+
+    Topos::Topos(): az(0.0), el(0.0), range(0.0), azdot(0.0), eldot(0.0), rangedot(0.0), visibility(false)
+    {}
+ 
+    Topos::Topos( double azi, double ele, double rnge, double rnge_rate): 
+            az(azi), el(ele), range(rnge), azdot(rnge_rate), eldot(0.0), rangedot(0.0), visibility(false)
+    {}
+
+    Topos::Topos( double azi, double ele, double rnge, 
+                double az_rate, double el_rate, double range_rate, bool visible): 
+            az(azi), el(ele), range(rnge), 
+            azdot(az_rate), eldot(el_rate), rangedot(range_rate), visibility(visible)
+    {}
+
+    Topos::Topos( double az, double el, double rnge):
+        az(azi), el(ele), range(rnge), azdot(0.0), eldot(0.0), rangedot(0.0), visibility(true);
+    {}
+
+
 
 /**
     * Constructor
@@ -336,6 +355,9 @@ Topos::Topos(
     m_azRad = azimuth * M_PI / 180;
     m_elRad = elevation * M_PI / 180;
 }
+
+
+
 
 Topos::Topos(
         double az,

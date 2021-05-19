@@ -1,81 +1,90 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 
 
-#include "ground-station-mobility.h"
+#include "full-ground-station-mobility.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
 
 namespace ns3 {
 
-NS_LOG_COMPONENT_DEFINE ("GroundStationMobility");
+NS_LOG_COMPONENT_DEFINE ("FullGroundStationMobility");
 
-NS_OBJECT_ENSURE_REGISTERED (GroundStationMobilityModel);
+NS_OBJECT_ENSURE_REGISTERED (FullGroundStationMobilityModel);
 
 uint32_t current = 0; // to know if we are setting up first or second ground station
 
 TypeId
-GroundStationMobilityModel::GetTypeId (void)
+FullGroundStationMobilityModel::GetTypeId (void)
 {
-  static TypeId tid = TypeId ("ns3::GroundStationMobilityModel")
+  static TypeId tid = TypeId ("ns3::FullGroundStationMobilityModel")
     .SetParent<MobilityModel> ()
     .SetGroupName ("Mobility")
-    .AddConstructor<GroundStationMobilityModel> ()
+    .AddConstructor<FullGroundStationMobilityModel> ()
     .AddAttribute ("Latitude",
                    "Latitude of ground station.",
                    DoubleValue(1.0),
-                   MakeDoubleAccessor (&GroundStationMobilityModel::m_latitude),
+                   MakeDoubleAccessor (&FullGroundStationMobilityModel::m_latitude),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("Longitude",
                    "Longitude of ground station.",
                    DoubleValue(1.0),
-                   MakeDoubleAccessor (&GroundStationMobilityModel::m_longitude),
+                   MakeDoubleAccessor (&FullGroundStationMobilityModel::m_longitude),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("Altitude", "The altitude of ground station.",
                    DoubleValue (0.0),
-                   MakeDoubleAccessor (&GroundStationMobilityModel::m_altitude),
+                   MakeDoubleAccessor (&FullGroundStationMobilityModel::m_altitude),
                    MakeDoubleChecker<double> ())
   ;
 
   return tid;
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(double latitude, double longitude, double altitude, std::string name)
+FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
+                                                      std::string name, double angleIncidence, std::string dataRate)
 {
     m_latitude = latitude;
     m_longitude = longitude;
     m_altitude = altitude;
     m_name = name;
+    m_angleIncidence = angleIncidence;
+    m_dataRate = dataRate;
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(double latitude, double longitude, double altitude)
+FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude)
 {
     m_latitude = latitude;
     m_longitude = longitude;
     m_altitude = altitude;
     m_name = "";
+    m_angleIncidence = 25.0;
+    m_dataRate = "5.36Gbps";
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(Vector latLonAlt)
+FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
 {
     m_latitude = latitude;
     m_longitude = longitude;
     m_altitude = altitude;
     m_name = "";
+    m_angleIncidence = 25.0;
+    m_dataRate = "5.36Gbps";
 }
 
-GroundStationMobilityModel::GroundStationMobilityModel(Vector latLonAlt, std::string name)
+FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt, std::string name)
 {
     m_latitude = latitude;
     m_longitude = longitude;
     m_altitude = altitude;
     m_name = name;
+    m_angleIncidence = 25.0;
+    m_dataRate = "5.36Gbps";
     // m_id
 }
 
 
 
-GroundStationMobilityModel::GroundStationMobilityModel()
+FullGroundStationMobilityModel::FullGroundStationMobilityModel()
 {
 }
 
@@ -84,7 +93,7 @@ GroundStationMobilityModel::GroundStationMobilityModel()
 
 
 Vector 
-GroundStationMobilityModel::GetLatLonAlt (void) const
+FullGroundStationMobilityModel::GetLatLonAlt (void) const
 {
   return Vector(m_latitude, m_longitude, m_altitude);
 }
@@ -120,14 +129,14 @@ GroundStationMobilityModel::GetLatLonAlt (void) const
    latitudes   
  */
 void 
-GroundStationMobilityModel::DoSetPosition ()
+FullGroundStationMobilityModel::DoSetPosition ()
 {
   m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude);
   m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 Vector
-GroundStationMobilityModel::DoGetPosition (void) const
+FullGroundStationMobilityModel::DoGetPosition (void) const
 {
  
   return m_ecefPosition;
@@ -137,7 +146,7 @@ GroundStationMobilityModel::DoGetPosition (void) const
 
 
 double 
-CalculateDistanceGroundToSat (const Vector &ecefSat) // (const Vector &a, const Vector &b)
+FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecefSat) // (const Vector &a, const Vector &b)
 {
 
   distance = (m_ecefPosition - ecefSat).GetLength()
@@ -146,8 +155,9 @@ CalculateDistanceGroundToSat (const Vector &ecefSat) // (const Vector &a, const 
   return distance;
 }
 
-Vector 
-GetVisibilityGroundToSat (const &satPVCoords)
+// std::tuple <bool, double >
+Topos
+FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
 {
   
   PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
@@ -155,22 +165,26 @@ GetVisibilityGroundToSat (const &satPVCoords)
   double razelrates[3];
   ECEF2azel(ecefSat, m_latitude, m_longitude, m_altitude, jdut1, razel[3], razelrates[3]);
 
+  bool visible = razel[2] * M_PI / 180.0 > m_angleIncidence;
+  
+
+  Topos topoFrame(razel[1] * M_PI / 180.0, razel[2] * M_PI / 180.0, razel[0], 
+                  razelrates[1] * M_PI / 180.0, razelrates[2] * M_PI / 180.0, razelrates[0], visible);
+
+
+
+  // std::tuple <bool, double > visibDistance = {topoFrame.el > m_angleIncidence, razel[0]};
   
 
 
-
-    return Topos(az,
-            el,
-            rangew,
-            rate);
-
-  return false 
+  return topoFrame;
+  
 }
 
 
 
 Vector
-GroundStationMobilityModel::DoGetVelocity (void) const
+FullGroundStationMobilityModel::DoGetVelocity (void) const
 {
   
  // ecef velocity = 0; fixed (to earths rotating axis) ref frame
@@ -180,12 +194,15 @@ GroundStationMobilityModel::DoGetVelocity (void) const
 
 
 
-
+friend double GetDataRate(void) const
+{
+  return m_dataRate;
+}
 
 
 
 Vector 
-GroundStationMobility::GetZenithDirection(void) const
+FullGroundStationMobility::GetZenithDirection(void) const
 {
   zenith = Vector(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) )
   return zenith;

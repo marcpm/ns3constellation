@@ -35,7 +35,7 @@ class PVCoords
         PVCoords();
         PVCoords(double px, double py, double pz, double vx, double vy, double vz, FrameType frame); //: m_pos(px, py, pz), m_vel(vx, vy, vz), m_frame(frame);
         PVCoords(Vector pos, Vector vel, FrameType frame); //: m_pos(pos), m_vel(vel), m_frame(frame);
-
+        PVCoords(Vector3D pos, Vector3D vel, FrameType frame);
         
         // For Debugging Purposes
         std::string PrintFrameType();
@@ -69,17 +69,6 @@ class PVCoords
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 //  TopoCentric Coordinate frame. (on earth's surface)
 class Topos
 {
@@ -91,26 +80,34 @@ class Topos
     double el;
     /** range in meters */
     double range;
+    
+    double azdot;
+    double eldot;
     /** range rate in meters per second */
-    double range_rate;
+    double rangedot;
 
+    bool visibility;
+
+
+
+   /**
+     * Constructor
+     * @param[in] az azimuth in degrees
+     * @param[in] el elevation in degrees
+     * @param[in] range range in kilometers
+     
+     */
     /**
      * Default constructor
      */
-    Topos(): az(0.0), el(0.0), range(0.0), range_rate(0.0);
-    /**
-     * Constructor
-     * @param[in] az azimuth in radians
-     * @param[in] el elevation in radians
-     * @param[in] rnge range in kilometers
-     * @param[in] rnge_rate range rate in kilometers per second
-     */
-    Topos( double azi, double ele, double rnge, double rnge_rate): 
-            az(azi), el(ele), range(rnge), range_rate(0.0);
+    Topos();
+ 
+    Topos( double azi, double ele, double rnge, double rnge_rate, bool visibility);
 
+    Topos( double azi, double ele, double rnge, 
+          double az_rate, double el_rate, double range_rate, bool visibility);
 
-    Topos( double az, double el, double rnge):
-        az(azi), el(ele), range(rnge), range_rate(0.0);
+    Topos( double az, double el, double rnge);
 
 
     /*
@@ -128,10 +125,10 @@ class Topos
      */
     std::string ToString() const;
 
- private:
+  private:
 
-    m_azRad = azimuth * M_PI / 180;
-    m_elRad = elevation * M_PI / 180;
+    // m_azRad = azimuth * M_PI / 180;
+    // m_elRad = elevation * M_PI / 180;
     
 };
 

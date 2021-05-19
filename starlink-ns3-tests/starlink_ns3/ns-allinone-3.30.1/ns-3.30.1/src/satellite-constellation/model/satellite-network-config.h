@@ -1,22 +1,15 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
-/*
- * LEO Satellite Constellation Config
- * Creates and maintains all satellites and links within a satellite communication network
- *
- * ENSC 427: Communication Networks
- * Spring 2020
- * Team 11
- */
-#ifndef LEO_SATELLITE_CONFIG_H
-#define LEO_SATELLITE_CONFIG_H
+
+#ifndef SATELLITE_NETWORK_CONFIG_H
+#define SATELLITE_NETWORK_CONFIG_H
 
 #include "ns3/vector.h"
 #include "ns3/object.h"
 #include "ns3/ptr.h"
 #include "ns3/core-module.h"
 #include "ns3/point-to-point-module.h"
-#include "ns3/leo-satellite-mobility.h"
-#include "ns3/ground-station-mobility.h"
+#include "ns3/leo-satellite-mobility.h" /// check satellite.cc replacement
+#include "ns3/full-ground-station-mobility.h" 
 #include <vector>
 #include "ns3/mobility-module.h"
 #include "ns3/csma-module.h"
@@ -31,7 +24,7 @@
 
 namespace ns3 {
 
-class LeoSatelliteConfig : public Object
+class SatelliteNetworkConfig : public Object
 {
 public:
   /**
@@ -40,9 +33,9 @@ public:
    */
   static TypeId GetTypeId (void);
 
-  LeoSatelliteConfig (std::string TLEfilepath, std::string GSfilepath);
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath);
 
-  virtual ~LeoSatelliteConfig ();
+  virtual ~SatelliteNetworkConfig ();
   virtual TypeId GetInstanceTypeId (void) const;
   
   void ReadSatConfigFile (std::string TLEfilepath); // reads and parses file containing 3 line TLEs.
@@ -77,4 +70,4 @@ private:
   
 }
 
-#endif /* LEO_SATELLITE_CONFIG_H */
+#endif /* SATELLITE_NETWORK_CONFIG_H */

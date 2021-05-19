@@ -1,45 +1,38 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
-/*
- * LEO Satellite Constellation Config
- * Creates and maintains all satellites and links within a satellite communication network
- *
- * ENSC 427: Communication Networks
- * Spring 2020
- * Team 11
- */
 
-#include "leo-satellite-config.h"
+
+#include "satellite-network-config.h"
 
 namespace ns3 {
 
-NS_OBJECT_ENSURE_REGISTERED (LeoSatelliteConfig);
-NS_LOG_COMPONENT_DEFINE ("LeoSatelliteConfig");
+NS_OBJECT_ENSURE_REGISTERED (SatelliteNetworkConfig);
+NS_LOG_COMPONENT_DEFINE ("SatelliteNetworkConfig");
 
 extern double CalculateDistanceGroundToSat (const Vector &a, const Vector &b);
 
 double speed_of_light = 299792458; //in m/s
 
 //typeid
-TypeId LeoSatelliteConfig::GetTypeId (void)
+TypeId SatelliteNetworkConfig::GetTypeId (void)
 {
-  static TypeId tid = TypeId ("ns3::LeoSatelliteConfig")
+  static TypeId tid = TypeId ("ns3::SatelliteNetworkConfig")
   .SetParent<Object> ()
   .SetGroupName("LeoSatellite")
   ;
   return tid;
 }
 
-LeoSatelliteConfig::~LeoSatelliteConfig ()
+SatelliteNetworkConfig::~SatelliteNetworkConfig ()
 {
 }
 
-TypeId LeoSatelliteConfig::GetInstanceTypeId (void) const
+TypeId SatelliteNetworkConfig::GetInstanceTypeId (void) const
 {
   TypeId tid = this->GetTypeId();
   return tid;
 }
 
-void LeoSatelliteConfig::ReadSatConfigFile (std::string satConfigFilepath)
+void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
 {
    fstream newfile;
    newfile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
@@ -97,7 +90,7 @@ std::vector<std::string> split_string (std::string s, std::string delimiter) {
 
 
 
-void LeoSatelliteConfig::ReadGSConfigFile (std::string GSfilepath)
+void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
 {/////// editttt
    fstream newfile;
    newfile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
@@ -122,7 +115,7 @@ void LeoSatelliteConfig::ReadGSConfigFile (std::string GSfilepath)
 }
 
 //constructor
-LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSfilepath)
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
 
 {
   ReadSatConfigFile();
@@ -277,24 +270,30 @@ LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSf
   for (uint32_t i=0; i<totalNumGroundstations; i++)
   {
     Vector gsPos = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetPosition();
-    uint32_t closestSat = 0;
-    uint32_t closestSatDist = 0;
+    std::string dataRate = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetDataRate();
+    uint32_t closestSatid = 0;
+    double closestSatDist = 0;
 
     //find closest adjacent satellite for ground station
     for (uint32_t j=0; j<totalNumSatellites; j++)
     {
-      Vector satPos = m_constellationSatsNodes.Get(j)->GetObject<MobilityModel>()->GetPosition();
-      std::tuple <bool, double > gsSatVisibility = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetVisibilityGroundToSat(satPos);
+      Vector3D satPos = m_constellationSatsNodes.Get(j)->GetObject<MobilityModel>()->GetPosition();
+      Vector3D satVel = m_constellationSatsNodes.Get(j)->GetObject<MobilityModel>()->GetVelocity();
+      PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      Topos gsSatTopos = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetVisibilityGroundToSat(satPVecef);
       
       
-      double temp_dist = CalculateDistanceGroundToSat(gsPos,pos);
-      if((temp_dist < closestAdjSatDist) || (j==0))
+      double temp_dist = gsSatTopos.range;
+      double visible = gsSatTopos.visibility;
+
+      if( ( (temp_dist < closestAdjSatDist) || (j==0)) && visible )
       {
-        closestAdjSatDist = temp_dist;
-        closestAdjSat = j;
+        closestSatDist = temp_dist;
+        closestSatid = j;
       }
     }
-    double delay = (closestAdjSatDist*1000)/speed_of_light;
+    double delay = (closestSatDist*1000)/speed_of_light;
     CsmaHelper ground_station_link_helper;
     ground_station_link_helper.SetChannelAttribute("DataRate", StringValue ("5.36Gbps"));
     ground_station_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
@@ -397,7 +396,7 @@ LeoSatelliteConfig::LeoSatelliteConfig (std::string TLEfilepath, std::string GSf
 */
 
 
-void LeoSatelliteConfig::UpdateLinks()
+void SatelliteNetworkConfig::UpdateLinks()
 {
   NS_LOG_INFO(std::endl<<std::endl<<std::endl<<"Updating Links"<<std::endl);
 
