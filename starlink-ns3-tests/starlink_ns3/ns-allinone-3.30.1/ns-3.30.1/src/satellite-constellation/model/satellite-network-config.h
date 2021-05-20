@@ -8,19 +8,24 @@
 #include "ns3/ptr.h"
 #include "ns3/core-module.h"
 #include "ns3/point-to-point-module.h"
-#include "ns3/leo-satellite-mobility.h" /// check satellite.cc replacement
+#include "ns3/satellite-position-helper.h"
+#include "ns3/satellite-position-mobility-model.h"
 #include "ns3/full-ground-station-mobility.h" 
-#include <vector>
 #include "ns3/mobility-module.h"
 #include "ns3/csma-module.h"
-#include <cmath>
 #include "ns3/internet-module.h"
 #include "ns3/ipv4-global-routing-helper.h"
 #include "ns3/applications-module.h"
+
 #include <sstream>
 #include <vector>
 #include <fstream>
 #include <string>
+#include <vector>
+#include <cmath>
+#include <stdexcept>
+#include <algorithm>
+#include <utility>
 
 namespace ns3 {
 
@@ -45,13 +50,16 @@ public:
 
   void UpdateLinks (); //update the intersatellite links
 
-  
+  uint32_t m_islPerSat;
+  std::string m_islDataRate;
   NodeContainer m_satellitesNodes;
   NodeContainer m_groundStationsNodes; //node container to hold ground stations
 
 private:
   std::vector<Satellite> m_constellationSats;
   std::vector<GroundStation> m_groundStations;
+
+
   
   NodeContainer m_groundStationsNodes;
   std::vector<NetDeviceContainer> m_groundStationsdevices; 
@@ -62,12 +70,13 @@ private:
 
   // NodeContainer m_constellationSatsNodes;
   NetDeviceContainer m_islDevices;
-  std::vector<Ptr<CsmaChannel>> m_oislChannels;
+  std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;
   std::vector<uint32_t> m_islTracker; //this will have the node from the adjacent plane that is currently connected
 
-  
+  double CalculateDistanceSatToSat(Vector sat1Pos, Vector sat2Pos);
+  double CalculateDistanceSatToSat(PVCoords sat1, PVCoords sat2);
 };
   
 }

@@ -10,17 +10,18 @@ NS_LOG_COMPONENT_DEFINE ("SatelliteNetworkConfig");
 
 extern double CalculateDistanceGroundToSat (const Vector &a, const Vector &b);
 
-double speed_of_light = 299792458; //in m/s
+double SPEED_OF_LIGHT = 299792458; //in m/s
 
 //typeid
 TypeId SatelliteNetworkConfig::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::SatelliteNetworkConfig")
   .SetParent<Object> ()
-  .SetGroupName("LeoSatellite")
+  .SetGroupName("SatelliteNetworkConfig")
   ;
   return tid;
 }
+
 
 SatelliteNetworkConfig::~SatelliteNetworkConfig ()
 {
@@ -36,7 +37,8 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
 {
    fstream satFile;
    satFile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
-   if (satFile.is_open()){   //checking whether the file is open
+   if (satFile.is_open()) //checking whether the file is open
+   {   
       string satname;
       string line1;
       string line2;
@@ -83,6 +85,11 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
       satFile.close(); //close the file object.
 
    
+    }
+    else
+    {
+      std::runtime_error( "Error Reading  Config File");
+    }
 }
 
 // extra util split string with chosen delimiter
@@ -106,10 +113,11 @@ SatelliteNetworkConfig::splitString (std::string s, std::string delimiter)
 
 
 void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
-{/////// editttt
+{
    fstream gsFile;
    gsFile.open(satConfigFilepath, ios::in); //open a file to perform read operation using file object
-   if (gsFile.is_open()){   //checking whether the file is open
+   if (gsFile.is_open()) //checking whether the file is open
+   {   
       string GSname;
       string tmp;
       
@@ -147,84 +155,160 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
         idxGs++;
       }
       gsFile.close(); //close the file object.
-
+   
+    }
+    else
+    {
+      std::runtime_error( "Error Reading  Config File");
+    }
 }
 
-//constructor
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
+// Constructors 
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string &TLEfilepath, std::string &GSfilepath)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath), m_islPerSat(1), m_islDataRate("5.36Gbps")
+{
+  BuildNetwork(TLEfilepath, GSfilepath);
+}
+
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath), m_islPerSat(islPerSat), m_islDataRate("5.36Gbps")
+{
+  BuildNetwork(TLEfilepath, GSfilepath);
+}
+
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath), m_islPerSat(islPerSat), m_islDataRate(islDataRate)
+{
+  BuildNetwork(TLEfilepath, GSfilepath);
+}
+
+// Build all
+SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSfilepath)
 
 {
-  ReadSatConfigFile();
-  ReadGSConfigFile();
-
-  uint32_t totalNumSatellites = m_satellitesNodes.GetN();
+  ReadSatConfigFile(TLEfilepath);
+  ReadGSConfigFile(GSfilepath);
+  
+  
+  // uint32_t totalNumSatellites = m_satellitesNodes.GetN();
   // // NodeContainer temp;
   // // m_satellitesNodes.Create(totalNumSatellites); // 
 
-  Vector nodeAPosition = this->plane[0].Get(0)->GetObject<SateliteMobilityModel>()->GetPosition();
-  Vector nodeBPosition = this->plane[0].Get(1)->GetObject<FullGroundStationMobilityModel>()->GetPosition();
-  double distance = CalculateDistance(nodeAPosition, nodeBPosition);
-  double delay = (distance * 1000)/speed_of_light; //should get delay in seconds
-  PointToPointHelper isl_link_helper;
-  isl_link_helper.SetDeviceAttribute ("DataRate", StringValue ("5.36Gbps"));
-  isl_link_helper.SetChannelAttribute ("Delay", TimeValue(Seconds (delay)));
 
-  NS_LOG_INFO("Setting up intra-plane links with distance of "<<distance<<" km and delay of "<<delay<<" seconds."<<std::endl);
+  /* 
+  ******* ******* ******* 
+  ******* ISL Links ***** 
+  ******* ******* ******* 
+  */
+  std::vector < std::vector<uint32_t> > idxSatslinked; // keep track of already linked satellites to skip iterations.
 
- for (uint32_t i=0; i<num_planes; i++)
+
+  for (uint32_t idxSat1=0; idxSat1 < m_satellitesNodes.GetN(); idxSat1++)
   {
-    for (uint32_t j=0; j<num_satellites_per_plane; j++)
+    // if (std::find(idxSatslinked.begin(), idxSatslinked.end(), idxSat1) != idxSatslinked.end()) //check if idxSat1 is already linked
+    //   {
+    //   continue; 
+    //   } 
+    if((std::count_if(idxSatslinked.begin(), idxSatslinked.end(),
+                    [](std::vector<uint32_t> const& v) { return std::find(v.begin(), v.end(), idxSat1) 
+                                                                      != v.end();}) )
+         == m_islPerSat)
     {
-      this->intra_plane_devices.push_back(intraplane_link_helper.Install(plane[i].Get(j), plane[i].Get((j+1)%num_satellites_per_plane)));
-      NS_LOG_INFO("Plane "<<i<<": channel between node "<<j<<" and node "<<(j+1)%num_satellites_per_plane<<std::endl);
+      idxSatslinked.push_back( std::vector <uint32_t> {-1})
+      continue;
+    } 
+
+
+
+
+    Vector sat1Pos = this->m_satellitesNodes.Get(idxSat1)->GetObject<MobilityModel>()->GetPosition();
+    // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+
+    // uint32_t closestSatid = 0;
+    // double closestSatDist = 0;
+    std::vector < std::pair< uint32_t, double > > idxDistVec;
+
+    //find closest adjacent satellite for ground station
+    for (uint32_t idxSat2=0; idxSat2 < m_satellitesNodes.GetN(); idxSat2++)
+    {
+      
+
+      // if (std::find(idxSatslinked.begin(), idxSatslinked.end(), idxSat1) != idxSatslinked.end()) //check if idxSat1 is already linked
+      // {
+
+      // continue; 
+      // } 
+
+      // check if already all ISLs for this satellite are implemented. and if so, skip.
+      if((std::count_if(idxSatslinked.begin(), idxSatslinked.end(),
+                    [](std::vector<uint32_t> const& v) { return std::find(v.begin(), v.end(), idxSat2) 
+                                                                      != v.end();}) )
+         == m_islPerSat)
+      {
+        idxSatslinked
+        continue;
+      } 
+
+
+      
+      Vector3D sat2Pos = m_satellitesNodes.Get(idxSat2)->GetObject<MobilityModel>()->GetPosition();
+      // Vector3D sat2Vel = m_constellationSatsNodes.Get(idxSat2)->GetObject<MobilityModel>()->GetVelocity();
+      // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      double temp_dist = CalculateDistance(sat1Pos, sat2Pos);
+
+      std::pair< uint32_t, double > idxDist = {idxSat, temp_dist};
+      idxDistVec.push_back(idxDist);
+
+      // if(  (temp_dist < closestSatDist) || (idxSat==0) )
+      // {
+      //   // closestSatDist = temp_dist;
+      //   // closestSatId = idxSat;
+      // }
     }
+
+    // sort from min to max, distance pair vectors (keeping track of indexes) 
+    std::sort(idxDistVec.begin(), idxDistVec.end(), [](std::pair <uint32_t, double> a, std::pair <uint32_t, double> b) 
+                                    {return a.second < b.second;} 
+                                    );
+    
+    // idxSatslinked.push_back(idxSat1); // add first loop Satellite as already linked satellite.
+
+    idxSatslinked.push_back(std::vector<int>{}); // add empty vector for idxSat1's isl satlinks.
+    for (uint32_t islId=0; islId < m_islPerSat; islId++ )
+    {
+
+      uint32_t idxSat2 = idxDistVec.at(islId).first
+      idxSatslinked.at(idxSat1).push_back(idxSat2); // add each satellite link  to first loop sat1
+      double distance =  idxDistVec.at(islId).second      
+      double delay = closestSatDist * 1000 /  SPEED_OF_LIGHT; // in seconds
+    
+      PointToPointHelper isl_link_helper;
+      isl_link_helper.SetDeviceAttribute ("DataRate", StringValue (m_islDataRate));
+      isl_link_helper.SetChannelAttribute ("Delay", TimeValue(Seconds (delay)));
+      m_islDevices.push_back( isl_link_helper.Install(m_satellitesNodes.Get(idxSat1), m_satellitesNodes.Get(idxSat2))  );
+
+      NS_LOG_INFO("Setting up #"<<islId << "ISL link with distance of "<<distance<<" km and delay of "<<delay<<" seconds."<<std::endl);
+
+    }
+
+    
+
+    
+    
+
+
   }
 
-  // //setting up interplane links
-  // NS_LOG_INFO("Setting up inter-plane links"<<std::endl);
-  // for (uint32_t i=0; i<num_planes; i++)
-  // {
-  //   for (uint32_t j=0; j<num_satellites_per_plane; j++)
-  //   {
-  //     uint32_t nodeBIndex;
-  //     (i == num_planes - 1) ? nodeBIndex = num_satellites_per_plane - j - 1: nodeBIndex = j;
-  //     Vector nodeAPos = this->plane[i].Get(j)->GetObject<MobilityModel>()->GetPosition();
-  //     Vector nodeBPos = this->plane[(i+1)%num_planes].Get(nodeBIndex)->GetObject<MobilityModel>()->GetPosition();
-  //     double distance = CalculateDistance(nodeAPos, nodeBPos);
-  //     double delay = (distance*1000)/speed_of_light;
-  //     CsmaHelper interplane_link_helper;
-  //     interplane_link_helper.SetChannelAttribute("DataRate", StringValue ("5.36Gbps"));
-  //     interplane_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
 
-  //     NS_LOG_INFO("Channel open between plane "<<i<<" satellite "<<j<<" and plane "<<(i+1)%num_planes<<" satellite "<<nodeBIndex<< " with distance "<<distance<< "km and delay of "<<delay<<" seconds"<<std::endl);
 
-  //     NodeContainer temp_node_container;
-  //     temp_node_container.Add(this->plane[i].Get(j));
-  //     temp_node_container.Add(this->plane[(i+1)%num_planes]);
-  //     NetDeviceContainer temp_netdevice_container;
-  //     temp_netdevice_container = interplane_link_helper.Install(temp_node_container);
-  //     Ptr<CsmaChannel> csma_channel;
-  //     Ptr<Channel> channel;
-  //     channel = temp_netdevice_container.Get(0)->GetChannel();
-  //     csma_channel = channel->GetObject<CsmaChannel> ();
-      
-  //     for (uint32_t k=0; k<num_satellites_per_plane; k++)
-  //     {
-  //       if (j != k)
-  //       {
-  //         csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
-  //       }
-  //     }
-        
-  //     this->inter_plane_devices.push_back(temp_netdevice_container);
-  //     this->inter_plane_channels.push_back(csma_channel);
-  //     this->inter_plane_channel_tracker.push_back(nodeBIndex);
-  //   }
-  // }
 
-//////////////////////////////////////////////////////
-///////  GROND-SAT LINKS     ////////////////////
-//////////////////////////////////////////////////////
+/* 
+  ******* ******* ******* 
+  ******* GSL Links ***** 
+  ******* ******* ******* 
+  */
 
   totalNumGroundstations = m_groundStationsNodes.GetN();
 
@@ -269,8 +353,8 @@ SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::st
     //find closest adjacent satellite for ground station
     for (uint32_t idxSat=0; idxSat<totalNumSatellites; idxSat++)
     {
-      Vector3D satPos = m_constellationSatsNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition();
-      Vector3D satVel = m_constellationSatsNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity();
+      Vector3D satPos = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition();
+      Vector3D satVel = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity();
       PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
 
       Topos gsSatTopos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetVisibilityGroundToSat(satPVecef);
@@ -279,17 +363,19 @@ SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::st
       double temp_dist = gsSatTopos.range;
       double visible = gsSatTopos.visibility;
 
-      if( ( (temp_dist < closestAdjSatDist) || (idxSat==0)) && visible )
+      if( ( (temp_dist < closestSatDist) || (idxSat==0)) && visible )
       {
         closestSatDist = temp_dist;
         closestSatId = idxSat;
       }
     }
 
-    double delay = (closestSatDist*1000)/speed_of_light;
-    CsmaHelper ground_station_link_helper;
-    ground_station_link_helper.SetChannelAttribute("DataRate", StringValue (dataRate));
-    ground_station_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
+    double delay = (closestSatDist*1000)/SPEED_OF_LIGHT;
+    
+    // GSL Links
+    CsmaHelper gsl_link_helper;
+    gsl_link_helper.SetChannelAttribute("DataRate", StringValue (dataRate));
+    gsl_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
 
     NS_LOG_INFO("Channel open between ground station " << idxGs << 
             " and satellite " << closestSatId << "with distance "<< 
@@ -297,23 +383,24 @@ SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::st
 
 
     NodeContainer temp_node_container;
-    temp_node_container.Add(ground_stations.Get(idxGs));
-    temp_node_container.Add(this->plane[planeIndex]);
+    temp_node_container.Add(m_groundStationsNodes.Get(idxGs));
+    temp_node_container.Add(m_satellitesNodes.Get(idxSat));
     NetDeviceContainer temp_netdevice_container;
-    temp_netdevice_container = ground_station_link_helper.Install(temp_node_container);
+    temp_netdevice_container = gsl_link_helper.Install(temp_node_container); // attach closestSat to GS
+    
     Ptr<CsmaChannel> csma_channel;
     Ptr<Channel> channel;
     channel = temp_netdevice_container.Get(0)->GetChannel();
     csma_channel = channel->GetObject<CsmaChannel> ();
-
-    for (uint32_t k=0; k<num_satellites_per_plane; k++)
-    {
-      if (closestAdjSat != k)
-      {
-        csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
-      }
-    }
-        
+    
+    // num_satellites_per_plane = m_planes[idxPlane].size();
+    // for (uint32_t k=0; k<num_satellites_per_plane; k++)
+    // {
+    //   if (closestAdjSat != k)
+    //   {
+    //     csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
+    //   }
+    // }    
     this->ground_station_devices.push_back(temp_netdevice_container);
     this->ground_station_channels.push_back(csma_channel);
     this->ground_station_channel_tracker.push_back(closestAdjSat);
@@ -324,26 +411,13 @@ SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::st
   address.SetBase ("10.1.0.0", "255.255.255.0");
 
   //configuring IP Addresses for IntraPlane devices
-  for(uint32_t i=0; i< this->intra_plane_devices.size(); i++)
+  for(uint32_t i=0; i< this->isl_.size(); i++)
   {
     address.NewNetwork();
     this->intra_plane_interfaces.push_back(address.Assign(this->intra_plane_devices[i]));
   }
   
-  //configuring IP Addresses for InterPlane devices
-  for(uint32_t i=0; i< this->inter_plane_devices.size(); i++)
-  {
-    address.NewNetwork();
-    this->inter_plane_interfaces.push_back(address.Assign(this->inter_plane_devices[i]));
-    for(uint32_t j=1; j<= this->num_satellites_per_plane; j++)
-    {
-      if(j != this->inter_plane_channel_tracker[i] + 1)
-      {
-        std::pair< Ptr< Ipv4 >, uint32_t > interface = this->inter_plane_interfaces[i].Get(j);
-        interface.first->SetDown(interface.second);
-      }
-    }
-  }
+ 
 
   //configuring IP Addresses for Ground devices
   for(uint32_t i=0; i< this->ground_station_devices.size(); i++)
@@ -457,7 +531,7 @@ void SatelliteNetworkConfig::UpdateLinks()
 
       if(currAdjNodeID == nextAdjNodeID)
       {
-        double new_delay = (nextAdjNodeDist*1000)/speed_of_light;
+        double new_delay = (nextAdjNodeDist*1000)/SPEED_OF_LIGHT;
         this->inter_plane_channels[access_idx]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
         NS_LOG_INFO("Channel updated between plane "<<i<<" satellite "<<j<<" and plane "<<(i+1)%num_planes<<" satellite "<<nextAdjNodeID<< " with distance "<<nextAdjNodeDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
@@ -470,7 +544,7 @@ void SatelliteNetworkConfig::UpdateLinks()
         interface = this->inter_plane_interfaces[access_idx].Get(nextAdjNodeID+1);
         interface.first->SetUp(interface.second);
         this->inter_plane_channel_tracker[access_idx] = nextAdjNodeID;
-        double new_delay = (nextAdjNodeDist*1000)/speed_of_light;
+        double new_delay = (nextAdjNodeDist*1000)/SPEED_OF_LIGHT;
         this->inter_plane_channels[access_idx]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
         NS_LOG_INFO("New channel between plane "<<i<<" satellite "<<j<<" and plane "<<(i+1)%num_planes<<" satellite "<<nextAdjNodeID<< " with distance "<<nextAdjNodeDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
@@ -503,7 +577,7 @@ void SatelliteNetworkConfig::UpdateLinks()
     uint32_t currAdjNodeID = this->ground_station_channel_tracker[i];
     if(currAdjNodeID == closestAdjSat)
     {
-      double new_delay = (closestAdjSatDist*1000)/speed_of_light;
+      double new_delay = (closestAdjSatDist*1000)/SPEED_OF_LIGHT;
       this->ground_station_channels[i]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
       NS_LOG_INFO("Channel updated between ground station "<<i<<" and plane "<<planeIndex<<" satellite "<<closestAdjSat<< " with distance "<<closestAdjSatDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
@@ -516,7 +590,7 @@ void SatelliteNetworkConfig::UpdateLinks()
         interface = this->ground_station_interfaces[i].Get(closestAdjSat+1);
         interface.first->SetUp(interface.second);
         this->ground_station_channel_tracker[i] = closestAdjSat;
-        double new_delay = (closestAdjSatDist*1000)/speed_of_light;
+        double new_delay = (closestAdjSatDist*1000)/SPEED_OF_LIGHT;
         this->ground_station_channels[i]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
         NS_LOG_INFO("New channel between ground station "<<i<<" and plane "<<planeIndex<<" satellite "<<closestAdjSat<< " with distance "<<closestAdjSatDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
@@ -528,5 +602,16 @@ void SatelliteNetworkConfig::UpdateLinks()
   NS_LOG_INFO("Finished Recomputing Routing Tables"<<std::endl);
 }
 
+
+
+double 
+SatelliteNetworkConfig::CalculateDistance(Vector &pos1, Vector &pos2)
+{
+  return (pos1 - pos2).GetLength();
+}
+double 
+SatelliteNetworkConfig::CalculateDistance(PVCoords &pv1, PVCoords &pv2)
+{
+  return (pv1.GetPos() - pv2.GetPos()).GetLength();
 }
 
