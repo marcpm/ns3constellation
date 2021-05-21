@@ -215,27 +215,28 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
   ******* ******* ******* ******* ISL Links ***** ******* ******* ******* 
   ******* ******* ******* ******* ******* ******* ******* ******* ******* 
   */
-  std::vector < std::vector<int> > idxSatslinked; // keep track of already linked satellites to skip iterations.
+
+  // std::vector < std::vector<int> >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
 
 
   for (uint32_t idxSat1=0; idxSat1 < m_satellitesNodes.GetN(); idxSat1++)
   {
-    // if (std::find(idxSatslinked.begin(), idxSatslinked.end(), idxSat1) != idxSatslinked.end()) //check if idxSat1 is already linked
+    // if (std::find( m_islChannelTracker.begin(),  m_islChannelTracker.end(), idxSat1) !=  m_islChannelTracker.end()) //check if idxSat1 is already linked
     //   {
     //   continue; 
     //   } 
-    if((std::count_if(idxSatslinked.begin(), idxSatslinked.end(),
+    if((std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
                     [](std::vector<int> const& v) { return std::find(v.begin(), v.end(), idxSat1) 
                                                                       != v.end();}) )
          == m_islPerSat)
     {
-      idxSatslinked.push_back( std::vector <int> {-1})
+       m_islChannelTracker.push_back( std::vector <int> {-1})
       continue;
     } 
 
     Vector sat1Pos = this->m_satellitesNodes.Get(idxSat1)->GetObject<MobilityModel>()->GetPosition();
     // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
-    // uint32_t closestSatid = 0;
+    // uint32_t closestSatId = 0;
     // double closestSatDist = 0;
     std::vector < std::pair< uint32_t, double > > idxDistVec;
 
@@ -243,15 +244,16 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
     for (uint32_t idxSat2=0; idxSat2 < m_satellitesNodes.GetN(); idxSat2++)
     {
       
+      
 
-      // if (std::find(idxSatslinked.begin(), idxSatslinked.end(), idxSat1) != idxSatslinked.end()) //check if idxSat1 is already linked
+      // if (std::find( m_islChannelTracker.begin(),  m_islChannelTracker.end(), idxSat1) !=  m_islChannelTracker.end()) //check if idxSat1 is already linked
       // {
 
       // continue; 
       // } 
 
       // check if already all ISLs for this satellite are implemented. and if so, skip.
-      if((std::count_if(idxSatslinked.begin(), idxSatslinked.end(),
+      if((std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
                     [](std::vector<uint32_t> const& v) { return std::find(v.begin(), v.end(), idxSat2) 
                                                                       != v.end();}) )
          == m_islPerSat)
@@ -283,14 +285,14 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
                                     {return a.second < b.second;} 
                                     );
     
-    // idxSatslinked.push_back(idxSat1); // add first loop Satellite as already linked satellite.
+    
 
-    idxSatslinked.push_back(std::vector<int>{}); // add empty vector for idxSat1's isl satlinks.
+     m_islChannelTracker.push_back(std::vector<int>{}); // add empty vector for idxSat1's isl satlinks.
     for (uint32_t islId=0; islId < m_islPerSat; islId++ )
     {
 
       int idxSat2 = idxDistVec.at(islId).first
-      idxSatslinked.at(idxSat1).push_back(idxSat2); // add each satellite link  to first loop sat1
+       m_islChannelTracker.at(idxSat1).push_back(idxSat2); // add each satellite link  to first loop sat1
       double distance =  idxDistVec.at(islId).second      
       double delay = closestSatDist * 1000 /  SPEED_OF_LIGHT; // in seconds
     
@@ -303,7 +305,7 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
 
       m_islDevices.push_back( isl_link_helper.Install(m_satellitesNodes.Get(idxSat1), m_satellitesNodes.Get(idxSat2))  );
 
-      NS_LOG_INFO("Setting up #"<<islId << "ISL link with distance of "<<distance<<" km and delay of "<<delay<<" seconds."<<std::endl);
+      NS_LOG_INFO("Setting up #"<<islId << "ISL link with distance of "<<distance/1000<<" km and delay of "<<delay<<" seconds."<<std::endl);
 
     }
 
@@ -355,19 +357,20 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
   {
     Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
     std::string dataRate = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetDataRate();
-    uint32_t closestSatid = 0;
+
+    uint32_t closestSatId = 0;
     double closestSatDist = 0;
 
 /*
-*****************************************************************
-*************  ADD simultaneous multi satellite links (based on ISL setup) ***********
-*****************************************************************
+***********************************************************************************************
+************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
+***********************************************************************************************
 */
     //find closest adjacent satellite for ground station
     for (uint32_t idxSat=0; idxSat<totalNumSatellites; idxSat++)
     {
       // <SatellitePositionMobilityModel> ?
-      JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetStartTime() + Simulator::Now();
+      JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<SatellitePositionMobilityModel>()->GetStartTime() + Simulator::Now();
 
       Vector3D satPos = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition();
       Vector3D satVel = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity();
@@ -386,7 +389,7 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
       }
     }
 
-    double delay = (closestSatDist*1000)/SPEED_OF_LIGHT;
+    double delay = (closestSatDist)/SPEED_OF_LIGHT;
     
     // GSL Links
     CsmaHelper gsl_link_helper;
@@ -395,56 +398,69 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
 
     NodeContainer temp_node_container;
     temp_node_container.Add(m_groundStationsNodes.Get(idxGs));
-    temp_node_container.Add(m_satellitesNodes.Get(idxSat));
+    // temp_node_container.Add(m_satellitesNodes.Get(idxSat));
+    temp_node_container.Add(m_satellitesNodes);
     NetDeviceContainer temp_netdevice_container;
     temp_netdevice_container = gsl_link_helper.Install(temp_node_container); // attach closestSat to GS
-    NS_LOG_INFO("Channel open between ground station " << idxGs << 
-            " and satellite " << closestSatId << "with distance "<< 
-            closestSatDist<< "km and delay of "<<delay<<" seconds"<<std::endl);
+
 
 
 
     Ptr<CsmaChannel> csma_channel;
     Ptr<Channel> channel;
-    channel = temp_netdevice_container.Get(0)->GetChannel();
-    csma_channel = channel->GetObject<CsmaChannel> ();
+    gs_channel = temp_netdevice_container.Get(0)->GetChannel();
+    gs_csma_channel = gs_channel->GetObject<CsmaChannel> ();
     
     // num_satellites_per_plane = m_planes[idxPlane].size();
-    // for (uint32_t k=0; k<num_satellites_per_plane; k++)
-    // {
-    //   if (closestAdjSat != k)
-    //   {
-    //     csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
-    //   }
-    // }    
-    this->ground_station_devices.push_back(temp_netdevice_container);
-    this->ground_station_channels.push_back(csma_channel);
-    this->ground_station_channel_tracker.push_back(closestAdjSat);
-  }
+    for (uint32_t k = 1; k <= temp_node_container.GetN(); k++)
+    // for (uint32_t k = 0; k < m_satellitesNodes.GetN(); k++)
+    {
+      if (k != closestSatId)
+      {
+        gs_csma_channel->Detach(temp_netdevice_container.Get(k)->GetObject<CsmaNetDevice> ());
+      }
+    }    
+
+    NS_LOG_INFO("Channel open between ground station " << idxGs << 
+            " and satellite " << closestSatId << "with distance "<< 
+            closestSatDist/1000 << "km and delay of "<< delay <<" seconds"<<std::endl);    
+
+    m_groundStationsDevices.push_back(temp_netdevice_container);
+    m_groundStationsChannels.push_back(csma_channel);
+    m_groundStationsChannelTracker.push_back(closestSatId);
+  
+
+
+/*
+******************************************************************************************
+*************************** IP CONFIG ****************************************************
+******************************************************************************************
+*/
+
+
 
   //Configure IP Addresses for all NetDevices
   Ipv4AddressHelper address;
   address.SetBase ("10.1.0.0", "255.255.255.0");
 
-  //configuring IP Addresses for IntraPlane devices
-  for(uint32_t i=0; i< this->isl_.size(); i++)
+
+   //configuring IP Addresses for ISL devices
+  for(uint32_t i=0; i< this->m_islDevices.size(); i++)
   {
     address.NewNetwork();
-    this->intra_plane_interfaces.push_back(address.Assign(this->intra_plane_devices[i]));
+    m_islInterfaces.push_back(address.Assign(m_islDevices[i]));
   }
-  
- 
 
   //configuring IP Addresses for Ground devices
-  for(uint32_t i=0; i< this->ground_station_devices.size(); i++)
+  for(uint32_t i=0; i < m_groundStationsDevices.size(); i++)
   {
     address.NewNetwork();
-    this->ground_station_interfaces.push_back(address.Assign(this->ground_station_devices[i]));
-    for(uint32_t j=1; j<= this->num_satellites_per_plane; j++)
+    m_groundStationsInterfaces.push_back(address.Assign(m_groundStationsDevices[i]));
+    for(uint32_t j=1; j<= m_groundStationsDevices[i].GetN(); j++)
     {
-      if(j != this->ground_station_channel_tracker[i] + 1)
+      if(j != m_groundStationsChannelTracker[i] + 1)
       {
-        std::pair< Ptr< Ipv4 >, uint32_t > interface = this->ground_station_interfaces[i].Get(j);
+        std::pair< Ptr< Ipv4 >, uint32_t > interface = m_groundStationsInterfaces[i].Get(j);
         interface.first->SetDown(interface.second);
       }
     }
@@ -486,64 +502,116 @@ void SatelliteNetworkConfig::UpdateLinks()
 {
   NS_LOG_INFO(std::endl<<std::endl<<std::endl<<"Updating Links"<<std::endl);
 
-  std::vector<NodeContainer> update_links_plane = this->plane;
-  NodeContainer final_plane;
-  for(uint32_t j=0; j<num_satellites_per_plane; j++)
+
+/*
+******************************************************************************************
+*************************** ISL UPDATES **************************************************
+******************************************************************************************
+*/
+
+
+  
+
+
+  for (uint32_t idxSat1=0; idxSat1 < m_satellitesNodes.GetN(); idxSat1++)
   {
-    final_plane.Add(this->plane[0].Get(num_satellites_per_plane - j - 1));
+    // if (std::find( m_islChannelTracker.begin(),  m_islChannelTracker.end(), idxSat1) !=  m_islChannelTracker.end()) //check if idxSat1 is already linked
+    //   {
+    //   continue; 
+    //   } 
+    if((std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
+                    [](std::vector<int> const& v) { return std::find(v.begin(), v.end(), idxSat1) 
+                                                                      != v.end();}) )
+         == m_islPerSat)
+    {
+       m_islChannelTracker.push_back( std::vector <int> {-1})
+      continue;
+    } 
+
+    Vector sat1Pos = m_satellitesNodes.Get(idxSat1)->GetObject<MobilityModel>()->GetPosition();
+    // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+    // uint32_t closestSatId = 0;
+    // double closestSatDist = 0;
+    std::vector < std::pair< uint32_t, double > > idxDistVec;
+
+    //find closest adjacent satellite for ground station
+    for (uint32_t idxSat2=1; idxSat2 < m_satellitesNodes.GetN(); idxSat2++)
+    {
+      
+
+      // if (std::find( m_islChannelTracker.begin(),  m_islChannelTracker.end(), idxSat1) !=  m_islChannelTracker.end()) //check if idxSat1 is already linked
+      // {
+
+      // continue; 
+      // } 
+
+      // check if already all ISLs for this satellite are implemented. and if so, skip.
+      if((std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
+                    [](std::vector<uint32_t> const& v) { return std::find(v.begin(), v.end(), idxSat2) 
+                                                                      != v.end();}) )
+         == m_islPerSat)
+      {
+        
+        continue;
+      } 
+
+
+      
+      Vector3D sat2Pos = m_satellitesNodes.Get(idxSat2)->GetObject<MobilityModel>()->GetPosition();
+      // Vector3D sat2Vel = m_constellationSatsNodes.Get(idxSat2)->GetObject<MobilityModel>()->GetVelocity();
+      // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      double temp_dist = CalculateDistance(sat1Pos, sat2Pos);
+
+      std::pair< uint32_t, double > idxDist = {idxSat, temp_dist};
+      idxDistVec.push_back(idxDist);
+
+      // if(  (temp_dist < closestSatDist) || (idxSat==0) )
+      // {
+      //   // closestSatDist = temp_dist;
+      //   // closestSatId = idxSat;
+      // }
+    }
+
+    // sort from min to max, distance pair vectors (keeping track of indexes) 
+    std::sort(idxDistVec.begin(), idxDistVec.end(), [](std::pair <uint32_t, double> a, std::pair <uint32_t, double> b) 
+                                    {return a.second < b.second;} 
+                                    );
+    
+    
+
+     m_islChannelTracker.push_back(std::vector<int>{}); // add empty vector for idxSat1's isl satlinks.
+    for (uint32_t islId=0; islId < m_islPerSat; islId++ )
+    {
+
+      int idxSat2 = idxDistVec.at(islId).first
+       m_islChannelTracker.at(idxSat1).push_back(idxSat2); // add each satellite link  to first loop sat1
+      double distance =  idxDistVec.at(islId).second      
+      double delay = closestSatDist * 1000 /  SPEED_OF_LIGHT; // in seconds
+    
+      PointToPointHelper isl_link_helper;
+      isl_link_helper.SetDeviceAttribute ("DataRate", StringValue (m_islDataRate));
+      isl_link_helper.SetChannelAttribute ("Delay", TimeValue(Seconds (delay)));
+
+      // NetDeviceContainer temp_isl_netdevice_container;
+      // temp_isl_netdevice_container = gsl_link_helper.Install(m_satellitesNodes.Get(idxSat1), m_satellitesNodes.Get(idxSat2)); // 
+
+      m_islDevices.push_back( isl_link_helper.Install(m_satellitesNodes.Get(idxSat1), m_satellitesNodes.Get(idxSat2))  );
+
+      NS_LOG_INFO("Setting up #"<<islId << "ISL link with distance of "<<distance/1000<<" km and delay of "<<delay<<" seconds."<<std::endl);
+
+    }
+
   }
-  update_links_plane.push_back(final_plane);
- 
-  for (uint32_t i=0; i<this->num_planes; i++)
-  {
-    Vector refSatPos;
-    uint32_t refSat = 0;
-    //find reference satellite (closest to equator)
-    for (uint32_t j=0; j<this->num_satellites_per_plane; j++)
-    {
-      Vector pos = update_links_plane[i].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      if ((std::abs(pos.x) < std::abs(refSatPos.x)) || j == 0)
-      {
-        refSatPos = pos;
-        refSat = j;
-      }
-    }
 
-    //find the closest adjacent satellite to the reference satellite
-    uint32_t closestAdjSat = 0;
-    double closestAdjSatDist = 0;
-    Vector adjPos; //debug
-    for (uint32_t j=0; j<this->num_satellites_per_plane; j++)
-    {
-      Vector pos = update_links_plane[i+1].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      double temp_dist = CalculateDistance(refSatPos,pos);
-      if((temp_dist < closestAdjSatDist) || (j==0))
-      {
-        closestAdjSatDist = temp_dist;
-        closestAdjSat = j;
-        adjPos = pos; //debug
-      }
-    }
 
-    //calculate the reference increment factor for adjacent satellites in a plane
-    uint32_t ref_incr;
-    (refSat <= closestAdjSat) ? (ref_incr = closestAdjSat - refSat) : (ref_incr = this->num_satellites_per_plane - refSat + closestAdjSat);
 
-    //update all adjacent satellites for this plane
-    for (uint32_t j=0; j<this->num_satellites_per_plane; j++)
-    {
-      uint32_t access_idx = i*(this->num_satellites_per_plane) + j;
-      uint32_t currAdjNodeID = this->inter_plane_channel_tracker[access_idx];
-      uint32_t nextAdjNodeID = (j + ref_incr)%(this->num_satellites_per_plane);
-      double nextAdjNodeDist;
 
-      Vector constNodePos = update_links_plane[i].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      Vector nextAdjNodePos = update_links_plane[(i+1)/*%(this->num_planes)*/].Get(nextAdjNodeID)->GetObject<MobilityModel>()->GetPosition();
 
-      nextAdjNodeDist = CalculateDistance(constNodePos, nextAdjNodePos);
 
-      if (i == this->num_planes - 1)
-        nextAdjNodeID = num_satellites_per_plane - nextAdjNodeID - 1;
+
+
+
 
       if(currAdjNodeID == nextAdjNodeID)
       {
@@ -567,55 +635,83 @@ void SatelliteNetworkConfig::UpdateLinks()
     }
   }
 
-  //updating links between ground stations and their closest satellites
-  for (uint32_t i=0; i<2; i++)
+
+/*
+******************************************************************************************
+*************************** GSL UPDATES **************************************************
+******************************************************************************************
+*/
+
+
+  //setting up links between ground stations and their closest satellites
+  NS_LOG_INFO("Setting links between ground stations and satellites"<<std::endl);
+  for (uint32_t idxGs=0; idxGs<m_groundStationsNodes.GetN(); idxGs++)
   {
-    Vector gndPos = ground_stations.Get(i)->GetObject<MobilityModel> ()->GetPosition();
-    uint32_t closestAdjSat = 0;
-    uint32_t closestAdjSatDist = 0;
-    uint32_t planeIndex;
-    if (i == 0)
-      planeIndex = 0;
-    else
-      planeIndex = floor(3*num_planes/7);
+    Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
+    std::string dataRate = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetDataRate();
+
+    uint32_t closestSatId = 0;
+    double closestSatDist = 0;
+
+/*
+***********************************************************************************************
+************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
+***********************************************************************************************
+*/
     //find closest adjacent satellite for ground station
-    for (uint32_t j=0; j<this->num_satellites_per_plane; j++)
+    for (uint32_t idxSat=0; idxSat<totalNumSatellites; idxSat++)
     {
-      Vector pos = this->plane[planeIndex].Get(j)->GetObject<MobilityModel>()->GetPosition();
-      double temp_dist = CalculateDistanceGroundToSat(gndPos,pos);
-      if((temp_dist < closestAdjSatDist) || (j==0))
+      // <SatellitePositionMobilityModel> ?
+      JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<SatellitePositionMobilityModel>()->GetStartTime() + Simulator::Now();
+
+      Vector3D satPos = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition();
+      Vector3D satVel = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity();
+      PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      
+      Topos gsSatTopos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetVisibilityGroundToSat(satPVecef, currentJdut);
+      
+      double temp_dist = gsSatTopos.range;
+      bool visible = gsSatTopos.visibility;
+
+      if( ( (temp_dist < closestSatDist) || (idxSat==0)) && visible )
       {
-        closestAdjSatDist = temp_dist;
-        closestAdjSat = j;
+        closestSatDist = temp_dist;
+        closestSatId = idxSat;
       }
     }
 
-    uint32_t currAdjNodeID = this->ground_station_channel_tracker[i];
-    if(currAdjNodeID == closestAdjSat)
+    double newDelay = (closestSatDist)/SPEED_OF_LIGHT;
+    
+    
+    uint32_t prevClosestSatId = m_groundStationsChannelTracker[i];
+    
+    if(prevClosestSatId == closestSatId) // no change of closest
     {
-      double new_delay = (closestAdjSatDist*1000)/SPEED_OF_LIGHT;
-      this->ground_station_channels[i]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
-      NS_LOG_INFO("Channel updated between ground station "<<i<<" and plane "<<planeIndex<<" satellite "<<closestAdjSat<< " with distance "<<closestAdjSatDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
+
+      m_groundStationsChannels[i]->SetAttribute("Delay", TimeValue(Seconds(newDelay)));
+      NS_LOG_INFO("Channel updated between ground station "<<i<<" and satellite "<<closestSatId<< " with distance "<<closestSatDist/1000<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
       else
       {
-        this->ground_station_channels[i]->Detach(this->ground_station_devices[i].Get(currAdjNodeID+1)->GetObject<CsmaNetDevice> ());
-        std::pair< Ptr< Ipv4 >, uint32_t> interface = this->ground_station_interfaces[i].Get(currAdjNodeID+1);
+        // Detach previous closest satellite node.
+        //prevClosestSatId (( + 1 ))!! due to the first device on m_groundStationsDevices is the ground station itself,
+        m_groundStationsChannels[i]->Detach( m_groundStationsDevices[i].Get(prevClosestSatId+1)->GetObject<CsmaNetDevice> ());
+        std::pair< Ptr< Ipv4 >, uint32_t> interface =  m_groundStationsInterfaces[i].Get(prevClosestSatId+1);
         interface.first->SetDown(interface.second);
-        this->ground_station_channels[i]->Reattach(this->ground_station_devices[i].Get(closestAdjSat+1)->GetObject<CsmaNetDevice> ());
-        interface = this->ground_station_interfaces[i].Get(closestAdjSat+1);
+
+        // Attach new closest sat node.
+        m_groundStationsChannels[i]->Reattach( m_groundStationsDevices[i].Get( closestSatId+1)->GetObject<CsmaNetDevice> ());
+        interface =  m_groundStationsInterfaces[i].Get( closestSatId+1);
         interface.first->SetUp(interface.second);
-        this->ground_station_channel_tracker[i] = closestAdjSat;
-        double new_delay = (closestAdjSatDist*1000)/SPEED_OF_LIGHT;
-        this->ground_station_channels[i]->SetAttribute("Delay", TimeValue(Seconds(new_delay)));
-        NS_LOG_INFO("New channel between ground station "<<i<<" and plane "<<planeIndex<<" satellite "<<closestAdjSat<< " with distance "<<closestAdjSatDist<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
+        m_groundStationsChannelTracker[i] =  closestSatId;
+        
+        m_groundStationsChannels[i]->SetAttribute("Delay", TimeValue(Seconds(newDelay)));
+
+        NS_LOG_INFO("New channel between ground station "<< i <<" and satellite "<< closestSatId<< " with distance "<<closestSatDist/1000<< "km and delay of "<<new_delay<<" seconds"<<std::endl);
       }
   }
-  
-  //Recompute Routing Tables
-  NS_LOG_INFO("Recomputing Routing Tables"<<std::endl);
-  Ipv4GlobalRoutingHelper::RecomputeRoutingTables ();
-  NS_LOG_INFO("Finished Recomputing Routing Tables"<<std::endl);
+
 }
 
 

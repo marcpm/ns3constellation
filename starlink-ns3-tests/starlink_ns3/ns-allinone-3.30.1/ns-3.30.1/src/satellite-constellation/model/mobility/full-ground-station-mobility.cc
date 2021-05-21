@@ -22,16 +22,16 @@ FullGroundStationMobilityModel::GetTypeId (void)
     .SetGroupName ("Mobility")
     .AddConstructor<FullGroundStationMobilityModel> ()
     .AddAttribute ("Latitude",
-                   "Latitude of ground station.",
+                   "Latitude of ground station [deg].",
                    DoubleValue(1.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_latitude),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("Longitude",
-                   "Longitude of ground station.",
+                   "Longitude of ground station [deg].",
                    DoubleValue(1.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_longitude),
                    MakeDoubleChecker<double> ())
-    .AddAttribute ("Altitude", "The altitude of ground station.",
+    .AddAttribute ("Altitude", "The altitude of ground station [m].",
                    DoubleValue (0.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_altitude),
                    MakeDoubleChecker<double> ())
@@ -43,7 +43,7 @@ FullGroundStationMobilityModel::GetTypeId (void)
                    StringValue ("5.36Gbps"),
                    MakeStringAccessor (&FullGroundStationMobilityModel::m_dataRate),
                    MakeStringChecker<string> ())
-    .AddAttribute ("AngleIncidence", "The minimum Angle of incidence of ground station.",
+    .AddAttribute ("AngleIncidence", "The minimum Angle of incidence of ground station [deg].",
                    DoubleValue (25.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_angleIncidence),
                    MakeDoubleChecker<double> ())
@@ -152,12 +152,7 @@ FullGroundStationMobilityModel::GetLatLonAlt (void) const
 
 
 
-/* To be called after MobilityModel object is created to set position.
-   Input should be a NULL vector as position is determined by number of orbital planes and number of satellites per   
-   orbital plane
-   Both ground stations are set along the longitude of a satellite's orbit (not at the same longitude), and at random 
-   latitudes   
- */
+
 void 
 FullGroundStationMobilityModel::DoSetPosition ()
 {
@@ -172,6 +167,13 @@ FullGroundStationMobilityModel::DoGetPosition (void) const
   return m_ecefPosition;
 }
 
+Vector
+FullGroundStationMobilityModel::DoGetVelocity (void) const
+{
+  
+ // ecef velocity = 0; fixed (to earths rotating axis) ref frame
+  return m_ecefVelocity;
+}
 
 
 
@@ -195,13 +197,18 @@ FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVC
   
   double razel[3];
   double razelrates[3];
-  ECEF2azel(ecefSat, m_latitude, m_longitude, m_altitude, jdut1, razel[3], razelrates[3]);
 
-  bool visible = razel[2] * M_PI / 180.0 > m_angleIncidence;
+  // ecef2azel needs lat,lon in rad, alt in km.
+  ECEF2azel(ecefSat, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
+            jdut1, razel[3], razelrates[3]);
+
+  bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
   
 
-  Topos topoFrame(razel[1] * M_PI / 180.0, razel[2] * M_PI / 180.0, razel[0], 
-                  razelrates[1] * M_PI / 180.0, razelrates[2] * M_PI / 180.0, razelrates[0], visible);
+  // toposAzelRa Coords in az[deg] el[deg]  ra[m] : idem rates [/s]
+  Topos topoFrame(razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
+                  razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible);
+
 
 
 
@@ -213,20 +220,14 @@ FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVC
   
 }
 
-
-
-Vector
-FullGroundStationMobilityModel::DoGetVelocity (void) const
-{
-  
- // ecef velocity = 0; fixed (to earths rotating axis) ref frame
-  return m_ecefVelocity;
-}
+ double GetAngleOfIncidence(void) const
+ {
+   return m_angleIncidence;
+ }
 
 
 
-
-friend double GetDataRate(void) const
+double GetDataRate(void) const
 {
   return m_dataRate;
 }

@@ -60,7 +60,7 @@ private:
   virtual Vector DoGetVelocity (void) const;
   friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite (deprecated)
   friend Topos GetVisibilityGroundToSat (const PVCoords &position, double jdut1) const;
-  friend double GetAngleofIncidence(void) const;
+  friend double GetAngleOfIncidence(void) const;
   friend double GetDataRate(void) const;
   // virtual Vector GetLatLonAlt (void) const;
   virtual Vector GetZenithDirection(void) const;

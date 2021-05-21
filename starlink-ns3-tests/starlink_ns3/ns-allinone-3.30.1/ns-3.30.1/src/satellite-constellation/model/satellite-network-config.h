@@ -57,15 +57,15 @@ public:
 
 private:
   std::vector<Satellite> m_constellationSats;
-  std::vector<GroundStation> m_groundStations;
+  // std::vector<GroundStation> m_groundStations;
 
 
   
   NodeContainer m_groundStationsNodes;
-  std::vector<NetDeviceContainer> m_groundStationsdevices; 
-  std::vector<Ptr<CsmaChannel>> m_groundStationschannels;
-  std::vector<Ipv4InterfaceContainer> m_groundStationsinterfaces;
-  std::vector<uint32_t> m_groundStationschannel_tracker;
+  std::vector<NetDeviceContainer> m_groundStationsDevices; 
+  std::vector<Ptr<CsmaChannel>> m_groundStationsChannels;
+  std::vector<Ipv4InterfaceContainer> m_groundStationsInterfaces;
+  std::vector<uint32_t> m_groundStationsChannelTracker;
 
 
   // NodeContainer m_constellationSatsNodes;
@@ -73,7 +73,7 @@ private:
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;
-  std::vector<uint32_t> m_islTracker; //this will have the node from the adjacent plane that is currently connected
+  std::vector < std::vector<int> >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
 
   double CalculateDistanceSatToSat(Vector sat1Pos, Vector sat2Pos);
   double CalculateDistanceSatToSat(PVCoords sat1, PVCoords sat2);

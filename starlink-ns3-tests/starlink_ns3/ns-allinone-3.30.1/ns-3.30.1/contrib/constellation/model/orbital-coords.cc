@@ -809,6 +809,25 @@ void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lo
 }
 
 
+/*
+rv2azel
+This function calculates the range, elevation, and azimuth (and their rates)
+from the TEME vectors output by the SGP4 function.
+Author: David Vallado, 2007.
+
+Ported to C++ by Grady Hillhouse with some modifications, July 2015.
+Repurposed by Marc PM with modifications for PVCoords input, April 2021.
+
+INPUTS          DESCRIPTION                     RANGE/UNITS
+satCoords       Position velocity (any Frame)   
+latgd           Site geodetic latitude          -pi/2 to pi/2 in radians
+lon             Site longitude                  -2pi to 2pi in radians
+alt             Site altitude                   km
+jdut1           Julian date                     days
+OUTPUTS         DESCRIPTION
+razel           Range, azimuth, and elevation matrix
+razelrates      Range rate, azimuth rate, and elevation rate matrix
+*/
 
 void ECEF2azel(const PVCoords satCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
 {
@@ -829,13 +848,13 @@ void ECEF2azel(const PVCoords satCoords, double latgd, double lon, double alt, d
     
 
     satCoords =  satCoords.TransformTo(FrameType::ECEF);
-    posSat = satCoords.GetPos();
-    velSat = satCoords.GetVel();
+    posSat = satCoords.GetPos() / 1000.0;
+    velSat = satCoords.GetVel() / 1000.0;
     double recef[3] = {posSat.x, posSat.y, posSat.z};
     double vecef[3] = {velSat.x, velSat.y, velSat.z};
 
 
-    // case of rv input in TEME
+    // original implementation  of rv input in TEME
     // teme2ecef(ro, vo, jdut1, recef, vecef);
 
     
