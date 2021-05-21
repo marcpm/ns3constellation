@@ -810,7 +810,7 @@ void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lo
 
 
 
-void ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
+void ECEF2azel(const PVCoords satCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
 {
     //Locals
     double halfPI = PI * 0.5;
@@ -827,8 +827,16 @@ void ECEF2azel(const PVCoords satEcefCoords, double latgd, double lon, double al
     double rho, az, el;
     double drho, daz, del;
     
-    double recef[3] = {satEcefCoords.getPos().x, satEcefCoords.getPos().y, satEcefCoords.getPos().z};
-    double vecef[3] = {satEcefCoords.getVel().x, satEcefCoords.getVel().y, satEcefCoords.getVel().z};
+
+    satCoords =  satCoords.TransformTo(FrameType::ECEF);
+    posSat = satCoords.GetPos();
+    velSat = satCoords.GetVel();
+    double recef[3] = {posSat.x, posSat.y, posSat.z};
+    double vecef[3] = {velSat.x, velSat.y, velSat.z};
+
+
+    // case of rv input in TEME
+    // teme2ecef(ro, vo, jdut1, recef, vecef);
 
     
     //Get site vector in ECEF coordinate system

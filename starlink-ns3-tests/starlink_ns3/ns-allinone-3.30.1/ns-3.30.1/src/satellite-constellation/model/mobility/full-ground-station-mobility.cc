@@ -54,6 +54,19 @@ FullGroundStationMobilityModel::GetTypeId (void)
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
+                                                      std::string name, double angleIncidence, std::string dataRate,
+                                                      uint32_t simultaneous_gsLinks)
+{
+    m_latitude = latitude;
+    m_longitude = longitude;
+    m_altitude = altitude;
+    m_name = name;
+    m_angleIncidence = angleIncidence;
+    m_dataRate = dataRate;
+    m_simultaneous_gsLinks = simultaneous_gsLinks;
+}
+
+FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
                                                       std::string name, double angleIncidence, std::string dataRate)
 {
     m_latitude = latitude;
@@ -62,6 +75,7 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_name = name;
     m_angleIncidence = angleIncidence;
     m_dataRate = dataRate;
+    m_simultaneous_gsLinks = 1;
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude)
@@ -72,6 +86,7 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_name = "";
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
+    m_simultaneous_gsLinks = 1;
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
@@ -82,6 +97,7 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
     m_name = "";
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
+    m_simultaneous_gsLinks = 1;
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt, std::string name)
@@ -92,6 +108,7 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt,
     m_name = name;
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
+    m_simultaneous_gsLinks = 1;
     // m_id
 }
 
@@ -170,10 +187,12 @@ FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecef
 
 // std::tuple <bool, double >
 Topos
-FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
+FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords, double jdut1) const
 {
   
   PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
+  
+  
   double razel[3];
   double razelrates[3];
   ECEF2azel(ecefSat, m_latitude, m_longitude, m_altitude, jdut1, razel[3], razelrates[3]);
