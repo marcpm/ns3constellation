@@ -41,7 +41,7 @@ public:
   FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
                                                       std::string name, double angleIncidence, 
                                                       std::string dataRate,
-                                                      uint32_t simultaneous_gsLinks);
+                                                      uint32_t numGSLs);
   FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
                                                       std::string name, double angleIncidence, 
                                                       std::string dataRate);
@@ -62,6 +62,7 @@ private:
   friend Topos GetVisibilityGroundToSat (const PVCoords &position, double jdut1) const;
   friend double GetAngleOfIncidence(void) const;
   friend double GetDataRate(void) const;
+  friend double GetNumGsl(void) const;
   // virtual Vector GetLatLonAlt (void) const;
   virtual Vector GetZenithDirection(void) const;
   virtual String GetName(void) const;
@@ -76,7 +77,7 @@ private:
   double m_angleIncidence;
   std::string m_name;
   std::string m_dataRate;
-  uint32_t m_simultaneous_gsLinks;
+  uint32_t m_numGsl;
 
 
   // Vector m_ecefPosition;

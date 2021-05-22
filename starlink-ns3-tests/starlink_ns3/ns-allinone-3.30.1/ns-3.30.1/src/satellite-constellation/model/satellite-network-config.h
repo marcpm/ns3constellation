@@ -50,7 +50,7 @@ public:
 
   void UpdateLinks (); //update the intersatellite links
 
-  uint32_t m_islPerSat;
+  uint32_t m_nISLsPerSat; // num of ISLs per sat
   std::string m_islDataRate;
   NodeContainer m_satellitesNodes;
   NodeContainer m_groundStationsNodes; //node container to hold ground stations
@@ -73,7 +73,7 @@ private:
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;
-  std::vector < std::vector<int> >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
+  std::vector < std::pair < uint32_t, uint32_t > >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
 
   double CalculateDistanceSatToSat(Vector sat1Pos, Vector sat2Pos);
   double CalculateDistanceSatToSat(PVCoords sat1, PVCoords sat2);
