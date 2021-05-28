@@ -11,10 +11,10 @@ def build(bld):
     module.source = [
         'model/satellite-network-config.cc',
         'model/mobility/full-ground-station-mobility.cc',
-        'model/orbital/orbital-coords.cc',
-        'model/orbital/sgp4math.cc',
-        
+        'model/orbital/basic-orbital.cc',
         ]
+        #'model/orbital/orbital-coords.cc',
+        #'model/orbital/sgp4math.cc',
 # 'model/mobility/leo-satellite-mobility.cc',
 # 'helper/leo-satellite-helper.cc',
 
@@ -26,11 +26,12 @@ def build(bld):
     headers = bld(features='ns3header')
     headers.module = 'satellite-constellation'
     headers.source = [
-        'model/leo-satellite-config.h',    
+        'model/satellite-network-config.h',    
         'model/mobility/full-ground-station-mobility.h',
-        'model/orbital/orbital-coords.h',
-        'model/orbital/sgp4math.h'
+        'model/orbital/basic-orbital.h',
         ]
+        #'model/orbital/orbital-coords.h',
+        #'model/orbital/sgp4math.h'
     # 'model/mobility/leo-satellite-mobility.h',
 
     if bld.env.ENABLE_EXAMPLES:

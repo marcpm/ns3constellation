@@ -29,6 +29,7 @@
 
 // #include "sgp4unit.h"
 
+#define PI M_PI
 
 // ------------------------- function declarations -------------------------
 

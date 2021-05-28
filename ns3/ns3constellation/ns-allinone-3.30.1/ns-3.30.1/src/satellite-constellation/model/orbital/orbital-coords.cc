@@ -104,7 +104,7 @@ namespace ns3 {
                     switch (newFrame)
                     {   
                         case FrameType::ECI:
-                            PVCoords newFrameFrame =  PVCoords(m_pos, m_vel, m_frame) //copy ECI 2 ECI
+                            PVCoords newCoords =  PVCoords(m_pos, m_vel, m_frame) //copy ECI 2 ECI
                             break;
                         case FrameType::ECEF:
                             // ECI2ECEF 
@@ -175,14 +175,14 @@ namespace ns3 {
 
                     break;
                 
-            };
+            }
             return newCoords;
 
         };
 
 
         
-virtual PVCoords PVCoords::Geodetic2ECEF (double latitude, double longitude, double altitude)
+PVCoords PVCoords::Geodetic2ECEF (double latitude, double longitude, double altitude)
 {
 
     // * "Department of Defense World Geodetic System 1984." National Imagery and 
@@ -235,12 +235,13 @@ latlongh        Latitude, longitude, and altitude (deg, deg, and m)
 PVCoords PVCoords::ECEF2GEO (PVCoords ecefCoords)
 {
     double twopi = 2.0*M_PI;
+    double pi = M_PI;
     double small = 0.00000001;          //small value for tolerances
     double re = 6378137;               //radius of earth in m
     double eesqrd = 0.006694385000;     //eccentricity of earth sqrd
     double magr, temp, rtasc;
     
-    Vector ecefPos = ecefCoords.getPos()
+    Vector ecefPos = ecefCoords.GetPos()
     double r[3] = {ecefPos.x, ecefPos.y, ecefPos.z};
 
 
@@ -329,50 +330,50 @@ PVCoords PVCoords::ECEF2GEO (PVCoords ecefCoords)
             azdot(az_rate), eldot(el_rate), rangedot(range_rate), visibility(visible)
     {}
 
-    Topos::Topos( double az, double el, double rnge):
-        az(azi), el(ele), range(rnge), azdot(0.0), eldot(0.0), rangedot(0.0), visibility(true);
+    Topos::Topos( double azi, double ele, double rnge):
+        az(azi), el(ele), range(rnge), azdot(0.0), eldot(0.0), rangedot(0.0), visibility(false)
     {}
 
 
 
-/**
-    * Constructor
-    * @param[in] az azimuth in radians
-    * @param[in] el elevation in radians
-    * @param[in] rnge range in kilometers
-    * @param[in] rnge_rate range rate in kilometers per second
-    */
-Topos::Topos(
-        double az,
-        double el,
-        double rnge,
-        double rnge_rate)
-    : azimuth(az)
-    , elevation(el)
-    , range(rnge)
-    , range_rate(rnge_rate)
-{
-    m_azRad = azimuth * M_PI / 180;
-    m_elRad = elevation * M_PI / 180;
-}
+// /**
+//     * Constructor
+//     * @param[in] az azimuth in radians
+//     * @param[in] el elevation in radians
+//     * @param[in] rnge range in kilometers
+//     * @param[in] rnge_rate range rate in kilometers per second
+//     */
+// Topos::Topos(
+//         double az,
+//         double el,
+//         double rnge,
+//         double rnge_rate)
+//     : azimuth(az)
+//     , elevation(el)
+//     , range(rnge)
+//     , range_rate(rnge_rate)
+// {
+//     m_azRad = azimuth * M_PI / 180;
+//     m_elRad = elevation * M_PI / 180;
+// }
 
 
 
 
-Topos::Topos(
-        double az,
-        double el,
-        double rnge,
-        )
-    : azimuth(az)
-    , elevation(el)
-    , range(rnge)
-    , range_rate(0.0)
+// Topos::Topos(
+//         double az,
+//         double el,
+//         double rnge,
+//         )
+//     : azimuth(az)
+//     , elevation(el)
+//     , range(rnge)
+//     , range_rate(0.0)
 
-{
-    m_azRad = azimuth * M_PI / 180;
-    m_elRad = elevation * M_PI / 180;
-}
+// {
+//     m_azRad = azimuth * M_PI / 180;
+//     m_elRad = elevation * M_PI / 180;
+// }
 
 
 /**
@@ -381,13 +382,13 @@ Topos::Topos(
     */
 Topos::Topos(const Topos& topo)
 {
-    azimuth = topo.azimuth;
-    elevation = topo.elevation;
+    az = topo.az;
+    el = topo.el;
     range = topo.range;
-    range_rate = topo.range_rate;
+    rangedot = topo.rangedot;
 
-    m_azRad = azimuth * M_PI / 180;
-    m_elRad = elevation * M_PI / 180;
+    // m_azRad = azimuth * M_PI / 180;
+    // m_elRad = elevation * M_PI / 180;
 }
 
 /**
@@ -396,16 +397,15 @@ Topos::Topos(const Topos& topo)
     */
 
 Topos 
-operator=(const Topos& topo)
+& Topos::operator=(const Topos& topo)
 {
     if (this != &topo)
     {
-        azimuth = topo.azimuth;
-        elevation = topo.elevation;
+        az = topo.az;
+        el = topo.el;
         range = topo.range;
-        range_rate = topo.range_rate;
-        m_azRad = azimuth * M_PI / 180;
-        m_elRad = elevation * M_PI / 180;
+        rangedot = topo.rangedo;
+
     }
     return *this;
 }
@@ -420,10 +420,10 @@ Topos::ToString() const
 {
     std::stringstream ss;
     ss << std::right << std::fixed << std::setprecision(3);
-    ss << "Az: " << std::setw(8) << Util::RadiansToDegrees(azimuth);
-    ss << ", El: " << std::setw(8) << Util::RadiansToDegrees(elevation);
+    ss << "Az: " << std::setw(8) << az;
+    ss << ", El: " << std::setw(8) << el;
     ss << ", Rng: " << std::setw(10) << range;
-    ss << ", Rng Rt: " << std::setw(7) << range_rate;
+    ss << ", Rng Rt: " << std::setw(7) << rangedot;
     return ss.str();
 }
 
@@ -541,7 +541,7 @@ polarm(double jdut1, double pm[3][3])
     double xp; //Polar motion coefficient in radians
     double yp; //Polar motion coefficient in radians
 
-    double pm[3][3];
+    // double pm[3][3];
 
     
     //Predict polar motion coefficients using IERS Bulletin - A (Vol. XXVIII No. 030)
@@ -601,6 +601,8 @@ teme2ecef(const double rteme[3], const double vteme[3], double jdut1)
     double st[3][3];
     double rpef[3];
     double vpef[3];
+    double recef[3];
+    double vecef[3];
     double pm[3][3];
     double omegaearth[3];
     
@@ -746,7 +748,7 @@ void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lo
     site(latgd, lon, alt, rs, vs);
     
     //Convert TEME vectors to ECEF coordinate system
-    teme2ecef(ro, vo, jdut1, recef, vecef);
+    PVCoords ecefPV = teme2ecef(ro, vo, jdut1);
     
     //Find ECEF range vectors
     for (int i = 0; i < 3; i++)
@@ -829,7 +831,7 @@ razel           Range, azimuth, and elevation matrix
 razelrates      Range rate, azimuth rate, and elevation rate matrix
 */
 
-void ECEF2azel(const PVCoords satCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
+void ECEF2azel(PVCoords &satCoords, double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
 {
     //Locals
     double halfPI = PI * 0.5;
@@ -847,11 +849,11 @@ void ECEF2azel(const PVCoords satCoords, double latgd, double lon, double alt, d
     double drho, daz, del;
     
 
-    satCoords =  satCoords.TransformTo(FrameType::ECEF);
-    posSat = satCoords.GetPos() / 1000.0;
-    velSat = satCoords.GetVel() / 1000.0;
-    double recef[3] = {posSat.x, posSat.y, posSat.z};
-    double vecef[3] = {velSat.x, velSat.y, velSat.z};
+    PVCoords satCoordsEcef =  satCoords.TransformTo(FrameType::ECEF);
+    Vector posSat = satCoordsEcef.GetPos(); // in m
+    Vector velSat = satCoordsEcef.GetVel(); // in m/s
+    double recef[3] = {posSat.x/1000, posSat.y/1000, posSat.z/1000};
+    double vecef[3] = {velSat.x/1000, velSat.y/1000, velSat.z/1000};
 
 
     // original implementation  of rv input in TEME

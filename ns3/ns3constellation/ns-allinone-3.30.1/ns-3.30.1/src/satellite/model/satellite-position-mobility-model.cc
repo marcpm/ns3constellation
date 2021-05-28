@@ -15,7 +15,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Pedro Silva  <pmms@inesctec.pt>
+ * Author: Pedro Silva <pmms@inesctec.pt>
+ *         Andre Aguas  March 2020
  *
  */
 
@@ -39,6 +40,11 @@ SatellitePositionMobilityModel::GetTypeId (void) {
     .SetParent<MobilityModel> ()
     .SetGroupName ("Mobility")
     .AddConstructor<SatellitePositionMobilityModel> ()
+    .AddAttribute("SatellitePositionHelper",
+                  "The satellite position helper that holds the satellite reference of this node",
+                  SatellitePositionHelperValue(SatellitePositionHelper()),
+                  MakeSatellitePositionHelperAccessor (&SatellitePositionMobilityModel::m_helper),
+                  MakeSatellitePositionHelperChecker())
   ;
 
   return tid;

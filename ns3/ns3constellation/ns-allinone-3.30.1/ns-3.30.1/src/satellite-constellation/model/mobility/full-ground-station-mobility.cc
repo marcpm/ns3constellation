@@ -49,7 +49,7 @@ FullGroundStationMobilityModel::GetTypeId (void)
                    MakeDoubleChecker<double> ())
     .AddAttribute ("NumGsl", "Number of simultaneous GSL links.",
                    IntegerValue (1),
-                   MakeIntegerAccessor (&GroundStationMobilityModel::m_numGsl),
+                   MakeIntegerAccessor (&FullGroundStationMobilityModel::m_numGsl),
                    MakeIntegerChecker<uint32_t> ())
                    
   ;
@@ -95,9 +95,9 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
 {
-    m_latitude = latitude;
-    m_longitude = longitude;
-    m_altitude = altitude;
+    m_latitude = latLonAlt.x;
+    m_longitude = latLonAlt.y;
+    m_altitude = latLonAlt.z;
     m_name = "";
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
@@ -106,9 +106,9 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt, std::string name)
 {
-    m_latitude = latitude;
-    m_longitude = longitude;
-    m_altitude = altitude;
+    m_latitude = latLonAlt.x;
+    m_longitude = latLonAlt.y;
+    m_altitude = latLonAlt.z;
     m_name = name;
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
@@ -192,8 +192,10 @@ FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecef
 }
 
 // std::tuple <bool, double >
+// Topos
+// FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
 Topos
-FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
+FullGroundStationMobilityModel::GetVisibilityGroundToSat (Vector satPos, Vector satVel) const
 {
   
   PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
@@ -203,34 +205,38 @@ FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVC
   double razel[3];
   double razelrates[3];
 
+  double recef[3] = {satPos.x/1000, satPos.y/1000, satPos.z/1000}
+  double vecef[3] = {satVel.x/1000, satVel.y/1000, satVel.z/1000}
   // ecef2azel needs lat,lon in rad, alt in km.
-  ECEF2azel(ecefSat, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
+
+  ECEF2azel(recef, vecef, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
             jdut1, razel[3], razelrates[3]);
 
   bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
   
 
   // toposAzelRa Coords in az[deg] el[deg]  ra[m] : idem rates [/s]
-  Topos topoFrame(razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
-                  razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible);
+  Topos topoFrame = {razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
+                    razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible 
+                  };
 
   return topoFrame;
   
 }
 
- double GetAngleOfIncidence(void) const
+ double FullGroundStationMobility::GetAngleOfIncidence(void) const
  {
    return m_angleIncidence;
  }
 
 
 
-double GetDataRate(void) const
+std::string  FullGroundStationMobility::GetDataRate(void) const
 {
   return m_dataRate;
 }
 
-double GetNumGsl(void) const
+double FullGroundStationMobility::GetNumGsl(void) const
 {
   return m_numGsl;
 }
@@ -239,7 +245,7 @@ double GetNumGsl(void) const
 Vector 
 FullGroundStationMobility::GetZenithDirection(void) const
 {
-  zenith = Vector(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) )
+  zenith = Vector(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) );
   return zenith;
 }
 

@@ -111,49 +111,6 @@ Satellite::GetPosition (const JulianDate &t) const
 }
 
 Vector3D
-Satellite::GetTemePos (const JulianDate &t) const
-{
-  double r[3], v[3];
-  //double delta = (t - GetTleEpoch ())*1440;
-  double delta = (t - GetTleEpoch ()).GetMinutes();
-
-  if (!IsInitialized ())
-    return Vector3D ();
-
-  sgp4 (WGeoSys, m_sgp4_record, delta, r, v);
-
-  if (m_sgp4_record.error != 0)
-    return Vector3D ();
-
-  // vector r is in km so it needs to be converted to meters
-  // return ( PVCoords( Vector (r[0], r[1], r[2])*1000,  FrameType::TEME);
-  return Vector (r[0], r[1], r[2])*1000;
-}
-
-Vector3D
-Satellite::GetTemeVel (const JulianDate &t) const
-{
-  double r[3], v[3];
-  //double delta = (t - GetTleEpoch ())*1440;
-  double delta = (t - GetTleEpoch ()).GetMinutes();
-
-  if (!IsInitialized ())
-    return Vector3D ();
-
-  sgp4 (WGeoSys, m_sgp4_record, delta, r, v);
-
-  if (m_sgp4_record.error != 0)
-    return Vector3D ();
-
-  // vector r is in km so it needs to be converted to meters
-  // return ( PVCoords( Vector (r[0], r[1], r[2])*1000,  FrameType::TEME);
-  return Vector (v[0], v[1], v[2])*1000;
-}
-
-
-
-
-Vector3D
 Satellite::GetVelocity (const JulianDate &t) const
 {
   double r[3], v[3];

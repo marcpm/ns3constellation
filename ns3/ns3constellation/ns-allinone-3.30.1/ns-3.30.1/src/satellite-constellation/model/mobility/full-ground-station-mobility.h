@@ -7,12 +7,14 @@
 #include "ns3/geographic-positions.h" // geo converter
 #include "ns3/mobility-model.h"
 
+#include <string>
+#include "ns3/string.h"
 #include "ns3/vector.h"
 #include "ns3/double.h"
 #include "ns3/log.h"
 #include "ns3/integer.h"
 
-#include "ns3/orbital-coords.h"
+#include "ns3/basic-orbital.h"
 
 
 
@@ -54,18 +56,20 @@ public:
   Vector GetPosEcef (void);
   std::string ToString();
 
+  double GetAngleOfIncidence(void) ;
+  std::string GetDataRate(void) const;
+  double GetNumGsl(void) const;
+  // virtual Vector GetLatLonAlt (void) const;
+  virtual Vector GetZenithDirection(void) const;
+  String GetName(void) const;
+
 private:
   virtual void DoSetPosition (void);
   virtual Vector DoGetPosition (void) const;
   virtual Vector DoGetVelocity (void) const;
   friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite (deprecated)
-  friend Topos GetVisibilityGroundToSat (const PVCoords &position, double jdut1) const;
-  friend double GetAngleOfIncidence(void) const;
-  friend double GetDataRate(void) const;
-  friend double GetNumGsl(void) const;
-  // virtual Vector GetLatLonAlt (void) const;
-  virtual Vector GetZenithDirection(void) const;
-  virtual String GetName(void) const;
+  virtual Topos GetVisibilityGroundToSat (const PVCoords &position, double jdut1) ;
+  
   double m_latitude; // latitude of ground station
                      // negative value indicates southern latitude, positive value indicates northern latitude
   double m_longitude; // longitude of ground station

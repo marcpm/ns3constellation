@@ -1,6 +1,8 @@
-ifndef ORBITAL_UTILS_H
-#define ORBITAL_UTILS_H
+#ifndef ORBITAL_COORDS_H
+#define ORBITAL_COORDS_H
 
+
+#include <iomanip> 
 #include "ns3/object.h"
 #include "ns3/mobility-model.h"
 #include "ns3/vector.h"
@@ -52,8 +54,8 @@ class PVCoords
         
 
 
-        virtual Vector PVCoords::Geodetic2ECEF (double latitude, double longitude, double altitude)
-        
+        Vector Geodetic2ECEF (double latitude, double longitude, double altitude)
+        PVCoords PVCoords::ECEF2GEO (PVCoords ecefCoords)
         // PVCoords ToTEME();
         // PVCoords ToECI();
         // PVCoords ToECEF();
@@ -209,6 +211,6 @@ private:
 
 } // namespace ns3
 
-#endif /* ORBITAL_UTILS_H */
+#endif /* ORBITAL_COORDS_H */
 
 

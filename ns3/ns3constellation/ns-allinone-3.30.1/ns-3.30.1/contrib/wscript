@@ -1,3 +1,4 @@
+
 ## -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 from __future__ import print_function
 import os, os.path
@@ -271,4 +272,3 @@ def build(bld):
     for module in all_contrib_modules:
         modheader = bld(features='ns3moduleheader')
         modheader.module = module.split('/')[-1]
-

@@ -15,15 +15,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * Author: Pedro Silva  <pmms@inesctec.pt>
+ * Author: Pedro Silva <pmms@inesctec.pt>
  *
  */
+
 
 #ifndef SATELLITE_POSITION_HELPER_MODEL_H
 #define SATELLITE_POSITION_HELPER_MODEL_H
 
 #include "ns3/ptr.h"
 #include "ns3/vector.h"
+#include "ns3/attribute.h"
+#include "ns3/attribute-helper.h"
 
 #include "ns3/satellite.h"
 
@@ -100,8 +103,28 @@ public:
 
 private:
   Ptr<Satellite> m_sat;               //!< pointer to the Satellite object.
-  JulianDate m_start;                 //!< simulation's absolute start time.
+  JulianDate m_start;                         //!< simulation's absolute start time.
 };
+
+/**
+ * \brief Stream insertion operator.
+ *
+ * \param os the stream
+ * \param size the satellite position helper
+ * \returns a reference to the stream
+ */
+std::ostream &operator << (std::ostream &os, const SatellitePositionHelper &satellitePositionHelper);
+
+/**
+ * \brief Stream extraction operator.
+ *
+ * \param is the stream
+ * \param size the satellite position helper 
+ * \returns a reference to the stream
+ */
+std::istream &operator >> (std::istream &is, SatellitePositionHelper &satellitePositionHelper);
+
+ATTRIBUTE_HELPER_HEADER (SatellitePositionHelper);
 
 } // namespace ns3
 

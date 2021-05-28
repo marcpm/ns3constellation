@@ -6,7 +6,6 @@
 #include <vector>
 
 #include "ns3/core-module.h"
-#include "ns3/constellation-helper.h"
 #include "ns3/satelite.h"
 
 using namespace ns3;
