@@ -51,24 +51,27 @@ public:
   FullGroundStationMobilityModel(Vector latLonAlt);
   FullGroundStationMobilityModel(Vector latLonAlt, std::string name);
   FullGroundStationMobilityModel();
+  virtual ~FullGroundStationMobilityModel();
   
-  Vector GetLatLonAlt (void);
-  Vector GetPosEcef (void);
-  std::string ToString();
+  
 
-  double GetAngleOfIncidence(void) ;
+  Vector GetLatLonAlt (void) const;
+  double GetLatitude() const;
+  double GetLongitude() const;
+  double GetElevation() const;
+  double GetAngleOfIncidence(void) const ;
   std::string GetDataRate(void) const;
   double GetNumGsl(void) const;
-  // virtual Vector GetLatLonAlt (void) const;
-  virtual Vector GetZenithDirection(void) const;
-  String GetName(void) const;
+  Vector GetZenithDirection(void) const;
+  std::string GetName(void) const;
+  std::string ToString() const;
 
 private:
-  virtual void DoSetPosition (void);
+  virtual void DoSetPosition (const Vector &position);
   virtual Vector DoGetPosition (void) const;
   virtual Vector DoGetVelocity (void) const;
-  friend double CalculateDistanceGroundToSat (const Vector &a, const Vector &b); // Vectors must correspond to a ground station and a LEO satellite (deprecated)
-  virtual Topos GetVisibilityGroundToSat (const PVCoords &position, double jdut1) ;
+  double CalculateDistanceGroundToSat (const Vector &ecefPosSat); //
+  Topos GetVisibilityGroundToSat (const Vector satPos, const Vector satVel) ;
   
   double m_latitude; // latitude of ground station
                      // negative value indicates southern latitude, positive value indicates northern latitude
@@ -82,7 +85,9 @@ private:
   std::string m_name;
   std::string m_dataRate;
   uint32_t m_numGsl;
-
+  
+  Vector m_ecefPosition;
+  Vector m_ecefVelocity;
 
   // Vector m_ecefPosition;
   // Vector m_ecefVelocity;

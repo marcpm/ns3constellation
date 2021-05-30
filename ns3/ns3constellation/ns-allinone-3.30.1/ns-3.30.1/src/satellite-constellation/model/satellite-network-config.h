@@ -45,13 +45,13 @@ public:
   static TypeId GetTypeId (void);
 
   // SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath);
-  SatelliteNetworkConfig (std::string &TLEfilepath, std::string &GSfilepath)
+  SatelliteNetworkConfig (std::string &TLEfilepath, std::string &GSfilepath);
   
-  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat);
 
-  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate);
 
-  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, std::string airFilepath, uint32_t islPerSat, std::string islDataRate)
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, std::string airFilepath, uint32_t islPerSat, std::string islDataRate);
 
 
   virtual ~SatelliteNetworkConfig ();
@@ -82,17 +82,14 @@ public:
   NodeContainer m_groundStationsNodes; //node container to hold ground stations
 
 
-  std:string m_TLEfilepath;
-  std:string m_GSfilepath;
-  std:string m_airFilepath;
+  std::string m_TLEfilepath;
+  std::string m_GSfilepath;
+  std::string m_airFilepath;
 
 private:
   std::vector<Satellite> m_constellationSats;
   // std::vector<GroundStation> m_groundStations;
 
-
-  
-  NodeContainer m_groundStationsNodes;
   std::vector<NetDeviceContainer> m_groundStationsDevices; 
   std::vector<Ptr<CsmaChannel>> m_groundStationsChannels;
   std::vector<Ipv4InterfaceContainer> m_groundStationsInterfaces;
@@ -102,11 +99,11 @@ private:
   // NodeContainer m_constellationSatsNodes;
   NetDeviceContainer m_islDevices;
   std::vector<Ptr<CsmaChannel>> m_islChannels;
-  std::vector<Ptr<CsmaChannel>> m_islChannels;
+  // std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;
   std::vector < std::pair < uint32_t, uint32_t > >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
   double CalculateDistance(Vector &pos1, Vector &pos2);
-  double CalculateDistance(PVCoords &pv1, PVCoords &pv2);
+  // double CalculateDistance(PVCoords &pv1, PVCoords &pv2);
 };
   
 }

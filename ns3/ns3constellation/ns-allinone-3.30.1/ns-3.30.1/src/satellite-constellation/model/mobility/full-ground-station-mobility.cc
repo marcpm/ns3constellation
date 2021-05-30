@@ -38,11 +38,11 @@ FullGroundStationMobilityModel::GetTypeId (void)
     .AddAttribute ("Name", "The ground station Name.",
                    StringValue (""),
                    MakeStringAccessor (&FullGroundStationMobilityModel::m_name),
-                   MakeStringChecker<string> ())
+                   MakeStringChecker ())
     .AddAttribute ("DataRate", "The ground station Data Rate.",
                    StringValue ("5.36Gbps"),
                    MakeStringAccessor (&FullGroundStationMobilityModel::m_dataRate),
-                   MakeStringChecker<string> ())
+                   MakeStringChecker ())
     .AddAttribute ("AngleIncidence", "The minimum Angle of incidence of ground station [deg].",
                    DoubleValue (25.0),
                    MakeDoubleAccessor (&FullGroundStationMobilityModel::m_angleIncidence),
@@ -68,6 +68,8 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_angleIncidence = angleIncidence;
     m_dataRate = dataRate;
     m_numGsl = simultaneous_gsLinks;
+    m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
+    m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
@@ -80,6 +82,8 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_angleIncidence = angleIncidence;
     m_dataRate = dataRate;
     m_numGsl = 1;
+    m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
+    m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude)
@@ -91,6 +95,9 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
     m_numGsl = 1;
+
+    m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
+    m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
@@ -102,6 +109,8 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt)
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
     m_numGsl = 1;
+    m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
+    m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt, std::string name)
@@ -113,17 +122,15 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(Vector latLonAlt,
     m_angleIncidence = 25.0;
     m_dataRate = "5.36Gbps";
     m_numGsl = 1;
-    // m_id
+    
+    m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
+    m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
 
 
-
-FullGroundStationMobilityModel::FullGroundStationMobilityModel()
+FullGroundStationMobilityModel::~FullGroundStationMobilityModel(void)
 {
 }
-
-
-
 
 
 Vector 
@@ -132,12 +139,60 @@ FullGroundStationMobilityModel::GetLatLonAlt (void) const
   return Vector(m_latitude, m_longitude, m_altitude);
 }
 
-  Vector GetPosEcef (void)
-  {
-    return m_ecefPosition;
-  };
-  
-  std::string ToString()
+double
+FullGroundStationMobilityModel::GetLatitude() const
+{
+    return m_latitude;
+}
+
+double
+FullGroundStationMobilityModel::GetLongitude() const
+{
+    return m_longitude;
+}
+
+double
+FullGroundStationMobilityModel::GetElevation() const
+{
+    return m_altitude;
+}
+
+
+ double 
+ FullGroundStationMobilityModel::GetAngleOfIncidence(void) const
+ {
+   return m_angleIncidence;
+ }
+
+std::string  
+FullGroundStationMobilityModel::GetDataRate(void) const
+{
+  return m_dataRate;
+}
+
+double FullGroundStationMobilityModel::GetNumGsl(void) const
+{
+  return m_numGsl;
+}
+
+
+Vector 
+FullGroundStationMobilityModel::GetZenithDirection(void) const
+{
+  Vector zenith(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) );
+  return zenith;
+}
+
+
+
+std::string 
+FullGroundStationMobilityModel::GetName(void) const
+{
+  return m_name;
+}
+
+std::string 
+FullGroundStationMobilityModel::ToString() const
   {
     std::stringstream info;
     info << "Ground station[";
@@ -153,15 +208,13 @@ FullGroundStationMobilityModel::GetLatLonAlt (void) const
 
 
 
-
-
+// privs
 
 
 void 
-FullGroundStationMobilityModel::DoSetPosition ()
+FullGroundStationMobilityModel::DoSetPosition (const Vector &position)
 {
-  m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude);
-  m_ecefVelocity = Vector(0.0, 0.0, 0.0);
+
 }
 
 Vector
@@ -182,35 +235,38 @@ FullGroundStationMobilityModel::DoGetVelocity (void) const
 
 
 double 
-FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecefSat) // (const Vector &a, const Vector &b)
+FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecefPosSat) // (const Vector &a, const Vector &b)
 {
 
-  distance = (m_ecefPosition - ecefSat).GetLength()
+  double distance = (m_ecefPosition - ecefPosSat).GetLength();
   // distance = sqrt( pow( b.x - a.x, 2) +  pow( b.y - a.y, 2)  + pow( b.z - a.z, 2)  )
 
   return distance;
 }
 
-// std::tuple <bool, double >
+
+
 // Topos
 // FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
 Topos
-FullGroundStationMobilityModel::GetVisibilityGroundToSat (Vector satPos, Vector satVel) const
+FullGroundStationMobilityModel::GetVisibilityGroundToSat (const Vector satPos, const Vector satVel)
 {
   
-  PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
+  // PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
   
-  bool jdut1 = false;
+  // bool jdut1 = false;
 
   double razel[3];
   double razelrates[3];
 
-  double recef[3] = {satPos.x/1000, satPos.y/1000, satPos.z/1000}
-  double vecef[3] = {satVel.x/1000, satVel.y/1000, satVel.z/1000}
+  double recef[3] = {satPos.x/1000.0, satPos.y/1000.0, satPos.z/1000.0}; // in  km
+  double vecef[3] = {satVel.x/1000.0, satVel.y/1000.0, satVel.z/1000.0};
   // ecef2azel needs lat,lon in rad, alt in km.
 
+
+
   ECEF2azel(recef, vecef, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
-            jdut1, razel[3], razelrates[3]);
+            razel[3], razelrates[3]);
 
   bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
   
@@ -224,38 +280,9 @@ FullGroundStationMobilityModel::GetVisibilityGroundToSat (Vector satPos, Vector 
   
 }
 
- double FullGroundStationMobility::GetAngleOfIncidence(void) const
- {
-   return m_angleIncidence;
- }
 
 
 
-std::string  FullGroundStationMobility::GetDataRate(void) const
-{
-  return m_dataRate;
-}
-
-double FullGroundStationMobility::GetNumGsl(void) const
-{
-  return m_numGsl;
-}
-
-
-Vector 
-FullGroundStationMobility::GetZenithDirection(void) const
-{
-  zenith = Vector(cos(m_longitude) * cos(m_latitude), sin(m_longitude) * cos(m_latitude), sin(m_latitude) );
-  return zenith;
-}
-
-
-
-String 
-FullGroundStationMobility::GetName(void) const
-{
-  return m_name;
-}
 
 
 

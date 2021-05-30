@@ -50,7 +50,7 @@ void site(double latgd, double lon, double alt, double rs[3], double vs[3]);
 
 void TEMErv2azel(const double ro[3], const double vo[3], double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3]);
 
-void ECEF2azel(const double recef[3], const double vecef[3], double latgd, double lon, double alt, double razel[3], double razelrates[3]);
+void ECEF2azel( double recef[3],  double vecef[3], double latgd, double lon, double alt, double razel[3], double razelrates[3]);
 
 void rot3(double invec[3], double xval, double outvec[3]);
 void rot2(double invec[3], double xval, double outvec[3]);

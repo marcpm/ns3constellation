@@ -151,7 +151,7 @@ razel           Range, azimuth, and elevation matrix
 razelrates      Range rate, azimuth rate, and elevation rate matrix
 */
 // void ECEF2azel(const double recef[3], const double vecef[3], double latgd, double lon, double alt, double jdut1, double razel[3], double razelrates[3])
-void ECEF2azel(const double recef[3], const double vecef[3], double latgd, double lon, double alt, double razel[3], double razelrates[3])
+void ECEF2azel( double recef[3],  double vecef[3], double latgd, double lon, double alt, double razel[3], double razelrates[3])
 {
     //Locals
     double halfPI = M_PI * 0.5;
