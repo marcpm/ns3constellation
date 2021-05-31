@@ -1,9 +1,9 @@
 # -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 
 def build(bld):
-    obj = bld.create_ns3_program('airborne-satellite-constellation-example', ['airborne-satellite-constellation'])
-    obj.source = 'airborne-satellite-constellation-example.cc'
+ #   obj = bld.create_ns3_program('airborne-satellite-constellation-example', ['satellite-constellation'])
+  #  obj.source = 'airborne-satellite-constellation-example.cc'
 
-    obj = bld.create_ns3_program('mobility-example', ['satellite-mobility'])
-    obj.source = 'mobility-example.cc'
+    obj = bld.create_ns3_program('constellation-example', ['satellite-constellation'])
+    obj.source = 'constellation-example.cc'
 

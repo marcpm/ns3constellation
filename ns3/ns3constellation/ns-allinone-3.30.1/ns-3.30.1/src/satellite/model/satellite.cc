@@ -200,7 +200,7 @@ Satellite::SetTleInfo (const std::string &line1, const std::string &line2)
 
   NS_ASSERT_MSG (
     line1.size () == TleSatInfoWidth && line2.size () == TleSatInfoWidth,
-    "Two-Line Element info lines must be of length" << TleSatInfoWidth << "!"
+    "Two-Line Element info lines must be of length " << TleSatInfoWidth << "!"
   );
 
   m_tle1 = std::string (line1.c_str ());

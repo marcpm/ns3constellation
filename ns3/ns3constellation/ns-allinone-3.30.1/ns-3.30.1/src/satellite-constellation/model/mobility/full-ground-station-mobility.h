@@ -40,6 +40,8 @@ public:
    */
   static TypeId GetTypeId (void);
 
+  FullGroundStationMobilityModel();
+
   FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
                                                       std::string name, double angleIncidence, 
                                                       std::string dataRate,
@@ -50,7 +52,7 @@ public:
   FullGroundStationMobilityModel(double latitude, double longitude, double altitude);
   FullGroundStationMobilityModel(Vector latLonAlt);
   FullGroundStationMobilityModel(Vector latLonAlt, std::string name);
-  FullGroundStationMobilityModel();
+  // FullGroundStationMobilityModel();
   virtual ~FullGroundStationMobilityModel();
   
   
@@ -66,12 +68,14 @@ public:
   std::string GetName(void) const;
   std::string ToString() const;
 
+  Topos GetVisibilityGroundToSat (const Vector satPos, const Vector satVel) ;
+
 private:
   virtual void DoSetPosition (const Vector &position);
   virtual Vector DoGetPosition (void) const;
   virtual Vector DoGetVelocity (void) const;
   double CalculateDistanceGroundToSat (const Vector &ecefPosSat); //
-  Topos GetVisibilityGroundToSat (const Vector satPos, const Vector satVel) ;
+  
   
   double m_latitude; // latitude of ground station
                      // negative value indicates southern latitude, positive value indicates northern latitude

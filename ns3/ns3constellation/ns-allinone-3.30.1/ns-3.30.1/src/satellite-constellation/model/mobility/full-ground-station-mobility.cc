@@ -1,6 +1,5 @@
 /* -*- Mode:C++; c-file-style:"gnu"; indent-tabs-mode:nil; -*- */
 
-
 #include "full-ground-station-mobility.h"
 
 #define _USE_MATH_DEFINES
@@ -12,7 +11,6 @@ NS_LOG_COMPONENT_DEFINE ("FullGroundStationMobility");
 
 NS_OBJECT_ENSURE_REGISTERED (FullGroundStationMobilityModel);
 
-uint32_t current = 0; // to know if we are setting up first or second ground station
 
 TypeId
 FullGroundStationMobilityModel::GetTypeId (void)
@@ -57,9 +55,15 @@ FullGroundStationMobilityModel::GetTypeId (void)
   return tid;
 }
 
+FullGroundStationMobilityModel::FullGroundStationMobilityModel()
+{
+  
+}
+
+
 FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, double longitude, double altitude, 
                                                       std::string name, double angleIncidence, std::string dataRate,
-                                                      uint32_t simultaneous_gsLinks)
+                                                      uint32_t numGSLs)
 {
     m_latitude = latitude;
     m_longitude = longitude;
@@ -67,7 +71,7 @@ FullGroundStationMobilityModel::FullGroundStationMobilityModel(double latitude, 
     m_name = name;
     m_angleIncidence = angleIncidence;
     m_dataRate = dataRate;
-    m_numGsl = simultaneous_gsLinks;
+    m_numGsl = numGSLs;
     m_ecefPosition = GeographicPositions::GeographicToCartesianCoordinates(m_latitude, m_longitude, m_altitude, GeographicPositions::EarthSpheroidType::WGS84);
     m_ecefVelocity = Vector(0.0, 0.0, 0.0);
 }
@@ -206,6 +210,41 @@ FullGroundStationMobilityModel::ToString() const
   };
 
 
+// Topos
+// FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
+Topos
+FullGroundStationMobilityModel::GetVisibilityGroundToSat (const Vector satPos, const Vector satVel)
+{
+  
+  // PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
+  
+  // bool jdut1 = false;
+
+  double razel[3];
+  double razelrates[3];
+
+  double recef[3] = {satPos.x/1000.0, satPos.y/1000.0, satPos.z/1000.0}; // in  km
+  double vecef[3] = {satVel.x/1000.0, satVel.y/1000.0, satVel.z/1000.0};
+  // ecef2azel needs lat,lon in rad, alt in km.
+
+
+
+  ECEF2azel(recef, vecef, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
+            razel, razelrates);
+
+  bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
+  
+
+  // toposAzelRa Coords in az[deg] el[deg]  ra[m] : idem rates [/s]
+  Topos topoFrame = {razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
+                    razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible 
+                  };
+
+  return topoFrame;
+  
+}
+
+
 
 
 // privs
@@ -244,41 +283,6 @@ FullGroundStationMobilityModel::CalculateDistanceGroundToSat (const Vector &ecef
   return distance;
 }
 
-
-
-// Topos
-// FullGroundStationMobilityModel::GetVisibilityGroundToSat (const PVCoords &satPVCoords) const
-Topos
-FullGroundStationMobilityModel::GetVisibilityGroundToSat (const Vector satPos, const Vector satVel)
-{
-  
-  // PVCoords ecefSat = satPVCoords->TransformTo(FrameType::ECEF);
-  
-  // bool jdut1 = false;
-
-  double razel[3];
-  double razelrates[3];
-
-  double recef[3] = {satPos.x/1000.0, satPos.y/1000.0, satPos.z/1000.0}; // in  km
-  double vecef[3] = {satVel.x/1000.0, satVel.y/1000.0, satVel.z/1000.0};
-  // ecef2azel needs lat,lon in rad, alt in km.
-
-
-
-  ECEF2azel(recef, vecef, m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
-            razel[3], razelrates[3]);
-
-  bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
-  
-
-  // toposAzelRa Coords in az[deg] el[deg]  ra[m] : idem rates [/s]
-  Topos topoFrame = {razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
-                    razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible 
-                  };
-
-  return topoFrame;
-  
-}
 
 
 

@@ -9,6 +9,8 @@
 #include "ns3/core-module.h"
 #include "ns3/point-to-point-module.h"
 #include "ns3/log.h"
+#include "ns3/nstime.h"
+
 
 // #include "ns3/orbital-coords.h"
 #include "ns3/basic-orbital.h"
@@ -45,14 +47,10 @@ public:
   static TypeId GetTypeId (void);
 
   // SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath);
-  SatelliteNetworkConfig (std::string &TLEfilepath, std::string &GSfilepath);
-  
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath);
   SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat);
-
   SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate);
-
-  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, std::string airFilepath, uint32_t islPerSat, std::string islDataRate);
-
+  SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate);
 
   virtual ~SatelliteNetworkConfig ();
   virtual TypeId GetInstanceTypeId (void) const;
@@ -72,22 +70,27 @@ public:
 
   void SetupIPConfig();
 
-  void BuildNetwork (std::string &TLEfilepath, std::string &GSfilepath);
+  void BuildNetwork (); //std::string &TLEfilepath, std::string &GSfilepath);
 
   void UpdateLinks (); //update the intersatellite links
-
-  uint32_t m_nISLsPerSat; // num of ISLs per sat
-  std::string m_islDataRate;
-  NodeContainer m_satellitesNodes;
-  NodeContainer m_groundStationsNodes; //node container to hold ground stations
+  
+  void UpdateISLsP2PFixed();
 
 
   std::string m_TLEfilepath;
   std::string m_GSfilepath;
+  uint32_t m_nISLsPerSat; // num of ISLs per sat
+  std::string m_islDataRate;
   std::string m_airFilepath;
 
+  NodeContainer m_satellitesNodes;
+  NodeContainer m_groundStationsNodes; //node container to hold ground stations
+
+
+
+
 private:
-  std::vector<Satellite> m_constellationSats;
+  // std::vector<Satellite> m_constellationSats;
   // std::vector<GroundStation> m_groundStations;
 
   std::vector<NetDeviceContainer> m_groundStationsDevices; 
@@ -97,7 +100,7 @@ private:
 
 
   // NodeContainer m_constellationSatsNodes;
-  NetDeviceContainer m_islDevices;
+  std::vector<NetDeviceContainer> m_islDevices;
   std::vector<Ptr<CsmaChannel>> m_islChannels;
   // std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;

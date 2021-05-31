@@ -22,11 +22,12 @@ TypeId SatelliteNetworkConfig::GetTypeId (void)
   return tid;
 }
 
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat): 
-    m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath), m_nISLsPerSat(islPerSat); // num of ISLs per sat
+// SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat): 
+//     m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath), m_nISLsPerSat(islPerSat) // num of ISLs per sat
   
-{
-}
+// {
+//   BuildNetwork ();
+// }
 
 
 SatelliteNetworkConfig::~SatelliteNetworkConfig ()
@@ -59,8 +60,9 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
      ***************
     first line TLE txt === simulation start
      */
-      std::string utcSimulationStart = getline(satFile); //first line utc timestamp of simulation start. (multi TLE coherence)
-      JulianDate  simulationStartTime(utcSimulationStart, TimeSystem::UTC); // satellite module julian date start
+      std::string utcSimulationStart;
+      getline(satFile, utcSimulationStart); //first line utc timestamp of simulation start. (multi TLE coherence)
+      JulianDate  simulationStartTime(utcSimulationStart, DateTime::TimeSystem::UTC); // satellite module julian date start
       std::cout <<"Starting Simulation at "<< utcSimulationStart <<std::endl;
 
 
@@ -78,19 +80,20 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
         {
           if (lineNum > 0) // construct + append satellite object every 3 lines read.
           {
-            Satellite satellite;
-            satellite.SetName(satname);
-            satellite.SetTleInfo(line1, line2);
-            m_constellationSats.push_back(satellite); // add satellites to member variable: vector of satellites
-            m_satellitesNodes.Create(1) // add new satellite node 
+            Ptr<Satellite> satellite = CreateObject<Satellite>();
+            satellite->SetName(satname);
+            satellite->SetTleInfo(line1, line2);
+            // m_constellationSats.push_back(satellite); // add satellites to member variable: vector of satellites
+            m_satellitesNodes.Create(1); // add new satellite node 
             MobilityHelper satMobility;
             
             satMobility.SetMobilityModel(
                         "ns3::SatellitePositionMobilityModel",
                         "SatellitePositionHelper",
-                        SatellitePositionHelperValue(SatellitePositionHelper(satellite))
+                        SatellitePositionHelperValue(SatellitePositionHelper(satellite, simulationStartTime) )
                 );
-            satMobility.SetStartTime(simulationStartTime);
+            // satMobility.SetSatellite(satellite);
+            // satMobility.SetStartTime(simulationStartTime);
             satMobility.Install(m_satellitesNodes.Get(idxSat)); // install mobility in new node created
 
             idxSat++;
@@ -160,7 +163,7 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
         double gsAlt = std::stof(gsStrLine[3]);
         double angleIncidence = std::stof(gsStrLine[4]);
         std::string dataRate = gsStrLine[5];
-        uint32_t numGSLs = gsStrLine[6];
+        uint32_t numGSLs = std::stoi(gsStrLine[6]);
 
         m_groundStationsNodes.Create(1);
 
@@ -196,29 +199,29 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
 }
 
 // Constructors GS - SAT network
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string &TLEfilepath, std::string &GSfilepath)
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
 : m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(1), m_islDataRate("300Mbps"), m_airFilepath("")
 {
-  BuildNetwork(TLEfilepath, GSfilepath);
+  BuildNetwork();
 }
 
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
 : m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate("300Mbps"), m_airFilepath("")
 {
-  BuildNetwork(TLEfilepath, GSfilepath);
+  BuildNetwork();
 }
 
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
 : m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath("")
 {
-  BuildNetwork(TLEfilepath, GSfilepath);
+  BuildNetwork();
 }
 
 // Constructors GS - AIR - SAT network
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, std::string airFilepath, uint32_t islPerSat, std::string islDataRate)
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate)
 : m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath(airFilepath)
 {
-  BuildNetwork(TLEfilepath, GSfilepath);
+  BuildNetwork();
 }
 
 
@@ -243,7 +246,7 @@ void SatelliteNetworkConfig::BuildISLsP2PFixed()
   {
     
     // count all links using idxSat1, skip iteration if equal to ISLs per sat.
-    int nidxSat1LinksRemaining = m_nISLsPerSat - std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
+    uint32_t nidxSat1LinksRemaining = m_nISLsPerSat - std::count_if( m_islChannelTracker.begin(),  m_islChannelTracker.end(),
                                                                       [&idxSat1](std::pair<uint32_t, uint32_t> const& v) 
                                                                       { return (v.first == idxSat1) || (v.second == idxSat1);}
                                                                   ); 
@@ -308,9 +311,10 @@ void SatelliteNetworkConfig::BuildISLsP2PFixed()
     {
 
       int idxSat2 = idxDistVec.at(islId).first;
+      
       m_islChannelTracker.push_back({idxSat1, idxSat2}); // add satellite link to tracker.
       double distance =  idxDistVec.at(islId).second;      // in meters
-      double delay = closestSatDist /  SPEED_OF_LIGHT; // in seconds
+      double delay = distance /  SPEED_OF_LIGHT; // in seconds
     
       PointToPointHelper isl_link_helper;
       isl_link_helper.SetDeviceAttribute ("DataRate", StringValue (m_islDataRate));
@@ -485,9 +489,9 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
   std::cout <<"Setting links between ground stations and satellites"<< std::endl;
   for (uint32_t idxGs=0; idxGs<m_groundStationsNodes.GetN(); idxGs++)
   {
-    Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
+    // Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
     std::string dataRate = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetDataRate();
-    //*** simultaneous sat links
+    // * ** simultaneous sat links
     // uint32_t numGsl = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetNumGsl();
 
 
@@ -502,7 +506,7 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
     ***********************************************************************************************
     */
     //find closest adjacent satellite for ground station
-    for (uint32_t idxSat=0; idxSat<totalNumSatellites; idxSat++)
+    for (uint32_t idxSat=0; idxSat<m_satellitesNodes.GetN(); idxSat++)
     {
       // <SatellitePositionMobilityModel> ?
       // JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<SatellitePositionMobilityModel>()->GetStartTime() + Simulator::Now();
@@ -564,10 +568,10 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
 
 
 
-    Ptr<CsmaChannel> csma_channel;
+    Ptr<CsmaChannel> gs_csma_channel;
     Ptr<Channel> channel;
-    gs_channel = temp_netdevice_container.Get(0)->GetChannel();
-    gs_csma_channel = gs_channel->GetObject<CsmaChannel> ();
+    channel = temp_netdevice_container.Get(0)->GetChannel();
+    gs_csma_channel = channel->GetObject<CsmaChannel> ();
     
     // num_satellites_per_plane = m_planes[idxPlane].size();
     for (uint32_t k = 1; k <= temp_node_container.GetN(); k++)
@@ -584,7 +588,7 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
             closestSatDist/1000 << "km and delay of "<< delay <<" seconds"<< std::endl;    
 
     m_groundStationsDevices.push_back(temp_netdevice_container);
-    m_groundStationsChannels.push_back(csma_channel);
+    m_groundStationsChannels.push_back(gs_csma_channel);
     m_groundStationsChannelTracker.push_back(closestSatId);
   
   }
@@ -593,7 +597,7 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
 
 void SatelliteNetworkConfig::BuildGSLsMultiSat()
 {
-  return -1;
+  
 }
 void SatelliteNetworkConfig::SetupIPConfig()
 {
@@ -659,11 +663,11 @@ void SatelliteNetworkConfig::SetupIPConfig()
 
 // Build all
 void
-SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSfilepath)
+SatelliteNetworkConfig::BuildNetwork ()
 
 {
-  ReadSatConfigFile(TLEfilepath);
-  ReadGSConfigFile(GSfilepath);
+  ReadSatConfigFile(m_TLEfilepath);
+  ReadGSConfigFile(m_GSfilepath);
   // ReadAirConfigFile();
   
   
@@ -679,7 +683,7 @@ SatelliteNetworkConfig::BuildNetwork (std::string &TLEfilepath, std::string &GSf
 
 void SatelliteNetworkConfig::UpdateISLsP2PFixed()
 {
-return -1;
+// return -1;
 }
 
 
@@ -816,9 +820,9 @@ void SatelliteNetworkConfig::UpdateLinks()
 
 
 /*
-//******************************************************************************************
-//*************************** GSL UPDATES **************************************************
-//******************************************************************************************
+******************************************************************************************
+*************************** GSL UPDATES **************************************************
+******************************************************************************************
 */
 
 
@@ -826,7 +830,7 @@ void SatelliteNetworkConfig::UpdateLinks()
   std::cout <<"Setting links between ground stations and satellites"<< std::endl;
   for (uint32_t idxGs=0; idxGs<m_groundStationsNodes.GetN(); idxGs++)
   {
-    Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
+    // Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
     std::string dataRate = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetDataRate();
 
     uint32_t closestSatId = 0;
@@ -834,7 +838,7 @@ void SatelliteNetworkConfig::UpdateLinks()
 
 /*
 ***********************************************************************************************
-//************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
+************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
 ***********************************************************************************************
 */
     //find closest adjacent satellite for ground station
