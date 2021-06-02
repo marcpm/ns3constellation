@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>US Ka gateways</name>
+    <Style id="icon-1794-0F9D58-normal">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1794-0F9D58-highlight">
+      <IconStyle>
+        <color>ff589d0f</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1794-0F9D58">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1794-0F9D58-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1794-0F9D58-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Style id="icon-1794-F57C00-normal">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+    </Style>
+    <Style id="icon-1794-F57C00-highlight">
+      <IconStyle>
+        <color>ff007cf5</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+    </Style>
+    <StyleMap id="icon-1794-F57C00">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1794-F57C00-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1794-F57C00-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>Conrad MT Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2019-08-15<br>https://fcc.report/IBFS/SES-LIC-20190816-01062]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -111.945278,48.203306,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Loring ME Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2019-08-15<br>https://fcc.report/IBFS/SES-LIC-20190816-01063]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -67.919528,46.914917,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Redmond WA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2019-08-26<br>https://fcc.report/IBFS/SES-LIC-20190827-01110]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -122.032139,47.694194,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Greenville PA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2019-09-05<br>https://fcc.report/IBFS/SES-LIC-20190906-01170]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -80.333222,41.433556,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Merrillan WI Gateway</name>
+      <description><![CDATA[<img src="https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/4f62dcmhhpg4n6pk7ru07gnvdk/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALog3RdRv0lFokb4jYu3nB00gx904rj81BxUeT1DdbJFjCV-NSahWQJj_2gWTyoMEAf4j7buAbOVtKaRJUeNTXDax5pitWwpq3vjSFN2bocqYkKPoftl-7s-X3ssgl-OpjXtm7zIur0PTQnoh5XKQThD8CqEBchOORH7e8xzpeCc0UY7kSY9yZe2BPg1EUdvpXy6HXB0jIgvgwdeYJ_TuyMQbJPgQA?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2019-09-05<br>https://fcc.report/IBFS/SES-LIC-20190906-01171<br><br>Photos: https://imgur.com/a/ygxncIO<br><br>Photos: https://www.reddit.com/r/SpaceXLounge/comments/gkkm9c/starlink_base_station_photos_from_the_location_of/]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/4f62dcmhhpg4n6pk7ru07gnvdk/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALog3RdRv0lFokb4jYu3nB00gx904rj81BxUeT1DdbJFjCV-NSahWQJj_2gWTyoMEAf4j7buAbOVtKaRJUeNTXDax5pitWwpq3vjSFN2bocqYkKPoftl-7s-X3ssgl-OpjXtm7zIur0PTQnoh5XKQThD8CqEBchOORH7e8xzpeCc0UY7kSY9yZe2BPg1EUdvpXy6HXB0jIgvgwdeYJ_TuyMQbJPgQA?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -90.814278,44.406333,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kalama WA Gateway</name>
+      <description><![CDATA[<img src="https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/s7lcq2hln4hci4puv621o4877o/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrXzsopC9tVQVNFvIXCmz9p6UFLgQjidchCXz4cGwY_bzPpOo1L6QXk2S6k91UCHVNpWEhiICaAf7u_3fJEDH4Z0glTZrs6pkvtPoy33T388AirQOAyfmGJJmGZQ0TL62t3aId2O2TNyMtueP5XNIB_MBjV1BtK9YUN8w37MnM6XYbZuFl7qNJw0Ytv-eOvqD-p-QA2CtKnN97Oinkw11HKg_KwGw?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8 <br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-02-06<br>https://fcc.report/IBFS/SES-LIC-20200210-00148<br><br>Photos: https://www.reddit.com/r/Starlink/comments/k6hd4a/photos_of_the_kalama_washington_downlink_station/]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/s7lcq2hln4hci4puv621o4877o/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrXzsopC9tVQVNFvIXCmz9p6UFLgQjidchCXz4cGwY_bzPpOo1L6QXk2S6k91UCHVNpWEhiICaAf7u_3fJEDH4Z0glTZrs6pkvtPoy33T388AirQOAyfmGJJmGZQ0TL62t3aId2O2TNyMtueP5XNIB_MBjV1BtK9YUN8w37MnM6XYbZuFl7qNJw0Ytv-eOvqD-p-QA2CtKnN97Oinkw11HKg_KwGw?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -122.8082222,46.0389722,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hawthorne CA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-02-06<br>https://fcc.report/IBFS/SES-LIC-20200210-00150]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -118.328111,33.9175,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Arbuckle CA Gateway</name>
+      <description><![CDATA[Antenna count: 8 <br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-03-23<br>https://fcc.report/IBFS/SES-LIC-20200327-00325]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -122.06,39.057,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Beekmantown NY Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-03-24<br>https://fcc.report/IBFS/SES-LIC-20200327-00326]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -73.48,44.789972,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Charleston OR Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-03-31<br>https://fcc.report/IBFS/SES-LIC-20200402-00365]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -124.381194,43.248417,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Panaca NV Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-03-31<br>https://fcc.report/IBFS/SES-LIC-20200402-00367]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -114.692694,37.783639,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Boca Chica TX Gateway</name>
+      <description><![CDATA[<img src="https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/95bp8a6u42gus6mloe9d8taq88/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoisnMoz2EDD75v6KaZhmahOUMsDhVlpXcYzEO6DHlOImtyv2ycy2tEgzP8Ub94xjCkO7AJKdfhcwZohRYr2i5FDbdc3pFlPekt2FYqiPrFpIB8NMtiL37n47jnxLwVGnD90uv4kI-Y1JePIDoT1jmurBxXYDW98pfyx5ckQ1srczszvA7dk9spD4cnkV4rbtI5_UghXKg8jTERUBt0kJTtrRdNTA?session=0&fife" height="200" width="auto" /><br><br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-06<br>https://fcc.report/IBFS/SES-LIC-20200406-00375<br><br>Photos: https://forum.nasaspaceflight.com/index.php?topic=48297.msg2070513#msg2070513]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/95bp8a6u42gus6mloe9d8taq88/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoisnMoz2EDD75v6KaZhmahOUMsDhVlpXcYzEO6DHlOImtyv2ycy2tEgzP8Ub94xjCkO7AJKdfhcwZohRYr2i5FDbdc3pFlPekt2FYqiPrFpIB8NMtiL37n47jnxLwVGnD90uv4kI-Y1JePIDoT1jmurBxXYDW98pfyx5ckQ1srczszvA7dk9spD4cnkV4rbtI5_UghXKg8jTERUBt0kJTtrRdNTA?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -97.18275,25.990694,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>McGregor TX Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.6 GHz total (27.5-29.1)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-06<br>https://fcc.report/IBFS/SES-LIC-20200406-00374]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -97.438139,31.404917,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Litchfield CT Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-09<br>https://fcc.report/IBFS/SES-LIC-20200410-00399<br><br>https://fcc.report/IBFS/SES-STA-20210119-00138<br><br>Objected by OneWeb: https://licensing.fcc.gov/cgi-bin/ws.exe/prod/ib/forms/reports/related_filing.hts?f_key=-443251&f_number=SESLIC2020041000399]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -73.354028,41.545028,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Warren MO Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-09<br>https://fcc.report/IBFS/SES-LIC-20200410-00400]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -91.116028,38.635167,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Nemaha NE Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-17<br>https://fcc.report/IBFS/SES-LIC-20200417-00422]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -95.815278,40.333667,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Manistique Gateway</name>
+      <description><![CDATA[<img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/1tsks1m4jrcbnfb8ch129p4mmc/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrSrNHQgHYfF0-2rqpUrsJ9rQFxgD0KCceFSIQnX3TwxrcJFXSDa4CYgiAxDDsLgIA2jCqXl5O8fBWXHV6Sy9n0s7jSLbrp6qpZzTK8i2PtjhvFtxZ8kE1IKUgwYC2AXREIHZ8e12XBZdoVLoJflHifKtrXVrogP9gg3T__rH_944n8ADTpLpHl08gNA-bLGCfJp820-DbbNaEyUcOzwsgoujAswQ?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-21<br>https://fcc.report/IBFS/SES-LIC-20200422-00443<br><br>Photos: https://imgur.com/a/e2X99jb]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/1tsks1m4jrcbnfb8ch129p4mmc/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrSrNHQgHYfF0-2rqpUrsJ9rQFxgD0KCceFSIQnX3TwxrcJFXSDa4CYgiAxDDsLgIA2jCqXl5O8fBWXHV6Sy9n0s7jSLbrp6qpZzTK8i2PtjhvFtxZ8kE1IKUgwYC2AXREIHZ8e12XBZdoVLoJflHifKtrXVrogP9gg3T__rH_944n8ADTpLpHl08gNA-bLGCfJp820-DbbNaEyUcOzwsgoujAswQ?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -86.483583,45.908611,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Slope County Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-21<br>https://fcc.report/IBFS/SES-LIC-20200422-00442]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -103.114583,46.408389,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Los Angeles Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-27<br>https://fcc.report/IBFS/SES-LIC-20200428-00458]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -117.454361,34.604028,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Cass County, ND Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-30<br>https://fcc.report/IBFS/SES-LIC-20200430-00472]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -97.408889,47.151694,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Sanderson TX Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-04-01<br>https://fcc.report/IBFS/SES-LIC-20200505-00498]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -102.89,30.194,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Springer OK Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-05-21<br>https://fcc.report/IBFS/SES-LIC-20200528-00576]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -97.213167,34.2685,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hitterdal MN Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-12<br>https://fcc.report/IBFS/SES-LIC-20200616-00649]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -96.258028,46.978917,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tionesta CA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-12<br>https://fcc.report/IBFS/SES-LIC-20200616-00645]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -121.329972,41.644,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Butte MT Gateway</name>
+      <description><![CDATA[<img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i6clq233dierklm36iofpnj110/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrEax_8qqZZHxTug-mhK2O_A0hKymZvmQoL6ZX61h0DI1jNXz1gsnnguhR2YiMOiNRtjRGBDx5gtcDAMapyF2EeRNyin-0Ta6aSjGqhTAv3LzARNFsm4kkKgQO-5vDm-zUlwHKYykM6gcXDPJUCedp8MUQHNV4vCZkcUecTyYLIisYnD1l7JwfUJuJevy-8Ar8aX_EJ-yi68VWuMlwMU45tvjTSfA?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-12<br>https://fcc.report/IBFS/SES-LIC-20200616-00648<br><br>More photos: https://www.reddit.com/r/Starlink/comments/jozfde/photos_of_butte_mt_gateway/]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i6clq233dierklm36iofpnj110/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrEax_8qqZZHxTug-mhK2O_A0hKymZvmQoL6ZX61h0DI1jNXz1gsnnguhR2YiMOiNRtjRGBDx5gtcDAMapyF2EeRNyin-0Ta6aSjGqhTAv3LzARNFsm4kkKgQO-5vDm-zUlwHKYykM6gcXDPJUCedp8MUQHNV4vCZkcUecTyYLIisYnD1l7JwfUJuJevy-8Ar8aX_EJ-yi68VWuMlwMU45tvjTSfA?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -112.513194,45.924056,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Colburn ID Gateway</name>
+      <description><![CDATA[<img src="https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/rsiglpi3t3g0ambvmtjm6st1vo/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpd73jZXewwm4HaRxJgDGtkqPicCuFWAj9ro6B_I7qcQceN3X9BGaUPkFJmjgTHVNtjo-rUA0xRsFQqMwnRrmLf21ukIO0-HmTiR0TWXOvHxE1kRUUXpE__xyi8PwfDnky8K1DbyH041tQL2tia2TbHplgd_A_gOmRaw61u22eQMU8LR8JpEiEpJOQxaHmFEstCUXQuZF2-2LGyPTwL9PHZg4-fmw?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-12<br>https://fcc.report/IBFS/SES-LIC-20200616-00647<br><br>Photos: https://www.reddit.com/r/Starlink/comments/huv4ju/starlink_in_northidaho/<br><br>Photos: https://www.reddit.com/r/Starlink/comments/hjbkuo/starlink_ground_station_being_constructed_near/<br><br><img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/alkdiumnp45udp7mvo5tekka44/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALraZcX52wBW6t_frECEPKIHOxcvlZU7LJ65G4LcrOes9FH6QjmNQqiobbUNfM3nST-QTZ__o86waolVhNVFA_LwQVl_JEG1JZ4WSPKL8jnxWa_pn67zk8qb7S8WqJaSw6SmXhmx1_7Fdndc9lHXWMOzSA_3-icClpZLX79bJap9zVgXiHZw5dKqQ2Amm0nOUP2YPTRc55FiCllQSLmErTFS1_YGtA?session=0&fife" height="200" width="auto" /><br><br><img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i6bmru5tfk56ml39nbf8d84cuc/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpgNeYFwcJqwX7jVypvV43sur2cyEjJOBSPqbTQET46MUHsECbA22wZgmBCYBcAL0XslLGyiQEaFLmp9GH3vn_udDAZg1wXMGxIAtG5b_luyjmePJNDrJFvmU-Bwh3UfqRx4Fg1oWzMUAElqz88gkCd1XQTh9ZOUx7D4mIDIQ3KZATlqta9JDZpBNa1h8M32y1zZhTt3MyM884zbhYSI7YO-d3OzQ?session=0&fife" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/rsiglpi3t3g0ambvmtjm6st1vo/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpd73jZXewwm4HaRxJgDGtkqPicCuFWAj9ro6B_I7qcQceN3X9BGaUPkFJmjgTHVNtjo-rUA0xRsFQqMwnRrmLf21ukIO0-HmTiR0TWXOvHxE1kRUUXpE__xyi8PwfDnky8K1DbyH041tQL2tia2TbHplgd_A_gOmRaw61u22eQMU8LR8JpEiEpJOQxaHmFEstCUXQuZF2-2LGyPTwL9PHZg4-fmw?session=0&fife https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/alkdiumnp45udp7mvo5tekka44/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALraZcX52wBW6t_frECEPKIHOxcvlZU7LJ65G4LcrOes9FH6QjmNQqiobbUNfM3nST-QTZ__o86waolVhNVFA_LwQVl_JEG1JZ4WSPKL8jnxWa_pn67zk8qb7S8WqJaSw6SmXhmx1_7Fdndc9lHXWMOzSA_3-icClpZLX79bJap9zVgXiHZw5dKqQ2Amm0nOUP2YPTRc55FiCllQSLmErTFS1_YGtA?session=0&fife https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i6bmru5tfk56ml39nbf8d84cuc/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpgNeYFwcJqwX7jVypvV43sur2cyEjJOBSPqbTQET46MUHsECbA22wZgmBCYBcAL0XslLGyiQEaFLmp9GH3vn_udDAZg1wXMGxIAtG5b_luyjmePJNDrJFvmU-Bwh3UfqRx4Fg1oWzMUAElqz88gkCd1XQTh9ZOUx7D4mIDIQ3KZATlqta9JDZpBNa1h8M32y1zZhTt3MyM884zbhYSI7YO-d3OzQ?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -116.439333,48.34525,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Baxley GA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-16<br>https://fcc.report/IBFS/SES-LIC-20200616-00646]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -82.268972,31.682167,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Robertsdale AL Gateway</name>
+      <description><![CDATA[<img src="https://doc-00-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/303b6h7jnjmmqrklajqcej8b6g/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALq8CgCA_pYMUEqkPjOmh4VKzRtBrDkHHu7A5Q-m95oce_wgnbNWgR-zNBy2VLweeRcHhGf2BUtzYN6LgXIR5-m0qz7ZMPPneR0Q-MsCTkWS4cPCHddu3QXDgZ79X9Cif3uw9xBlnQCgI7i4sfdxqTvX14oONBFYTddVm-VcnYopyT3dNz6-S9ne4ClP2wfCqL1IgBWikM1tY5055mqlhx10pucErw?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-16<br>https://fcc.report/IBFS/SES-LIC-20200616-00650]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-00-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/303b6h7jnjmmqrklajqcej8b6g/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALq8CgCA_pYMUEqkPjOmh4VKzRtBrDkHHu7A5Q-m95oce_wgnbNWgR-zNBy2VLweeRcHhGf2BUtzYN6LgXIR5-m0qz7ZMPPneR0Q-MsCTkWS4cPCHddu3QXDgZ79X9Cif3uw9xBlnQCgI7i4sfdxqTvX14oONBFYTddVm-VcnYopyT3dNz6-S9ne4ClP2wfCqL1IgBWikM1tY5055mqlhx10pucErw?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -87.646,30.567,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Roll AZ Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-29<br>https://fcc.report/IBFS/SES-LIC-20200701-00686]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -113.798056,32.8155,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Prosser WA Gateway</name>
+      <description><![CDATA[<img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8vei84o4e5i9rndfjur335f5d0/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoWhTj1DHwTWeruKLQ12hxJGwfNeQjbMd2d28rB2TBU_5gS92T9wK7eX4o82t2nmKSu1-anVjPfPG1GgoaDXwmzmwBF6_YbKioFwC1BYB1uDCdf5MhxYwYaqHE39NIG97IJXjRDn8xOq8tQxvzg9jjlCepRTWT29vdWOZbWxnKYEKcFkiqLGpnRARrNl4diMmFHyrzXg3gHaenYc-ImbKQHAK3kOA?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-06-29<br>https://fcc.report/IBFS/SES-LIC-20200701-00687<br><br>Photos: https://www.reddit.com/r/Starlink/comments/hufgs8/starlink_us_gateway_prosser_wa/<br><br>Progress photos: https://www.reddit.com/r/Starlink/comments/kc044t/progress_at_the_prosser_wa_ground_station/<br><br><img src="https://doc-10-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i8nfnkn6kv4299u93h9d69s8i4/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALp19Ou_OhzF4F8gGSgbwMy_9alixXN2uc6XoBIyv-oMOySRm-XnlUFwzEtWtlLRhZ0Xh4Ii-PrKtwdZE74K8fTnN1droEYYweurKUxKowRXZi5npzWFvIOWQOlhBfqQ8wYaKGhpI87O9EJayjnz4TJbutAS7dl-WcQhH6IwpW5zsNxMscN9SXy_hiNumNe-YthRxOD-IDUc0YLlf2tvQ0ckJEAepQ?session=0&fife" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8vei84o4e5i9rndfjur335f5d0/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoWhTj1DHwTWeruKLQ12hxJGwfNeQjbMd2d28rB2TBU_5gS92T9wK7eX4o82t2nmKSu1-anVjPfPG1GgoaDXwmzmwBF6_YbKioFwC1BYB1uDCdf5MhxYwYaqHE39NIG97IJXjRDn8xOq8tQxvzg9jjlCepRTWT29vdWOZbWxnKYEKcFkiqLGpnRARrNl4diMmFHyrzXg3gHaenYc-ImbKQHAK3kOA?session=0&fife https://doc-10-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/i8nfnkn6kv4299u93h9d69s8i4/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALp19Ou_OhzF4F8gGSgbwMy_9alixXN2uc6XoBIyv-oMOySRm-XnlUFwzEtWtlLRhZ0Xh4Ii-PrKtwdZE74K8fTnN1droEYYweurKUxKowRXZi5npzWFvIOWQOlhBfqQ8wYaKGhpI87O9EJayjnz4TJbutAS7dl-WcQhH6IwpW5zsNxMscN9SXy_hiNumNe-YthRxOD-IDUc0YLlf2tvQ0ckJEAepQ?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.684305,46.127278,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Vernon UT Gateway</name>
+      <description><![CDATA[<img src="https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/2ocd6r8e4ftqe2oppar3j7vqb8/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoh6_3f58BgsD85jH3qYgY8BHBmNBnQFnAklsUD4h7z-k5LEyvVNmssEjgvZWwJs5G_panNDBO30p03kNRivk0oc-7bNoagKH5fk8rJSd_DZUBQieyPvgRp5AfKJz9czsH87V_fDZ5I-Cqwx0PnCNFINAEXR8tUvRZGtROOeAE2rCSICStBwuaMqVU9NwNF4SP8hOftuZk_VNPJWLGGyIr4RLoFzw?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-07-08<br>https://fcc.report/IBFS/SES-LIC-20200709-00735]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/2ocd6r8e4ftqe2oppar3j7vqb8/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoh6_3f58BgsD85jH3qYgY8BHBmNBnQFnAklsUD4h7z-k5LEyvVNmssEjgvZWwJs5G_panNDBO30p03kNRivk0oc-7bNoagKH5fk8rJSd_DZUBQieyPvgRp5AfKJz9czsH87V_fDZ5I-Cqwx0PnCNFINAEXR8tUvRZGtROOeAE2rCSICStBwuaMqVU9NwNF4SP8hOftuZk_VNPJWLGGyIr4RLoFzw?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -112.354722,40.076222,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Inman KS Gateway</name>
+      <description><![CDATA[<img src="https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/3bb09e2g66n19i3adf296eq730/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoTkShQN-l_RLzj615wObc2HV34TOa-sHieck_gOrx5pZ1wd0Y5ITo-3lUyRcbM50CTGbOrPRflBeDhl9L3BTEr36Iz8Kwg8MPx63IJD0MQzUuqzweCKa580_cM_0eC6veGJHad1xzfiaWURYNxS53aqhAy4R05D8VQYzW4M1tAN_MM_OA8X7RbfCMLX3RY4QezO8R94VcoXjkgY-jHB2i_KQ1Fag?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-07-13<br>https://fcc.report/IBFS/SES-LIC-20200714-00758]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/3bb09e2g66n19i3adf296eq730/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoTkShQN-l_RLzj615wObc2HV34TOa-sHieck_gOrx5pZ1wd0Y5ITo-3lUyRcbM50CTGbOrPRflBeDhl9L3BTEr36Iz8Kwg8MPx63IJD0MQzUuqzweCKa580_cM_0eC6veGJHad1xzfiaWURYNxS53aqhAy4R05D8VQYzW4M1tAN_MM_OA8X7RbfCMLX3RY4QezO8R94VcoXjkgY-jHB2i_KQ1Fag?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -97.921972,38.229,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Evanston WY Gateway</name>
+      <description><![CDATA[<img src="https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/2dvdcvpj0gh1ata4tpl622q208/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALozc1vPlFp9cxiLowJQfobTgTRL5vln3wK5uPFL4Uk1e5HdHh3qN67Dh5i2ySDMsUX18a3rUw2raEJy0muCXEbquoMClgul3LiIK3nd1pMZMpswOHHEHuYUGZcz2YqoADRiutSryimyZwJHVsWnMhtDShbjwbJ2N8cKtZV36qxhfPcVfWNubR3Q3pN2TvynIPzyv350vXki88w3nGmgnfYt6rq0GQ?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-07-30<br>https://fcc.report/IBFS/SES-AMD-20200730-00803<br><br>Photos: https://www.reddit.com/r/Starlink/comments/lzj0qg/the_evanston_wy_ground_station/]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/2dvdcvpj0gh1ata4tpl622q208/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALozc1vPlFp9cxiLowJQfobTgTRL5vln3wK5uPFL4Uk1e5HdHh3qN67Dh5i2ySDMsUX18a3rUw2raEJy0muCXEbquoMClgul3LiIK3nd1pMZMpswOHHEHuYUGZcz2YqoADRiutSryimyZwJHVsWnMhtDShbjwbJ2N8cKtZV36qxhfPcVfWNubR3Q3pN2TvynIPzyv350vXki88w3nGmgnfYt6rq0GQ?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -110.842611,41.0925,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Punta Gorda FL Gateway</name>
+      <description><![CDATA[<img src="https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/mh01op33lttn8rbvet1s12tonk/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpuPXy6zVsLKLq0yaY02ZR68GGx1crlEmRHeAGvgSaPWtUYIe5Yc6Pn9K7W3WKOlWDbyDjes67pOjd1pFnZmBN_WaphUsio_vBpfNu5uO1lcJpXK57xPmgAvVJB7bCnCs0ADuPwTgvFVZb6cEuCEj8STK49vOIgNWEcX39BPZva7dMFjMsXiPkqR5Hl-O7r4C9pbqSX1IJ3NXrkTM-ScPfMuKwpkQ?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-08-06<br>https://fcc.report/IBFS/SES-LIC-20200811-00860]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-08-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/mh01op33lttn8rbvet1s12tonk/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALpuPXy6zVsLKLq0yaY02ZR68GGx1crlEmRHeAGvgSaPWtUYIe5Yc6Pn9K7W3WKOlWDbyDjes67pOjd1pFnZmBN_WaphUsio_vBpfNu5uO1lcJpXK57xPmgAvVJB7bCnCs0ADuPwTgvFVZb6cEuCEj8STK49vOIgNWEcX39BPZva7dMFjMsXiPkqR5Hl-O7r4C9pbqSX1IJ3NXrkTM-ScPfMuKwpkQ?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -81.762028,27.019667,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Tracy City, TN gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-09-01<br>https://fcc.report/IBFS/SES-LIC-20200903-00966<br><br>https://fcc.report/IBFS/SES-STA-20210208-00260]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -85.666,35.19725,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kuparuk, AK Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-09-02<br>https://fcc.report/IBFS/SES-LIC-20200903-00965<br><br>https://fcc.report/IBFS/SES-STA-20210208-00259]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -148.941194,70.317667,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Gaffney, SC Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-09-02<br>https://fcc.report/IBFS/SES-LIC-20200903-00976<br><br>https://fcc.report/IBFS/SES-STA-20210208-00266]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -81.733083,34.985306,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Robbins, CA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-10-16<br>https://fcc.report/IBFS/SES-LIC-20201020-01153<br>https://fcc.report/IBFS/SES-STA-20210208-00262]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -121.707055,38.875,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Wise, NC Gateway</name>
+      <description><![CDATA[<img src="https://doc-10-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/aacbrq4s670aue1due7vra6eqg/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoZ9dUd0u3a8Pud2kU_p2DqpdFQuvErFT1Ft0vHAJRsfLI-iAhGupqd3GRZxT1RJWICH_fD3Bvwo7IKXNFEmyOrjqF-6Z7vy_dXIItFXYTSSgKkDJ2S6WfaO9AzIUVClvM_lqUyJn5s6joiX8aGmhcVRZcYfv8tO-JcpblFZd-75KjntT_lUXPBzUM3XgVbguzBb323POvm6JYf0AWDW2rkaHN2mQ?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-10-16<br>https://fcc.report/IBFS/SES-LIC-20201023-01173<br><br>https://fcc.report/IBFS/SES-STA-20210208-00265<br><br><img src="https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/l781o8ufcmc8nqlq4c6qp0gbeo/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrzmjt063QplC9DvRzqcx-bM9LQNvyMm1ipZNi4vlEN-batDZ8AZifrw3dvvjC3UTfEtEJqmeTjRqxeN2UiI8DVxkCutA7xDidpVsfIVbwfKkOoKZr2jopugbhvCCoqV0PpIB6rHV-bqCDbIHYCjGYEMvkjlCPrk_od2fAFgmv-rmyJ4aPT3dM6_mb1L1kcaoiCwhOV-oLBWlomtpnEQi20sm1vUQ?session=0&fife" height="200" width="auto" /><br><br><img src="https://doc-00-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8lu1n8m91bfqljla3h7m9e3qak/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALq64fDdOrRi5mlO9J9m2aL6gGpZp3aDdsFBpvCpQPwCYvwqBWFYGYXf4C5-OVK_07ey7q5H2LW5C2U2GDMkEzGV2zR8qL0-cf8R5rthPCekUdLC01h3FXDoeFlbsqyhc0aKrxCRofK5gsQKlxH1bLJ-86usYbM4ksNvSfMj_wrdgJHnpZuaB_msZixLfcydWOEB8VGD5O9wirrjD-4mrRon_sEl_A?session=0&fife" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-10-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/aacbrq4s670aue1due7vra6eqg/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoZ9dUd0u3a8Pud2kU_p2DqpdFQuvErFT1Ft0vHAJRsfLI-iAhGupqd3GRZxT1RJWICH_fD3Bvwo7IKXNFEmyOrjqF-6Z7vy_dXIItFXYTSSgKkDJ2S6WfaO9AzIUVClvM_lqUyJn5s6joiX8aGmhcVRZcYfv8tO-JcpblFZd-75KjntT_lUXPBzUM3XgVbguzBb323POvm6JYf0AWDW2rkaHN2mQ?session=0&fife https://doc-14-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/l781o8ufcmc8nqlq4c6qp0gbeo/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrzmjt063QplC9DvRzqcx-bM9LQNvyMm1ipZNi4vlEN-batDZ8AZifrw3dvvjC3UTfEtEJqmeTjRqxeN2UiI8DVxkCutA7xDidpVsfIVbwfKkOoKZr2jopugbhvCCoqV0PpIB6rHV-bqCDbIHYCjGYEMvkjlCPrk_od2fAFgmv-rmyJ4aPT3dM6_mb1L1kcaoiCwhOV-oLBWlomtpnEQi20sm1vUQ?session=0&fife https://doc-00-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8lu1n8m91bfqljla3h7m9e3qak/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALq64fDdOrRi5mlO9J9m2aL6gGpZp3aDdsFBpvCpQPwCYvwqBWFYGYXf4C5-OVK_07ey7q5H2LW5C2U2GDMkEzGV2zR8qL0-cf8R5rthPCekUdLC01h3FXDoeFlbsqyhc0aKrxCRofK5gsQKlxH1bLJ-86usYbM4ksNvSfMj_wrdgJHnpZuaB_msZixLfcydWOEB8VGD5O9wirrjD-4mrRon_sEl_A?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -78.173389,36.470639,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Mandale NC Gateway</name>
+      <description><![CDATA[<img src="https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/lb3oivud2jkjc15qknast9dsts/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoQabQy_8CW7LciCA0YokS9j5f08avIFUAW2M4F8GlCPdG9djd9eV10L781aqxcT6DmPSKd8CK0YC_NKGBbcMVa62XRUgj8QgyrrKxLqEbD2LjLh2Ltqq8EyntbH2H1cH42ku7HdD9JBlaqPeqTU3OdFb0oqMzWXTDOV9JsO4XD1AdTZuzCjGapIQiuB7vzbHdt37RPZgJhadRirkq09b1Vr_EEZg?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-10-16<br>https://fcc.report/IBFS/SES-LIC-20201021-01160<br><br>https://fcc.report/IBFS/SES-STA-20210208-00263]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0c-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/lb3oivud2jkjc15qknast9dsts/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALoQabQy_8CW7LciCA0YokS9j5f08avIFUAW2M4F8GlCPdG9djd9eV10L781aqxcT6DmPSKd8CK0YC_NKGBbcMVa62XRUgj8QgyrrKxLqEbD2LjLh2Ltqq8EyntbH2H1cH42ku7HdD9JBlaqPeqTU3OdFb0oqMzWXTDOV9JsO4XD1AdTZuzCjGapIQiuB7vzbHdt37RPZgJhadRirkq09b1Vr_EEZg?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -79.224889,35.895361,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Dumas, TX Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-10-16<br>https://fcc.report/IBFS/SES-LIC-20201019-01147<br><br>https://fcc.report/IBFS/SES-STA-20210208-00268]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -102.031861,35.807972,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hamshire, TX Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-12-07<br>https://fcc.report/IBFS/SES-LIC-20201208-01396]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -94.312333,29.859861,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Marcell MN Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2020-12-07<br>https://fcc.report/IBFS/SES-LIC-20201208-01397]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <Point>
+        <coordinates>
+          -93.692528,47.593167,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Lockport, NY Gateway</name>
+      <description><![CDATA[<img src="https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8u9u0ooq6spgebgp16e4cvlll8/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALryEA62Y9zR21xhs9qfLjm85SE8WO6ua0Tyzs7tGkdhdr0crsOwN4ICsKuyTCtbs4vph1d_cbgzxIw6lFOtaDRK5r3of8iwvhJ2rvNP-TFTdhJTr7tahd0Oyr3GgKRPkRvMKhyrTl8GtNIJo6tzlWKkwp8Uo57kANowPHE7Ow3Ky9PMMQMCRwukif7eujwzzYqFmzNAJ1i2HbcBEUrLCoSSGErV6w?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-01-04<br>https://fcc.report/IBFS/SES-LIC-20210105-00015<br><br>Photos: https://www.reddit.com/r/Starlink/comments/l41mrn/new_lockport_ny_ground_stationgateway_first_view/<br><br>Next to a Yahoo! data center.<br><br><img src="https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/j4c9kpe3s2s64shc6vh0o76ihg/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALqD0xicAY87SVJoObBfeuIQ3U1uEMmeI6V7p-3TmIxuX2__RpYlwW9p0goSbL2wvy6J-Wz3auE6BLUZ1N9ecjyDdTjrkqTNn5YSrg48sdtdQWk4s0pnFfNC6SDWI22Yg-lbFZYNatVlzrKzuO5I46R4jZYrswDgk2FAtLdbZpzrvGudSQpMv0QcKdlCybCfKx1AnuK-s30REvG0xWfhqGgQfJuxMw?session=0&fife" height="200" width="auto" />]]></description>
+      <styleUrl>#icon-1794-0F9D58</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-0o-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/8u9u0ooq6spgebgp16e4cvlll8/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALryEA62Y9zR21xhs9qfLjm85SE8WO6ua0Tyzs7tGkdhdr0crsOwN4ICsKuyTCtbs4vph1d_cbgzxIw6lFOtaDRK5r3of8iwvhJ2rvNP-TFTdhJTr7tahd0Oyr3GgKRPkRvMKhyrTl8GtNIJo6tzlWKkwp8Uo57kANowPHE7Ow3Ky9PMMQMCRwukif7eujwzzYqFmzNAJ1i2HbcBEUrLCoSSGErV6w?session=0&fife https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/j4c9kpe3s2s64shc6vh0o76ihg/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALqD0xicAY87SVJoObBfeuIQ3U1uEMmeI6V7p-3TmIxuX2__RpYlwW9p0goSbL2wvy6J-Wz3auE6BLUZ1N9ecjyDdTjrkqTNn5YSrg48sdtdQWk4s0pnFfNC6SDWI22Yg-lbFZYNatVlzrKzuO5I46R4jZYrswDgk2FAtLdbZpzrvGudSQpMv0QcKdlCybCfKx1AnuK-s30REvG0xWfhqGgQfJuxMw?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -78.755111,43.166556,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Hillman, MI Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-01<br>https://fcc.report/IBFS/SES-LIC-20210303-00425]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -83.900417,45.07325,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Lawrence, KS Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-11<br>https://fcc.report/IBFS/SES-LIC-20210311-00469]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -95.149389,39.013889,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Norcross, GA Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-11<br>https://fcc.report/IBFS/SES-LIC-20210311-00472<br><br>Next to a Flexential data center]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -84.197972,33.954972,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fort Lauderdale Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-11<br>https://fcc.report/IBFS/SES-LIC-20210311-00470<br><br>Next to a Flexential data center]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -80.193083,26.190861,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Broadview, IL Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-11<br>https://fcc.report/IBFS/SES-LIC-20210311-00471]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -87.858889,41.854889,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Sullivan, ME Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-18<br>https://fcc.report/IBFS/SES-LIC-20210322-00573]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -68.224,44.530972,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Lunenburg, VT Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-03-18<br>https://fcc.report/IBFS/SES-LIC-20210322-00572]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -71.731833,44.412028,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Ketchikan AK Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-04-07<br>https://fcc.report/IBFS/SES-LIC-20210420-00722]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -131.585694,55.314611,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Rolette, ND Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-04-09<br>https://fcc.report/IBFS/SES-LIC-20210412-00662]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -99.810528,48.660361,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Fairbanks, AK Gateway</name>
+      <description><![CDATA[<img src="https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/1cuir20l5aj4hq6gj741g07604/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrpVX00A2k4h1UA6v4owF-gqho5wQjL1BKAl2OeQI6dcORgXY9PU-Mb3vrCKP8vsgjLsiTRcWPjiQX6CDWLbsbM5AlvQJKxMEgGzyYwzI_7UMIiJArdpvhkmbzETpaoXkEKVgprJq4I-bhwIMej-kYqG7q8r4vuSoTF51sxApdD2soLZeDF4vzMBpjC8hPl2P26FJD5v-lXNEWueLyZNjOD6HswAw?session=0&fife" height="200" width="auto" /><br><br>Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-04-09<br>https://fcc.report/IBFS/SES-LIC-20210412-00666]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <ExtendedData>
+        <Data name="gx_media_links">
+          <value><![CDATA[https://doc-04-0g-mymaps.googleusercontent.com/untrusted/hostedimage/3d2cv5ion8lovim18t6ai2f6ck/1cuir20l5aj4hq6gj741g07604/1622592494250/xJLYE5kRT4Z8xxy6hUeYp97cJJ0CBjRF/12678759400538718980/5AF2TALrpVX00A2k4h1UA6v4owF-gqho5wQjL1BKAl2OeQI6dcORgXY9PU-Mb3vrCKP8vsgjLsiTRcWPjiQX6CDWLbsbM5AlvQJKxMEgGzyYwzI_7UMIiJArdpvhkmbzETpaoXkEKVgprJq4I-bhwIMej-kYqG7q8r4vuSoTF51sxApdD2soLZeDF4vzMBpjC8hPl2P26FJD5v-lXNEWueLyZNjOD6HswAw?session=0&fife]]></value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -147.500222,64.805167,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>New Braunfels, TX Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-04-22<br>https://fcc.report/IBFS/SES-LIC-INTR2021-01659]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -98.050778,29.784056,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Nome, AK Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 1.25 GHz total (28.35-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-05-27<br><br>https://fcc.report/IBFS/SES-LIC-INTR2021-02031]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -165.428305,64.5035,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>Kenansville, FL Gateway</name>
+      <description><![CDATA[Antenna count: 8<br>Antenna diameter: 5 feet<br>Antenna manufacturer: SpaceX<br>Uplink: 2.1 GHz total (27.5-29.1, 29.5-30 GHz)<br>Downlink: 1.3 GHz total (17.8-18.6, 18.8-19.3 GHz)<br>Date filed: 2021-05-28<br><br>https://fcc.report/IBFS/SES-LIC-INTR2021-02051]]></description>
+      <styleUrl>#icon-1794-F57C00</styleUrl>
+      <Point>
+        <coordinates>
+          -81.030486,27.876006,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>

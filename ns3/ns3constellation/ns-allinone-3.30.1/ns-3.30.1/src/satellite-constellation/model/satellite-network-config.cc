@@ -157,13 +157,14 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
       { //read data from file object and put it into string.
 
         std::vector <std::string> gsStrLine = splitString(tmp, ",");
-        std::string gsName = gsStrLine[0];
-        double gsLat = std::stof(gsStrLine[1]);
-        double gsLon = std::stof(gsStrLine[2]);
-        double gsAlt = std::stof(gsStrLine[3]);
-        double angleIncidence = std::stof(gsStrLine[4]);
-        std::string dataRate = gsStrLine[5];
-        uint32_t numGSLs = std::stoi(gsStrLine[6]);
+        // std::string gsId = gsStrLine[0];
+        std::string gsName = gsStrLine[1];
+        double gsLat = std::stof(gsStrLine[2]);
+        double gsLon = std::stof(gsStrLine[3]);
+        double gsAlt = std::stof(gsStrLine[4]);
+        double angleIncidence = std::stof(gsStrLine[5]);
+        std::string dataRate = gsStrLine[6];
+        uint32_t numGSLs = std::stoi(gsStrLine[7]);
 
         m_groundStationsNodes.Create(1);
 
