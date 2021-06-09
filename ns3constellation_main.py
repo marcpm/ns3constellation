@@ -17,7 +17,7 @@ def call_ns3_constellation(tlepath, gspath, airpath=None):
 
 if __name__ == "__main__":
 
-    CONSTELLATION = "IRIDIUM"
+    # CONSTELLATION = "ONEWEB"
     # SIMULATION_TIME = "2021-05-12 00:00:00.000"
     SIMULATION_TIME = None
 
@@ -46,7 +46,8 @@ if __name__ == "__main__":
 
     if args.known_constellation is not None:
         tle_data = get_predefined_constellation_data(str(args.known_constellation).lower())
-        filename = CONSTELLATION + "-"+ str(time.time()).replace(".","_") + ".TLE"
+        filename = args.known_constellation.upper() + "-"+ str(time.time()).replace(".","_") + ".TLE"
+    
     if args.custom_constellation is not None:
         raise TypeError(f"Custom built constellation mode still in development")
 

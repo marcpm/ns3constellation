@@ -30,6 +30,36 @@ TypeId SatelliteNetworkConfig::GetTypeId (void)
 // }
 
 
+// Constructors GS - SAT network
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(2), m_islDataRate("300Mbps"), m_airFilepath("")
+{
+  BuildNetwork();
+}
+
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate("300Mbps"), m_airFilepath("")
+{
+  BuildNetwork();
+}
+
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath("")
+{
+  BuildNetwork();
+}
+
+// Constructors GS - AIR - SAT network
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath(airFilepath)
+{
+  BuildNetwork();
+}
+
+
+
+
+
 SatelliteNetworkConfig::~SatelliteNetworkConfig ()
 {
 }
@@ -207,33 +237,6 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
       std::runtime_error( "Error Reading  Config File");
     }
 }
-
-// Constructors GS - SAT network
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(2), m_islDataRate("300Mbps"), m_airFilepath("")
-{
-  BuildNetwork();
-}
-
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate("300Mbps"), m_airFilepath("")
-{
-  BuildNetwork();
-}
-
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath("")
-{
-  BuildNetwork();
-}
-
-// Constructors GS - AIR - SAT network
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath(airFilepath)
-{
-  BuildNetwork();
-}
-
 
 
 
@@ -653,7 +656,7 @@ void SatelliteNetworkConfig::BuildGSLsSingleSat()
 
 }
 
-void SatelliteNetworkConfig::BuildGSLsMultiSat()
+void SatelliteNetworkConfig::BuildGSLsMultiSat() // not fully implemented
 {
   
 }
@@ -975,6 +978,11 @@ void SatelliteNetworkConfig::UpdateLinks()
         
       }
   }
+
+  //Recompute Routing Tables
+  std::cout<<"Recomputing Routing Tables"<<std::endl;
+  Ipv4GlobalRoutingHelper::RecomputeRoutingTables ();
+  std::cout<<"Finished Recomputing Routing Tables"<<std::endl;
 
 }
 
