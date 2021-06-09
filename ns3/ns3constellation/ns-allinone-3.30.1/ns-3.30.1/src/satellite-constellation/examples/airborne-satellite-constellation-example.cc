@@ -23,7 +23,8 @@ main (int argc, char *argv[])
   CommandLine cmd;
 
   
-  cmd.AddValue ("infoPath", "Info file path.", tleFilepath);
+  cmd.AddValue ("satPath", "Info Satellite file path.", tleFilepath);
+  
   cmd.AddValue ("gsPath", "Ground Stations file Path.", gsFilepath);
   cmd.AddValue ("airPath", "Air routes file Path.", airFilepath);
 

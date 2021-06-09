@@ -234,7 +234,6 @@ FullGroundStationMobilityModel::GetVisibilityGroundToSat (const Vector satPos, c
 
   bool visible = (razel[2] / M_PI * 180.0 ) > m_angleIncidence;
   
-
   // toposAzelRa Coords in az[deg] el[deg]  ra[m] : idem rates [/s]
   Topos topoFrame = {razel[1] / M_PI * 180.0, razel[2] / M_PI * 180.0, razel[0] * 1000.0, 
                     razelrates[1] / M_PI * 180.0, razelrates[2] / M_PI * 180.0, razelrates[0] * 1000.0, visible 
@@ -259,8 +258,12 @@ FullGroundStationMobilityModel::DoSetPosition (const Vector &position)
 Vector
 FullGroundStationMobilityModel::DoGetPosition (void) const
 {
+  double rs[3];
+  double vs[3];
+  site(m_latitude * M_PI / 180.0 , m_longitude * M_PI / 180.0 , m_altitude / 1000.0, 
+        rs, vs);
  
-  return m_ecefPosition;
+  return Vector3D(rs[0], rs[1], rs[2]);
 }
 
 Vector
@@ -268,7 +271,7 @@ FullGroundStationMobilityModel::DoGetVelocity (void) const
 {
   
  // ecef velocity = 0; fixed (to earths rotating axis) ref frame
-  return m_ecefVelocity;
+  return Vector3D(0,0,0);
 }
 
 

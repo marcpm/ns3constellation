@@ -87,16 +87,16 @@ public:
   NodeContainer m_groundStationsNodes; //node container to hold ground stations
 
 
-
+  std::vector<NetDeviceContainer> m_groundStationsDevices; 
+  std::vector<Ptr<CsmaChannel>> m_groundStationsChannels;
+  std::vector<Ipv4InterfaceContainer> m_groundStationsInterfaces;
+  std::vector<int> m_groundStationsChannelTracker;
 
 private:
   // std::vector<Satellite> m_constellationSats;
   // std::vector<GroundStation> m_groundStations;
 
-  std::vector<NetDeviceContainer> m_groundStationsDevices; 
-  std::vector<Ptr<CsmaChannel>> m_groundStationsChannels;
-  std::vector<Ipv4InterfaceContainer> m_groundStationsInterfaces;
-  std::vector<uint32_t> m_groundStationsChannelTracker;
+
 
 
   // NodeContainer m_constellationSatsNodes;

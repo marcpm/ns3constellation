@@ -41,12 +41,12 @@ def write_TLEs_to_file(tle_obj_vec: list[dict], filepath:str="sats-TLE-example.j
     # tle_json_data = {item["NORAD_CAT_ID"]: [item["TLE_LINE1"], item["TLE_LINE2"]]  
     #                     for item in tle_obj_vec }  
     with open(filepath, "a") as file:
-        file.write("\n")
+        # file.write("\n")
         for sat in tle_obj_vec:
             obj_name = sat["OBJECT_NAME"]
             line1 = sat["TLE_LINE1"]
             line2 = sat["TLE_LINE2"]
-            file.write(f"{obj_name}\n{line1}\n{line2}")
+            file.write(f"{obj_name}\n{line1}\n{line2}\n")
     
     print(f"TLE File written successfully at {filepath}.")
 

@@ -7,3 +7,6 @@ def build(bld):
     obj = bld.create_ns3_program('constellation-example', ['satellite-constellation'])
     obj.source = 'constellation-example.cc'
 
+    obj = bld.create_ns3_program('basic-constellation-example', ['satellite-constellation'])
+    obj.source = 'basic-satellite-constellation-example.cc'
+

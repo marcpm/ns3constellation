@@ -100,16 +100,16 @@ Ported to C++ by Grady Hillhouse with some modifications, July 2015.
 INPUTS          DESCRIPTION                     RANGE/UNITS
 latgd           Site geodetic latitude          -PI/2 to PI/2 in radians
 lon             Longitude                       -2PI to 2PI in radians
-alt             Site altitude                   m
+alt             Site altitude                   km
 OUTPUTS         DESCRIPTION
-rs              Site position vector            m
-vs              Site velocity vector            m/s
+rs              Site position vector            km
+vs              Site velocity vector            km/s
 */
 
 void site(double latgd, double lon, double alt, double rs[3], double vs[3])
 {
     double sinlat, re, eesqrd, cearth, rdel, rk;
-    re = 6378137;              //radius of earth in m
+    re = 6378.137;              //radius of earth in m
     eesqrd = 0.006694385000;    //eccentricity of earth sqrd wgs84
     
     //Find rdel and rk components of site vector
