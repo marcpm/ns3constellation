@@ -17,15 +17,14 @@ main (int argc, char *argv[])
 {
 
 
-  double linkTimeStep = 100.0;
-  double timespan = 5000.0;
+  double linkTimeStep = 200.0;
+  double timespan = 3000.0;
   uint32_t nISLsPerSat = 2;
   uint32_t gsServerId = 0;
-  uint32_t airServerId = 0;
   uint32_t gsClientId = 2;
+  uint32_t airServerId = 0;
   
   
-
 
   CommandLine cmd;
   

@@ -141,12 +141,24 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
           
         }else if ( (lineNum-1) % 3 == 0)
         {
-          line1 = tmp.substr(0, 69);
-          // line1 = tmp;  // read TLE - line 1
+          if (tmp.size() > 69)
+          {
+            line1 = tmp.substr(0, 69);
+
+          }else
+          {
+            line1 = tmp;  // read TLE - line 1
+          }
         }else if ( (lineNum-2) % 3 == 0)
         {
-          line2 = tmp.substr(0, 69);
-          // line2 = tmp;   // read TLE - line 2
+          if (tmp.size() > 69)
+          {
+            line2 = tmp.substr(0, 69);
+
+          }else
+          {
+            line2 = tmp;  // read TLE - line 1
+          }
         }
 
         lineNum++;
@@ -892,7 +904,7 @@ void SatelliteNetworkConfig::SetupIPConfig()
 
   //Configure IP Addresses for all NetDevices
   Ipv4AddressHelper address;
-  address.SetBase ("10.1.0.0", "255.255.255.0");
+  address.SetBase ("10.0.0.0", "255.255.240.0"); //255.255.255.0 -> 200+ nodes 
 
 
    //configuring IP Addresses for ISL devices
