@@ -17,6 +17,7 @@
 #include "ns3/satellite-position-helper.h"
 #include "ns3/satellite-position-mobility-model.h"
 #include "ns3/full-ground-station-mobility.h" 
+#include "ns3/aircraft-mobility.h" 
 #include "ns3/mobility-module.h"
 
 #include "ns3/csma-module.h"
@@ -58,7 +59,7 @@ public:
   void ReadSatConfigFile (std::string TLEfilepath); // reads and parses file containing 3 line TLEs.
   std::vector<std::string> splitString (std::string s, std::string delimiter);
   void ReadGSConfigFile (std::string GSfilepath);
-  
+  void ReadAirConfigFile (std::string Airfilepath);
 
   void BuildISLsP2PFixed();
 
@@ -67,6 +68,8 @@ public:
   void BuildGSLsSingleSat();
 
   void BuildGSLsMultiSat();
+
+  void BuildASLsSingleSat();
 
   void SetupIPConfig();
 
@@ -81,16 +84,21 @@ public:
   std::string m_GSfilepath;
   uint32_t m_nISLsPerSat; // num of ISLs per sat
   std::string m_islDataRate;
-  std::string m_airFilepath;
+  std::string m_AIRfilepath;
 
   NodeContainer m_satellitesNodes;
   NodeContainer m_groundStationsNodes; //node container to hold ground stations
-
+  NodeContainer m_aircraftNodes;
 
   std::vector<NetDeviceContainer> m_groundStationsDevices; 
   std::vector<Ptr<CsmaChannel>> m_groundStationsChannels;
   std::vector<Ipv4InterfaceContainer> m_groundStationsInterfaces;
   std::vector<int> m_groundStationsChannelTracker;
+
+  std::vector<NetDeviceContainer> m_aircraftDevices; 
+  std::vector<Ptr<CsmaChannel>> m_aircraftChannels;
+  std::vector<Ipv4InterfaceContainer> m_aircraftInterfaces;
+  std::vector<int> m_aircraftChannelTracker;
 
 private:
   // std::vector<Satellite> m_constellationSats;
@@ -105,6 +113,7 @@ private:
   // std::vector<Ptr<CsmaChannel>> m_islChannels;
   std::vector<Ipv4InterfaceContainer> m_islInterfaces;
   std::vector < std::pair < uint32_t, uint32_t > >  m_islChannelTracker; // keep track of already linked satellites to skip iterations.
+  
   double CalculateDistance(Vector &pos1, Vector &pos2);
   // double CalculateDistance(PVCoords &pv1, PVCoords &pv2);
 };

@@ -11,6 +11,7 @@ def build(bld):
     module.source = [
         'model/satellite-network-config.cc',
         'model/mobility/full-ground-station-mobility.cc',
+        'model/mobility/aircraft-mobility.cc',
         'model/orbital/basic-orbital.cc',
         ]
         #'model/orbital/orbital-coords.cc',
@@ -28,6 +29,7 @@ def build(bld):
     headers.source = [
         'model/satellite-network-config.h',    
         'model/mobility/full-ground-station-mobility.h',
+        'model/mobility/aircraft-mobility.h',
         'model/orbital/basic-orbital.h',
         ]
         #'model/orbital/orbital-coords.h',

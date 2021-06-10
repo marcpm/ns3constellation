@@ -10,3 +10,9 @@ def build(bld):
     obj = bld.create_ns3_program('basic-constellation-example', ['satellite-constellation'])
     obj.source = 'basic-satellite-constellation-example.cc'
 
+    obj = bld.create_ns3_program('aircraft-example', ['satellite-constellation'])
+    obj.source = 'aircraft-example.cc'
+
+    obj = bld.create_ns3_program('basic-airborne-satellite-constellation-example', ['satellite-constellation'])
+    obj.source = 'basic-airborne-satellite-constellation-example.cc'
+

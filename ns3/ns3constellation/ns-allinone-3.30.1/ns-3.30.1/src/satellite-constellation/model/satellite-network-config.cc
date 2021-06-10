@@ -32,26 +32,26 @@ TypeId SatelliteNetworkConfig::GetTypeId (void)
 
 // Constructors GS - SAT network
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(2), m_islDataRate("300Mbps"), m_airFilepath("")
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(2), m_islDataRate("300Mbps"), m_AIRfilepath("")
 {
   BuildNetwork();
 }
 
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate("300Mbps"), m_airFilepath("")
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate("300Mbps"), m_AIRfilepath("")
 {
   BuildNetwork();
 }
 
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string islDataRate)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath("")
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_AIRfilepath("")
 {
   BuildNetwork();
 }
 
 // Constructors GS - AIR - SAT network
 SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate)
-: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_airFilepath(airFilepath)
+: m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_AIRfilepath(airFilepath)
 {
   BuildNetwork();
 }
@@ -239,8 +239,84 @@ void SatelliteNetworkConfig::ReadGSConfigFile (std::string GSfilepath)
 }
 
 
+void SatelliteNetworkConfig::ReadAirConfigFile (std::string Airfilepath)
+{
+
+  std::vector <std::pair <double, Vector3D>> airTrackLog;
+  std::vector <std::string>  airStrLine;
+  std::string aircraftName;
+  double angleIncidence;
+  std::string dataRate;
+  uint32_t numASLs;
+  
+
+   std::fstream airFile;
+   airFile.open(Airfilepath, std::ios::in); //open a file to perform read operation using file object
+   if (airFile.is_open()) //checking whether the file is open
+   {   
+      std::string tmp;
+      std::cout << "Reading Aircraft Logs" << std::endl;
+    
+      // Read Info 1st line
+      getline(airFile, tmp);
+      airStrLine = splitString(tmp, ",");
+      aircraftName = airStrLine[0];
+      angleIncidence = std::stof(airStrLine[1]);
+      dataRate = airStrLine[2];
+      numASLs = std::stoi(airStrLine[3]);
+
+      // Position interpolation lines
+      while(getline(airFile, tmp))
+      { //read data from file object and put it into string.
+
+        std::vector <std::string> airStrLine = splitString(tmp, ",");
+        // std::string gsId = airStrLine[0];
+        double airTime = std::stof(airStrLine[0]);
+        double airLat = std::stof(airStrLine[1]);
+        double airLon = std::stof(airStrLine[2]);
+        double airAlt = std::stof(airStrLine[3]);
+      
+        std::pair < double, Vector3D> parsedData = {airTime, Vector3D(airLat, airLon, airAlt)};
+        airTrackLog.push_back(parsedData);
+
+      }
+      airFile.close(); //close the file object.
+   
+    }
+    else
+    {
+      std::runtime_error( "Error Reading  Air Config File");
+    }
+  
+  m_aircraftNodes.Create(1);
+
+  MobilityHelper mobility;
+  mobility.SetMobilityModel(
+                  "ns3::AircraftMobilityModel",
+                  "Name", StringValue(aircraftName),
+                  "DataRate", StringValue(dataRate),
+                  "AngleIncidence", DoubleValue(angleIncidence),
+                  "NumAsl", IntegerValue(numASLs)
+                  );
+  
+  mobility.Install(m_aircraftNodes.Get(0));
 
 
+  for (NodeContainer::Iterator j = m_aircraftNodes.Begin ();
+       j != m_aircraftNodes.End (); ++j)
+    {
+      Ptr<Node> node = *j;
+      Ptr<AircraftMobilityModel> mobModel = node->GetObject<AircraftMobilityModel> ();    
+      mobModel->SetAircraftTrackLog(airTrackLog); // Cleaner way to pass std::vector in ns3.9.
+      
+    }
+
+
+
+
+
+
+}
 
 
 void SatelliteNetworkConfig::BuildISLsP2PFixed()
@@ -660,6 +736,148 @@ void SatelliteNetworkConfig::BuildGSLsMultiSat() // not fully implemented
 {
   
 }
+
+
+void SatelliteNetworkConfig::BuildASLsSingleSat()
+{
+
+  /* 
+  ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* 
+  ******* ******* ******* ******* *******  ASL Links ***** ******* ******* ******* ******* ******
+  ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* ******* 
+  */
+
+  
+
+
+  //Install IP stack
+  InternetStackHelper stack;
+  stack.Install(m_aircraftNodes);
+
+  //setting up links between ground stations and their closest satellites
+  std::cout <<"Setting up links between Aircraft and satellites"<< std::endl;
+  for (uint32_t idxGs=0; idxGs<m_aircraftNodes.GetN(); idxGs++)
+  {
+    // Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
+    std::string dataRate = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetDataRate();
+    // * ** simultaneous sat links
+    // uint32_t numGsl = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetNumGsl();
+
+    Vector3D gsPos = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetPosition();
+    Vector3D gsLatlonAlt = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->PropagateLatLonAlt();
+    std::cout << "Aircraft id: "<< idxGs << " at ECEFxyz = " << gsPos.x <<", "  << gsPos.y << ", "<< gsPos.z <<"\n " <<
+             "Lat: "<<gsLatlonAlt.x << " Lon: " << gsLatlonAlt.y << " Alt: "<<gsLatlonAlt.z << std::endl;
+    
+    // std::vector < std::pair< uint32_t, double > > idxDistVec;
+
+    // uint32_t closestSatId = NULL;
+    int closestSatId = -1;
+    double closestSatDist = 9e9;
+
+    /*
+    ***********************************************************************************************
+    ************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
+    ***********************************************************************************************
+    */
+    //find closest adjacent satellite for ground station
+    for (uint32_t idxSat=0; idxSat<m_satellitesNodes.GetN(); idxSat++)
+    {
+      // <SatellitePositionMobilityModel> ?
+      // JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<SatellitePositionMobilityModel>()->GetStartTime() + Simulator::Now();
+
+      Vector3D satPos = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition();
+      Vector3D satVel = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity();
+      // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      
+      Topos gsSatTopos = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetVisibilityAirToSat(satPos, satVel);
+      
+      double temp_dist = gsSatTopos.range;
+      bool visible = gsSatTopos.visible;
+      if (visible == true ) std::cout << "satId: " << idxSat << " Visible! from Aircraft: " << idxGs << std::endl;
+
+      if( ( (temp_dist < closestSatDist) ) && visible )
+      {
+        closestSatDist = temp_dist;
+        closestSatId = (int) idxSat;
+      }
+
+
+      // ********* MULTI LINKS *********  
+      // std::pair< uint32_t, double > idxDist = {idxSat, temp_dist};
+      // idxDistVec.push_back(idxDist); 
+      
+    }
+
+    // ********* MULTI LINKS *********
+    // // sort  distance pair vectors from min to max, (keeping track of indexes) 
+    // std::sort(idxDistVec.begin(), idxDistVec.end(), [](std::pair <uint32_t, double> a, std::pair <uint32_t, double> b) 
+    //                                 {return a.second < b.second;} 
+    //                                 );
+    // for (uint32_t gslId=0; gslId < numGsl; gslId++)
+    // {
+
+    //   int idxSat = idxDistVec.at(gslId).first
+    //   m_groundStationsChannelTracker.push_back(idxSat);// add satellite link to tracker.
+    //   double distance =  idxDistVec.at(gslId).second      // in meters
+    //   double delay = closestSatDist /  SPEED_OF_LIGHT; // in seconds
+
+    
+    // }
+
+ 
+    double delay = (closestSatId != -1) ? (closestSatDist)/SPEED_OF_LIGHT : 0.0 ;
+    
+    // GSL Links
+    CsmaHelper gsl_link_helper;
+    gsl_link_helper.SetChannelAttribute("DataRate", StringValue (dataRate));
+    gsl_link_helper.SetChannelAttribute("Delay", TimeValue(Seconds(delay)));
+
+    NodeContainer temp_node_container;
+    temp_node_container.Add(m_aircraftNodes.Get(idxGs));
+    // temp_node_container.Add(m_satellitesNodes.Get(idxSat));
+    temp_node_container.Add(m_satellitesNodes);
+    NetDeviceContainer temp_netdevice_container;
+    temp_netdevice_container = gsl_link_helper.Install(temp_node_container); 
+
+    Ptr<CsmaChannel> gs_csma_channel;
+    Ptr<Channel> channel;
+    channel = temp_netdevice_container.Get(0)->GetChannel();
+    gs_csma_channel = channel->GetObject<CsmaChannel> ();
+    
+    // num_satellites_per_plane = m_planes[idxPlane].size();
+    // iterate over all sats and detach all except the one visible and closest.
+    for (int k = 0; k < (int) m_satellitesNodes.GetN(); k++)
+    // for (uint32_t k = 0; k < m_satellitesNodes.GetN(); k++)
+    {
+        if (k != closestSatId) // skips if closestSatId is null -> no visible sat for ith GS.
+        {
+          gs_csma_channel->Detach(temp_netdevice_container.Get(k+1)->GetObject<CsmaNetDevice> ());
+        }
+      
+
+    }    
+
+    if (closestSatId != -1)
+    {
+      std::cout <<"Channel open between aircraft " << idxGs << 
+            " and satellite " << closestSatId << " with distance "<< 
+            closestSatDist/1000 << "km and delay of "<< delay <<" seconds"<< std::endl;    
+    }
+    
+    m_aircraftChannelTracker.push_back(closestSatId); // will add -1 if no channel was attached.
+    // (closestSatId.size() > 0) ? m_groundStationsChannelTracker.push_back(closestSatId.at(0))   :   m_groundStationsChannelTracker.push_back(-1) ;
+    m_aircraftDevices.push_back(temp_netdevice_container);
+    m_aircraftChannels.push_back(gs_csma_channel);
+
+
+  
+  }
+
+}
+
+
+
 void SatelliteNetworkConfig::SetupIPConfig()
 {
 
@@ -709,6 +927,39 @@ void SatelliteNetworkConfig::SetupIPConfig()
     }
   }
 
+  if (m_AIRfilepath.empty() == false )
+  {
+    //configuring IP Addresses for Aicraft devices
+    for(int i=0; i < (int) m_aircraftDevices.size(); i++)
+    {
+      address.NewNetwork();
+      m_aircraftInterfaces.push_back(address.Assign(m_aircraftDevices[i]));
+      // for(uint32_t j=1; j<= m_groundStationsDevices[i].GetN(); j++)
+      for(int j=1; j<= (int) m_satellitesNodes.GetN(); j++)
+      {
+
+        if (m_aircraftChannelTracker[i] == -1)
+        {
+            std::pair< Ptr< Ipv4 >, uint32_t > interface = m_aircraftInterfaces[i].Get(j);
+            interface.first->SetDown(interface.second); // 
+        }
+        else
+        {
+          if(j != (m_aircraftChannelTracker[i] + 1))
+          {
+            std::pair< Ptr< Ipv4 >, uint32_t > interface = m_aircraftInterfaces[i].Get(j);
+            interface.first->SetDown(interface.second); // 
+          }
+        
+        }
+      }
+    }
+
+
+  }
+
+
+
   //Populate Routing Tables
   std::cout <<"Populating Routing Tables"<< std::endl;
   Ipv4GlobalRoutingHelper::PopulateRoutingTables ();
@@ -740,12 +991,20 @@ SatelliteNetworkConfig::BuildNetwork ()
 {
   ReadSatConfigFile(m_TLEfilepath);
   ReadGSConfigFile(m_GSfilepath);
-  // ReadAirConfigFile();
-  
-  
+
   BuildISLsP2PFixed();
-  // BuildISLsDynamic();
   BuildGSLsSingleSat();
+
+
+  if (m_AIRfilepath.empty() == false )
+  {
+    ReadAirConfigFile(m_AIRfilepath);
+    BuildASLsSingleSat();
+  }
+  
+  
+  
+  // BuildISLsDynamic();
   // BuildGSLsMultiSat();
 
   SetupIPConfig();
@@ -979,12 +1238,116 @@ void SatelliteNetworkConfig::UpdateLinks()
       }
   }
 
+  // ASL LINK UPDATES
+  // ----------------
+  if (m_AIRfilepath.empty() == false )
+  {
+
+/*
+******************************************************************************************
+*************************** ASL UPDATES **************************************************
+******************************************************************************************
+*/
+
+  std::cout <<"Updating links between aircraft and satellites"<< std::endl;
+
+  //setting up links between ground stations and their closest satellites
+  
+  for (uint32_t idxGs=0; idxGs<m_aircraftNodes.GetN(); idxGs++)
+  {
+    // Vector gsPos = m_groundStationsNodes.Get(idxGs)->GetObject<FullGroundStationMobilityModel> ()->GetPosition();
+    std::string dataRate = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetDataRate();
+
+    Vector3D gsPos = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetPosition();
+    Vector3D gsLatlonAlt = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->PropagateLatLonAlt();
+    std::cout << "Aircraft id: "<< idxGs << " at ECEFxyz = " << gsPos.x <<", "  << gsPos.y << ", "<< gsPos.z <<"\n " <<
+             "Lat: "<<gsLatlonAlt.x << " Lon: " << gsLatlonAlt.y << " Alt: "<<gsLatlonAlt.z << std::endl;
+  
+
+    int closestSatId = -1;
+    double closestSatDist = 9e9;
+
+/*
+***********************************************************************************************
+************* #TODO:  ADD simultaneous multi satellite links (based on ISL setup) *************
+***********************************************************************************************
+*/
+    //find closest adjacent satellite for ground station
+    for (uint32_t idxSat=0; idxSat<m_satellitesNodes.GetN(); idxSat++)
+    {
+      // <SatellitePositionMobilityModel> ?
+      // JulianDate currentJdut = m_satellitesNodes.Get(idxSat)->GetObject<SatellitePositionMobilityModel>()->GetStartTime() + Simulator::Now();
+
+      Vector3D satPos = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetPosition(); // in ecef [m]
+      Vector3D satVel = m_satellitesNodes.Get(idxSat)->GetObject<MobilityModel>()->GetVelocity(); // in ecef [m/s]
+      // PVCoords satPVecef(satPos, satVel, FrameType::ECEF);
+
+      
+      Topos gsSatTopos = m_aircraftNodes.Get(idxGs)->GetObject<AircraftMobilityModel> ()->GetVisibilityAirToSat(satPos, satVel);
+      
+      double temp_dist = gsSatTopos.range;
+      bool visible = gsSatTopos.visible;
+
+      if( ( (temp_dist < closestSatDist) ) && visible )
+      {
+        closestSatDist = temp_dist;
+        closestSatId = (int) idxSat;
+      }
+    }
+
+    double newDelay = (closestSatId != -1) ? (closestSatDist)/SPEED_OF_LIGHT : 0.0 ;
+    
+    
+    int prevClosestSatId = (int) m_aircraftChannelTracker[idxGs];
+    
+    if(prevClosestSatId == closestSatId) // no change of closest // valid also for No visible sat
+    {
+
+      m_aircraftChannels[idxGs]->SetAttribute("Delay", TimeValue(Seconds(newDelay)));
+      std::cout<< "Channel updated between ground station "<<idxGs<<" and satellite "<<closestSatId<< " with distance "<<closestSatDist/1000<< "km and delay of "<<newDelay<<" seconds"<<std::endl;
+    }
+      else
+      {
+        // Detach previous closest satellite node.
+        //prevClosestSatId (( + 1 ))!! due to the first device on m_groundStationsDevices is the ground station itself,
+        m_aircraftChannels[idxGs]->Detach( m_aircraftDevices[idxGs].Get(prevClosestSatId+1)->GetObject<CsmaNetDevice> ());
+        std::pair< Ptr< Ipv4 >, uint32_t> interface =  m_aircraftInterfaces[idxGs].Get(prevClosestSatId+1);
+        interface.first->SetDown(interface.second);
+
+        // Attach new closest sat node.
+        m_aircraftChannels[idxGs]->Reattach( m_aircraftDevices[idxGs].Get( closestSatId+1)->GetObject<CsmaNetDevice> ());
+        interface =  m_aircraftInterfaces[idxGs].Get( closestSatId+1);
+        interface.first->SetUp(interface.second);
+        m_aircraftChannelTracker[idxGs] =  closestSatId;
+        
+        m_aircraftChannels[idxGs]->SetAttribute("Delay", TimeValue(Seconds(newDelay)));
+
+        // std::ostringstream oss;
+        // oss << 
+        // std::cout <<oss);
+        std::cout << "New channel between aircraft "<< idxGs <<" and satellite "<< closestSatId<< " with distance "<<closestSatDist/1000<< "km and delay of "<<newDelay<<" seconds"<<std::endl;
+         
+        
+      }
+  }
+
+
+  }
+
+
+
+
+
+
+
+
+
   //Recompute Routing Tables
   std::cout<<"Recomputing Routing Tables"<<std::endl;
   Ipv4GlobalRoutingHelper::RecomputeRoutingTables ();
   std::cout<<"Finished Recomputing Routing Tables"<<std::endl;
 
-}
+} // end UPDATELINKS()
 
 
 
