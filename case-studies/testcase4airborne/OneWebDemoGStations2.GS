@@ -1,0 +1,3 @@
+0,OneWeb Gaithersburg MD USA,39.150246,-77.236266,0,25,2.17Gbps,1
+1,OneWeb Clewiston FL USA,26.744979,-80.941665,0,25,2.17Gbps,1
+2,OneWeb Westcott UK,51.843372,-0.974278,0,25,2.17Gbps,1

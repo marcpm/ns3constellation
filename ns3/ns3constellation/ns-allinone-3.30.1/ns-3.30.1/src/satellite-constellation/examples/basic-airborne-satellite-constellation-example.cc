@@ -18,9 +18,10 @@ main (int argc, char *argv[])
 
 
   double linkTimeStep = 100.0;
-  double timespan = 2000.0;
+  double timespan = 5000.0;
   uint32_t nISLsPerSat = 2;
   uint32_t gsServerId = 0;
+  uint32_t airServerId = 0;
   uint32_t gsClientId = 2;
   
   
@@ -28,11 +29,13 @@ main (int argc, char *argv[])
 
   CommandLine cmd;
   
-  std::string tleFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase3/ONEWEB-1623279541_2215083.TLE";
-  std::string gsFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase3/OneWebDemoGStations2.GS";
-  
+  std::string tleFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase4airborne/STARLINK-21160_89993.TLE";
+  std::string gsFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase4airborne/OneWebDemoGStations2.GS";
+  std::string airFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase4airborne/air-LHR_MAD-tracklog-sheet.AIR";
+
   cmd.AddValue ("satPath", "Info file path.", tleFilepath);
   cmd.AddValue ("gsPath", "Ground Stations file Path.", gsFilepath);
+  cmd.AddValue ("airPath", "Aircrfat track Log file Path.", airFilepath);
   
   cmd.AddValue ("gsClientId", "Client Ground Station id (row in file) .", gsClientId); // options
   cmd.AddValue ("gsServerId", "Server Ground Station id (row in file) .", gsServerId);
@@ -49,23 +52,23 @@ main (int argc, char *argv[])
 
   std::cout << "Pre satnetwork build;" << std::endl;
 
-  SatelliteNetworkConfig sat_network(tleFilepath, gsFilepath, nISLsPerSat);
+  SatelliteNetworkConfig sat_network(tleFilepath, gsFilepath, nISLsPerSat, "300Mbps", airFilepath);
   
   std::cout << "Post satnetwork build;" << std::endl;
 
   UdpEchoServerHelper echoServer (9);
 
-  ApplicationContainer serverApps = echoServer.Install(sat_network.m_groundStationsNodes.Get(gsServerId));
+  ApplicationContainer serverApps = echoServer.Install(sat_network.m_aircraftNodes.Get(airServerId));
   serverApps.Start (Seconds (1.0));
   serverApps.Stop (Seconds (timespan));
 
-  UdpEchoClientHelper echoClient (sat_network.m_groundStationsInterfaces[gsServerId].GetAddress(0), 9);
+  UdpEchoClientHelper echoClient (sat_network.m_aircraftInterfaces[airServerId].GetAddress(0), 9);
   echoClient.SetAttribute("MaxPackets", UintegerValue (20));
   echoClient.SetAttribute("Interval", TimeValue(Seconds(linkTimeStep)));
   echoClient.SetAttribute("PacketSize", UintegerValue (1024));
 
   NodeContainer clientContainer;
-  for (int i = 0; i < ((int) sat_network.m_groundStationsNodes.GetN()) - 1; i++)
+  for (int i = 0; i < ((int) sat_network.m_groundStationsNodes.GetN()) ; i++)
   {
     if (i != (int) gsServerId)
     {
@@ -110,7 +113,7 @@ main (int argc, char *argv[])
 
   std::stringstream ss;
   std::string resultsFilename;
-  ss << "results-basic-satellite-constellation-example-"<< simulationInfo<<".flowmon";
+  ss << "results-basic-airborne-satellite-constellation-example-"<< simulationInfo<<".flowmon";
   ss >> resultsFilename;
   
   std::string resultsFilepath = parentDirPath + "/" + resultsFilename;

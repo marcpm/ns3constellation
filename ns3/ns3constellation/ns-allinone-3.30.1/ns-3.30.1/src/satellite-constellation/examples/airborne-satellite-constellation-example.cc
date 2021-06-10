@@ -43,7 +43,7 @@ main (int argc, char *argv[])
   LogComponentEnable("UdpEchoClientApplication", LOG_LEVEL_INFO);
   LogComponentEnable("UdpEchoServerApplication", LOG_LEVEL_INFO);
 
-  SatelliteNetworkConfig sat_network(tleFilepath, gsFilepath, airFilepath);
+  SatelliteNetworkConfig sat_network(tleFilepath, gsFilepath, 1, "300Mbps", airFilepath);
   
   UdpEchoServerHelper echoServer (9);
 

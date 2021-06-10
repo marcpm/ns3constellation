@@ -65,7 +65,7 @@ main (int argc, char *argv[])
   echoClient.SetAttribute("PacketSize", UintegerValue (1024));
 
   NodeContainer clientContainer;
-  for (int i = 0; i < ((int) sat_network.m_groundStationsNodes.GetN()) - 1; i++)
+  for (int i = 0; i < ((int) sat_network.m_groundStationsNodes.GetN()) ; i++)
   {
     if (i != (int) gsServerId)
     {

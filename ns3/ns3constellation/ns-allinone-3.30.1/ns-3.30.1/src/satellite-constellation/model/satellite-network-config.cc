@@ -50,7 +50,7 @@ SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::st
 }
 
 // Constructors GS - AIR - SAT network
-SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat, std::string airFilepath,  std::string islDataRate)
+SatelliteNetworkConfig::SatelliteNetworkConfig (std::string TLEfilepath, std::string GSfilepath, uint32_t islPerSat,  std::string islDataRate, std::string airFilepath)
 : m_TLEfilepath(TLEfilepath), m_GSfilepath(GSfilepath),  m_nISLsPerSat(islPerSat), m_islDataRate(islDataRate), m_AIRfilepath(airFilepath)
 {
   BuildNetwork();
@@ -116,6 +116,7 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
             Ptr<Satellite> satellite = CreateObject<Satellite>();
             satellite->SetName(satname);
             
+
             satellite->SetTleInfo(line1, line2);
 
             std::cout << satellite->GetName() << std::endl;
@@ -141,11 +142,11 @@ void SatelliteNetworkConfig::ReadSatConfigFile (std::string satConfigFilepath)
         }else if ( (lineNum-1) % 3 == 0)
         {
           line1 = tmp.substr(0, 69);
-          line1 = tmp;  // read TLE - line 1
+          // line1 = tmp;  // read TLE - line 1
         }else if ( (lineNum-2) % 3 == 0)
         {
           line2 = tmp.substr(0, 69);
-          line2 = tmp;   // read TLE - line 2
+          // line2 = tmp;   // read TLE - line 2
         }
 
         lineNum++;
