@@ -1,0 +1,12 @@
+Waf: Entering directory `/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/build'
+Waf: Leaving directory `/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.348s)
+*******************
+Running example Aircraft read
+Reading Aircraft Logs
+
+ Geo position at 22seconds
+51.477, -0.48135, 399.875
+*******************
+./waf --run src/satellite-constellation/examples/aircraft-example  1,65s user 0,38s system 118% cpu 1,719 total

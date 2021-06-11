@@ -53,17 +53,21 @@ splitString (std::string s, std::string delimiter)
 int 
 main (int argc, char *argv[])
 {
-  std::cout << "*******************" << std::endl << "Running example Aircraft read" << std::endl;
-  
-  bool verbose = true;
-  std::string filepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/src/satellite-constellation/examples/air-LHR_MAD-tracklog-sheet.AIR";
+
 
   CommandLine cmd;
-  cmd.AddValue ("verbose", "Tell application to log if true", verbose);
 
-  cmd.AddValue ("Airpath", "Set TLE filepath", filepath);
+  std::string airFilepath;
+  bool verbose = true;
+  
+
+  cmd.AddValue ("airPath", "Aircraft track Log file Path.", airFilepath);
+  
+  cmd.AddValue ("verbose", "Tell application to log if true", verbose);  
   cmd.Parse (argc,argv);
 
+  std::cout << "*******************" << std::endl << "Running example Aircraft read" << std::endl;
+  
 // / //  // // /
 
   std::vector <std::string>  airStrLine;
@@ -75,7 +79,7 @@ main (int argc, char *argv[])
   std::vector<std::pair<double, Vector3D>> m_airTrackLog;
 
    std::fstream airFile;
-   airFile.open(filepath, std::ios::in); //open a file to perform read operation using file object
+   airFile.open(airFilepath, std::ios::in); //open a file to perform read operation using file object
    if (airFile.is_open()) //checking whether the file is open
    {   
       std::string tmp;
