@@ -1,0 +1,34 @@
+Waf: Entering directory `/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/build'
+[2250/2627] Compiling src/satellite-constellation/examples/aircraft-example.cc
+[2251/2627] Compiling src/satellite-constellation/examples/basic-airborne-satellite-constellation-example.cc
+[2581/2627] Linking build/src/satellite-constellation/examples/ns3.30.1-aircraft-example-debug
+[2582/2627] Linking build/src/satellite-constellation/examples/ns3.30.1-basic-airborne-satellite-constellation-example-debug
+Waf: Leaving directory `/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (3.915s)
+Invalid command-line arguments: --airFilepath=/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase6airborne/air-EZE_FRA-tracklog.AIR
+ns3.30.1-basic-airborne-satellite-constellation-example-debug [Program Options] [General Arguments]
+
+Program Options:
+    --tlePath:       Info file path. [/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/STARLINK-21160_89993.TLE]
+    --gsPath:        Ground Stations file Path. [/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/OneWebDemoGStations2.GS]
+    --airPath:       Aircrfat track Log file Path. [/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/air-LHR_MAD-tracklog-sheet.AIR]
+    --gsClientId:    Client Ground Station id (row in file) [2]
+    --gsServerId:    Server Ground Station id (row in file) [0]
+    --linkTimeStep:  Link Update Time in seconds [200]
+    --timespan:      Simulation timespan in seconds [1000]
+    --airServerId:   Aircraft Id as server  [0]
+    --airClientId:   Aircraft Id  as client  [0]
+    --nIslsPerSat:   Set number of ISLs per satellite  [2]
+    --islDataRate:   Set Datarate string  [300Mbps]
+
+General Arguments:
+    --PrintGlobals:              Print the list of globals.
+    --PrintGroups:               Print the list of groups.
+    --PrintGroup=[group]:        Print all TypeIds of group.
+    --PrintTypeIds:              Print all TypeIds.
+    --PrintAttributes=[typeid]:  Print all attributes of typeid.
+    --PrintHelp:                 Print this help message.
+
+Command ['/home/tieg/plathon/ns3-constellations/ns3constellation/ns3/ns3constellation/ns-allinone-3.30.1/ns-3.30.1/build/src/satellite-constellation/examples/ns3.30.1-basic-airborne-satellite-constellation-example-debug', '--airFilepath=/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase6airborne/air-EZE_FRA-tracklog.AIR', '--tleFilepath=/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase6airborne/STARLINK-21160_89993.TLE', '--gsFilepath=/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase6airborne/US-starlink-gateways.GS', '--timespan=14000'] exited with code 1
+./waf --run   5,17s user 1,20s system 148% cpu 4,302 total

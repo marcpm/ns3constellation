@@ -20,15 +20,18 @@ main (int argc, char *argv[])
   double linkTimeStep = 200.0;
   double timespan = 1000.0;
   uint32_t nISLsPerSat = 2;
-  uint32_t gsServerId;
-  uint32_t gsClientId;
-  uint32_t airServerId;
+  uint32_t gsServerId = 0;
+  uint32_t gsClientId = 2;
+  uint32_t airServerId = 0;
   uint32_t airClientId;
   std::string islDataRate = "300Mbps";
 
-  std::string tleFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/STARLINK-21160_89993.TLE";
-  std::string gsFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/OneWebDemoGStations2.GS";
-  std::string airFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/air-LHR_MAD-tracklog-sheet.AIR";  
+  // std::string tleFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/STARLINK-21160_89993.TLE";
+  // std::string gsFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/OneWebDemoGStations2.GS";
+  // std::string airFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase5airborne/air-LHR_MAD-tracklog-sheet.AIR";  
+  std::string tleFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase7airborne/IRIDIUM-NEXT-1624121901_7017422.TLE";
+  std::string gsFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase7airborne/US-starlink-gateways.GS";
+  std::string airFilepath = "/home/tieg/plathon/ns3-constellations/ns3constellation/case-studies/testcase7airborne/air-NY_LAX-tracklog.AIR";  
   
   CommandLine cmd;
   cmd.AddValue ("tlePath", "Info file path.", tleFilepath);
