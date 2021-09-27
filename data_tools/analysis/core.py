@@ -5,7 +5,7 @@ import xmltodict
 class Scenario:
     pass
 
-def basic_network_stats(flowmon_filepath: str, simulation_scenario: Scenario=None, verbose=True) -> None:
+def basic_network_stats(flowmon_filepath: str, simulation_scenario: Scenario=None, verbose=True, output_path=None) -> None:
     with open(flowmon_filepath, "r") as xmlfile:
         # xml = et.parse(xmlfile.read())
         xml = xmltodict.parse(xmlfile.read())
@@ -38,7 +38,14 @@ def basic_network_stats(flowmon_filepath: str, simulation_scenario: Scenario=Non
         print("**********************")
         print()
 
+    if output_path is not None:
 
+        with open(output_path, "w") as f:
+            f.write("")
+            f.write("**********************")
+            f.write(f"RTT (avg): {rtt_avg} [s] \nNum Hops (avg) : {n_hops_avg} \nLost Packets (avg): {n_lostpackets_avg}")
+            f.write("**********************")
+            f.write("")
 
 
     return {"rtt": rtt_avg,

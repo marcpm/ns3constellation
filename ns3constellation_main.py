@@ -27,10 +27,11 @@ if __name__ == "__main__":
 
     group = parser.add_mutually_exclusive_group()
 
-    parser.add_argument("--known-constellation", type=str, required=False)
+    parser.add_argument("--predef-constellation", type=str, required=False)
     parser.add_argument("--norad-ids", type=str, required=False) # comma sepparated ids, e.g. 2321,12311,12345
     parser.add_argument("--custom-constellation", type=str, required=False )
     # parser.add_argument("--inputfile", type=str, action="store_true", required=False)
+    parser.add_argument("--ground-stations", type=str, required=False)
     
     parser.add_argument("--postprocess", type=bool, required=False)
     args = parser.parse_args()
@@ -44,12 +45,13 @@ if __name__ == "__main__":
         tle_data = get_TLE_data(norad_ids)
         filename = str(norad_ids[0]) + "-"  + str(norad_ids[-1]) + str(time.time()).replace(".","_") + ".TLE"
 
-    if args.known_constellation is not None:
-        tle_data = get_predefined_constellation_data(str(args.known_constellation).lower())
-        filename = args.known_constellation.upper() + "-"+ str(time.time()).replace(".","_") + ".TLE"
+    if args.predef_constellation is not None:
+        tle_data = get_predefined_constellation_data(str(args.predef_constellation).lower())
+        filename = args.predef_constellation.upper() + "-"+ str(time.time()).replace(".","_") + ".TLE"
     
     if args.custom_constellation is not None:
         raise TypeError(f"Custom built constellation mode still in development")
+
 
     if SIMULATION_TIME is None:
         SIMULATION_TIME = tle_data[0].get("EPOCH").replace("T", " ") # fix T12:22:21.234234234 format
